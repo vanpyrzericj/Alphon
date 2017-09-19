@@ -1,0 +1,28 @@
+﻿@font-face {
+  font-family: 'icomoon';
+  src:  url('/assets/global/fonts/icomoon.eot?7gauh');
+  src:  url('/assets/global/fonts/icomoon.eot?7gauh#iefix') format('embedded-opentype'),
+    url('/assets/global/fonts/icomoon.ttf?7gauh') format('truetype'),
+    url('/assets/global/fonts/icomoon.woff?7gauh') format('woff'),
+    url('/assets/global/fonts/icomoon.svg?7gauh#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.icon-kanban:before {
+  content: "\e900";
+}

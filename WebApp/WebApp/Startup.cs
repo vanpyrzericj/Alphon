@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebApp.Models;
 using MySQL.Data.EntityFrameworkCore.Extensions;
+using WebApp.Infrastructure.FeatureFolders;
 
 namespace WebApp
 {
@@ -30,7 +31,7 @@ namespace WebApp
             //    options.UseMySQL(sqlConnectionString);
             //});
 
-            services.AddMvc();
+            services.AddMvc().AddFeatureFolders();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
