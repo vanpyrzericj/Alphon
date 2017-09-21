@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
 
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace WebApp.Features.Admin.Students
 {
     [Area("Admin")]
@@ -64,5 +62,9 @@ namespace WebApp.Features.Admin.Students
             ViewData["Title"] = model.firstname + " " + model.lastname;
             return View("Student", model);
         }
+
+        [HttpPost]
+        [Route("/Admin/Students/Create")]
+        public IActionResult Create(Account account) => Redirect("/Admin/Students");
     }
 }
