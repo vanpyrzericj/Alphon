@@ -25,6 +25,8 @@
     <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.0/css/bootstrap-datepicker.min.css" />
+    <link href="~/assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css" />
     @RenderSection("PageStyles", required: false)
     @Html.Raw(JavaScriptSnippet.FullScript)
 </head>
@@ -78,9 +80,16 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/Admin/Courses" class="nav-link">
+                        <a href="/Student/Courses" class="nav-link">
                             <i class="fa fa-book"></i>
                             <span class="title">My Courses</span>
+                            <span class="arrow"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/Student/Enroll" class="nav-link">
+                            <i class="fa fa-book"></i>
+                            <span class="title">Enrollment</span>
                             <span class="arrow"></span>
                         </a>
                     </li>
@@ -127,6 +136,8 @@
     <script src="~/assets/global/scripts/app.min.js" type="text/javascript"></script>
     <script src="~/assets/layouts/layout2/scripts/layout.min.js" type="text/javascript"></script>
     <script src="~/assets/layouts/layout2/scripts/demo.min.js" type="text/javascript"></script>
+    <script src="~/assets/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
+    <script src="~/assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
     <!-- END THEME LAYOUT SCRIPTS -->
     <script src="~/assets/engine.js"></script>
     <environment names="Production">

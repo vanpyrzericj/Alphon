@@ -1,0 +1,59 @@
+﻿@model IEnumerable<WebApp.Models.Semester>
+<div class="page-content">
+    <h1 class="page-title">
+        Semester
+    </h1>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="fa fa-home"></i>
+                <a href="/Student/">Dashboard</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                Semesters
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light bordered">
+                <div class="portlet-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>
+                                    Select Enrollment Semester
+                                </label>
+                                <select id="semester" name="semester" onchange="SelectSemester();">
+                                    <option selected>
+                                        Select a Semester
+                                    </option>
+                                    @foreach (var semester in Model)
+                                    {
+                                        <option value="@semester.Id">
+                                            @semester.season
+                                            @semester.year
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @section PageScripts{
+        <script>
+            function SelectSemester() {
+                window.location = '/Student/Enroll/' + $("#semester").val();
+                //Redirects to: /Students/Enroll/123
+            }
+
+            $(document).ready(function () {
+                $("#studentList")
+                    .dataTable();
+            });
+        </script>
+    }

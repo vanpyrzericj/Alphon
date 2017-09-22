@@ -1,0 +1,81 @@
+﻿@model WebApp.Features.Student.Enroll.CourseEnrollInfoVM
+<div class="page-content">
+    <h1 class="page-title">
+        @Model.course.name
+    </h1>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="fa fa-home"></i>
+                <a href="/Student">Dashboard</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="/Student/Enroll">Enroll</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="/Student/Enroll/1">Fall 2017</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                @Model.course.name
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light bordered" id="">
+                <div class="portlet-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Name</label>
+                                <div class="col-md-9">
+                                    <p class="form-control-static">@Model.course.name</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Course Number</label>
+                                <div class="col-md-9">
+                                    <p class="form-control-static">@Model.course.number</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Course Description</label>
+                                <div class="col-md-9">
+                                    <p class="form-control-static">@Model.course.description</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-striped table-bordered table-hover table-checkable order-column" id="courseList">
+                                <thead>
+                                    <tr>
+                                        <th> Room </th>
+                                        <th> Times </th>
+                                        <th> Professor </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var sections in Model.sections)
+                                    {
+                                        <tr>
+                                            <th>@sections.room</th>
+                                            <th>Tuesday/Thursday, 4pm - 5pm</th>
+                                            <th>Aziz</th>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
