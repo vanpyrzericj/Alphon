@@ -141,7 +141,13 @@
     <!-- END THEME LAYOUT SCRIPTS -->
     <script src="~/assets/engine.js"></script>
     <environment names="Production">
-
+        <script src="https://cdn.ravenjs.com/3.17.0/raven.min.js" crossorigin="anonymous"></script>
+                <script>
+Raven.config('https://0c3fad9e6d5a42be9ee981a23a992207@sentry.io/215784', {
+                release: 'Prototype',
+                environment: 'Production',
+                tags: { area: 'Student' }
+            }).install();</script>
     </environment>
     @RenderSection("PageScripts", required: false)
     @RenderSection("Scripts", required: false)
