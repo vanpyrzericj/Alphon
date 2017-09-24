@@ -113,5 +113,11 @@ namespace WebApp.Features.Students.Enroll
             ViewData["Title"] = model.course.name;
             return View("Course", model);
         }
+
+        [Route("/Student/Cart")]
+        public IActionResult Cart()
+        {
+            return View("Cart");
+        }
     }
 }
