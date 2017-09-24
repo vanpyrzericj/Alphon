@@ -5,66 +5,59 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
 
-namespace WebApp.Features.Admin.Students
+namespace WebApp.Features.Admin.Professors
 {
     [Area("Admin")]
-    public class StudentsController : Controller
+    public class ProfessorsController : Controller
     {
-        [Route("/Admin/Students")]
-        public IActionResult Students()
+        [Route("/Admin/Professors")]
+        public IActionResult Professors()
         {
             //For Prototyping: Just create an arbitrary list of Students (Accounts entity)
-            List<Account> model = new List<Account>
+            List<Professor> model = new List<Professor>
             {
-                new Account
+                new Professor
+
                 {
-                    firstname = "John",
-                    lastname = "Doe",
+                    firstname = "Justin",
+                    lastname = "Timberlake",
                     Id = 1,
-                    usertype = "student",
+                    usertype = "admin",
                     lastlogin = DateTime.Now
                 },
                 new Account
                 {
-                    firstname = "Jane",
-                    lastname = "Doe",
+                    firstname = "Chris",
+                    lastname = "Green",
                     Id = 2,
-                    usertype = "student",
-                    lastlogin = DateTime.Now
-                },
-                new Account
-                {
-                    firstname = "Jesse",
-                    lastname = "Hartloff",
-                    Id = 3,
-                    usertype = "student",
+                    usertype = "admin",
                     lastlogin = DateTime.Now
                 }
             };
 
-            ViewData["Title"] = "Students";
-            return View("Students", model);
+            ViewData["Title"] = "Professors";
+            return View("Professors", model);
         }
 
-        [Route("/Admin/Students/{id}")]
-        public IActionResult Student(int id)
+        [Route("/Admin/Professors/{id}")]
+        public IActionResult Professor(int id)
         {
             //For Prototyping: Just create an arbitrary student entity
-            var model = new Account
+            var model = new Professor
             {
-                firstname = "John",
-                lastname = "Doe",
+                firstname = "Chris",
+                lastname = "Green",
                 Id = id,
-                usertype = "student",
+                usertype = "admin",
                 lastlogin = DateTime.Now
             };
 
             ViewData["Title"] = model.firstname + " " + model.lastname;
-            return View("Student", model);
+            return View("Professor", model);
         }
 
         [HttpPost]
-        [Route("/Admin/Students/Create")]
-        public IActionResult Create(Account account) => Redirect("/Admin/Students");
+        [Route("/Admin/Professors/Create")]
+        public IActionResult Create(Professor professor) => Redirect("/Admin/Professors");
     }
 }

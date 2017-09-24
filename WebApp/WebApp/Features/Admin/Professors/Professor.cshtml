@@ -1,4 +1,4 @@
-﻿@model WebApp.Models.Account
+﻿@model WebApp.Models.Professor
 <div class="page-content">
     <h1 class="page-title">
         @Model.firstname @Model.lastname
@@ -11,11 +11,11 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <a href="/Admin/Students">Students</a>
+                <a href="/Admin/Professors">Professors</a>
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                @Model.firstname @Model.lastname (Student ID# @Model.Id)
+                @Model.firstname @Model.lastname (Professor ID# @Model.Id)
             </li>
         </ul>
     </div>
