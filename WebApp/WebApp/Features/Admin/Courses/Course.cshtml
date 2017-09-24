@@ -1,0 +1,54 @@
+@model WebApp.Models.Course
+<div class="page-content">
+    <h1 class="page-title">
+        @Model.course.name
+    </h1>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="fa fa-home"></i>
+                <a href="/Admin">Dashboard</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="/Admin/Courses">Courses</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                @Model.name @Model.number ( Course ID# @Model.Id)
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light bordered" id="">
+                <div class="portlet-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Name </label>
+                                <div class="col-md-9">
+                                    <p class="form-control-static">@Model.name</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Number</label>
+                                <div class="col-md-9">
+                                    <p class="form-control-static">@Model.number</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Description</label>
+                                <div class="col-md-9">
+                                    <p class="form-control-static">@Model.description</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
