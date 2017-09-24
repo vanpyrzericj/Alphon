@@ -11,6 +11,6 @@ namespace WebApp.Models
         public string name { get; set; }
         public string number { get; set; }
         public string description { get; set; }
-
+        public int credithours { get; set; }
     }
 }
