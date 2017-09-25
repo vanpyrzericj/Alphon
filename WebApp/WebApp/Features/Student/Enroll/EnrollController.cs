@@ -51,8 +51,8 @@ namespace WebApp.Features.Students.Enroll
             return View("Semester", model);
         }
 
-        [Route("/Student/Enroll/{id}")]
-        public IActionResult CourseSelection(int id)
+        [Route("/Student/Enroll/{SemesterID}/Courses")]
+        public IActionResult CourseSelection(int SemesterID)
         {
             //For Prototyping: Just create an arbitrary list of Students (Accounts entity)
             List<Course> model = new List<Course>
@@ -79,7 +79,7 @@ namespace WebApp.Features.Students.Enroll
             return View("Courses", model);
         }
 
-        [Route("/Student/Enroll/{SemesterID}/Course/{CourseID}")]
+        [Route("/Student/Enroll/{SemesterID}/Courses/{CourseID}")]
         public IActionResult CourseEnrollInfo(int SemesterID, int CourseID)
         {
             //For Prototyping: Just create an arbitrary student entity
@@ -118,6 +118,22 @@ namespace WebApp.Features.Students.Enroll
         public IActionResult Cart()
         {
             return View("Cart");
+        }
+
+        [Route("/Student/Enroll/{SemesterID}/Search")]
+        public IActionResult CourseSearch(int SemesterID)
+        {
+            //For Prototyping: Just create an arbitrary list of Students (Accounts entity)
+            ViewData["Title"] = "Course Search";
+            return View("CourseSearch");
+        }
+
+        [Route("/Student/Enroll/CheckoutResult")]
+        public IActionResult CheckoutResult()
+        {
+            //For Prototyping: Just create an arbitrary list of Students (Accounts entity)
+            ViewData["Title"] = "Checkout Result";
+            return View("CheckoutResult");
         }
     }
 }
