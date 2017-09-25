@@ -31,7 +31,6 @@
                             <tr>
                                 <th> First Name </th>
                                 <th> Last Name </th>
-                                <th> Last Login </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -40,7 +39,6 @@
                                 <tr>
                                     <th><a href="/Admin/Professors/@professor.Id">@professor.firstname</a></th>
                                     <th>@professor.lastname</th>
-                                    <th>@professor.lastlogin.ToLongDateString()</th>
                                 </tr>
                             }
                         </tbody>
@@ -67,31 +65,11 @@
                                     <label>First Name</label>
                                     <input class="form-control" type="text" name="firstName" />
                                 </div>
-                                <div class="form-group">
-                                    <label>Email Address</label>
-                                    <input class="form-control" type="text" name="email" />
-                                </div>
-                                <div class="form-group">
-                                    <label>Date of Birth</label>
-                                    <div class='input-group date' id='datetimepicker1'>
-                                        <input name="dob" type="text" class="form-control" />
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                        </span>
-                                    </div>
-                                </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Last Name</label>
                                     <input class="form-control" type="text" name="lastName" />
-                                </div>
-                                <div class="form-group">
-                                    <label>Type</label>
-                                    <select class="form-control" name="userType">
-                                        <option selected>Professor</option>
-                                        <option>Administrator</option>
-                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -110,9 +88,6 @@
         $(document).ready(function () {
             $("#professorList")
                 .dataTable();
-            $('#datetimepicker1').datepicker({
-
-            });
         });
     </script>
 }

@@ -19,7 +19,7 @@ namespace WebApp.Features.Admin.Semesters
                 new Semester
                 {
                     season = "Fall",
-                    year = "2017",
+                    year = 2017,
                     Id = 1,
                 }
             };
@@ -35,7 +35,7 @@ namespace WebApp.Features.Admin.Semesters
             var model = new Semester
             {
                 season = "Fall",
-                year = "2017",
+                year = 2017,
                 Id = id,
             };
 

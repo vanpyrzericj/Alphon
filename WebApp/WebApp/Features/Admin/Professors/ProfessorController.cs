@@ -21,18 +21,15 @@ namespace WebApp.Features.Admin.Professors
                 {
                     firstname = "Justin",
                     lastname = "Timberlake",
-                    Id = 1,
-                    usertype = "admin",
-                    lastlogin = DateTime.Now
+                    Id = 1
                 },
-                new Account
+                new Professor
+
                 {
-                    firstname = "Chris",
-                    lastname = "Green",
-                    Id = 2,
-                    usertype = "admin",
-                    lastlogin = DateTime.Now
-                }
+                    firstname = "Aaron",
+                    lastname = "Carter",
+                    Id = 2
+                },
             };
 
             ViewData["Title"] = "Professors";
@@ -45,11 +42,9 @@ namespace WebApp.Features.Admin.Professors
             //For Prototyping: Just create an arbitrary student entity
             var model = new Professor
             {
-                firstname = "Chris",
-                lastname = "Green",
+                firstname = "Justin",
+                lastname = "Timberlake",
                 Id = id,
-                usertype = "admin",
-                lastlogin = DateTime.Now
             };
 
             ViewData["Title"] = model.firstname + " " + model.lastname;
