@@ -47,13 +47,8 @@
     @section PageScripts{
         <script>
             function SelectSemester() {
-                window.location = '/Student/Enroll/' + $("#semester").val();
+                window.location = '/Student/Enroll/' + $("#semester").val() + '/Search';
                 //Redirects to: /Students/Enroll/123
             }
-
-            $(document).ready(function () {
-                $("#studentList")
-                    .dataTable();
-            });
         </script>
     }

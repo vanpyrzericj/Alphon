@@ -16,7 +16,7 @@
         <div class="page-toolbar">
             <div class="btn-group">
                 <a class="btn btn-fit-height blue" href="/Student/Enroll">
-                    <i class="fa fa-plus"></i> Enroll In Class
+                    <i class="fa fa-plus"></i> Enroll In New Class
                 </a>
             </div>
         </div>
@@ -37,7 +37,7 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <th> Course1 </th>
+                                <th><a href="">Course1</a></th>
                                 <th> Monday 4pm / Tuesday 4pm </th>
                                 <th> Prof Name </th>
                                 <th>
@@ -49,7 +49,7 @@
                                         <ul class="dropdown-menu pull-left" role="menu">
                                             <li>
                                                 <a href="javascript:;">
-                                                    Drop Course
+                                                    Remove From Cart
                                                 </a>
                                             </li>
                                         </ul>
@@ -57,7 +57,7 @@
                                 </th>
                             </tr>
                             <tr>
-                                <th> Course2 </th>
+                                <th><a href="">Course2</a></th>
                                 <th> Wednesday 4pm / Thursday 4pm </th>
                                 <th> Prof Name </th>
                                 <th>
@@ -69,7 +69,7 @@
                                         <ul class="dropdown-menu pull-left" role="menu">
                                             <li>
                                                 <a href="javascript:;">
-                                                    Drop Course
+                                                    Remove From Cart
                                                 </a>
                                             </li>
                                         </ul>
@@ -78,7 +78,7 @@
                             </tr>
                             <tr>
                             <tr>
-                                <th> Course3 </th>
+                                <th><a href="">Course3</a></th>
                                 <th> Friday 4pm </th>
                                 <th> Prof Name </th>
                                 <th>
@@ -90,7 +90,7 @@
                                         <ul class="dropdown-menu pull-left" role="menu">
                                             <li>
                                                 <a href="javascript:;">
-                                                    Drop Course
+                                                    Remove From Cart
                                                 </a>
                                             </li>
                                         </ul>
@@ -99,15 +99,32 @@
                             </tr>
                         </tbody>
                     </table>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="pull-right" >
+                                <div class="btn-group">
+                                    <a class="btn btn-fit-height blue" href="">
+                                        <i></i> Clear Cart
+                                    </a>
+                                </div>
+                                <div class="btn-group">
+                                    <a class="btn btn-fit-height blue" href="/Student/Enroll/CheckoutResult">
+                                        <i></i> Checkout
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-@section PageScripts{
-    <script>
-        $(document).ready(function () {
 
-        });
-    </script>
-}
+    @section PageScripts{
+        <script>
+            $(document).ready(function () {
+
+            });
+        </script>
+    }
