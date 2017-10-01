@@ -24,12 +24,12 @@ namespace WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var sqlConnectionString = Configuration.GetConnectionString("PrimaryConnection");
+            //var sqlConnectionString = Configuration.GetConnectionString("PrimaryConnection");
 
-            services.AddDbContext<HubContext>(options =>
-            {
-                options.UseMySQL(sqlConnectionString);
-            });
+            //services.AddDbContext<HubContext>(options =>
+            //{
+            //    options.UseMySQL(sqlConnectionString);
+            //});
 
             services.AddMvc().AddFeatureFolders();
         }
