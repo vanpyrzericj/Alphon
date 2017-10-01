@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebApp.Infrastructure.Inherits;
 
 namespace WebApp.Features.Admin.Dashboard
 {

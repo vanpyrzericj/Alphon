@@ -4,12 +4,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
+using WebApp.Infrastructure.Inherits;
 
 namespace WebApp.Features.Admin.Students
 {
     [Area("Admin")]
     public class StudentsController : Controller
     {
+        public HubContext _context;
+        public StudentsController()
+        {
+            _context = new HubContext();
+        }
+
         [Route("/Admin/Students")]
         public IActionResult Students()
         {
@@ -43,7 +50,7 @@ namespace WebApp.Features.Admin.Students
             };
 
             ViewData["Title"] = "Students";
-            return View("Students", model);
+            return View("Students", _context.Accounts.ToList());
         }
 
         [Route("/Admin/Students/{id}")]

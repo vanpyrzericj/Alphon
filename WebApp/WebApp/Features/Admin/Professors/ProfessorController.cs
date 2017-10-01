@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
+using WebApp.Infrastructure.Inherits;
 
 namespace WebApp.Features.Admin.Professors
 {
