@@ -8,8 +8,8 @@ namespace WebApp.Models
     public class Offering
     {
         public int Id { get; set; }
-        public string semester { get; set; }
-        public string course { get; set; }
+        public Semester semester { get; set; }
+        public Course course { get; set; }
         public string type { get; set; }
 
     }

@@ -8,13 +8,18 @@ namespace WebApp.Models
 {
     public class HubContext : DbContext
     {
-        //TODO: Update this to your local or production server
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder
-                .UseMySql(@"Server=albatross.jm-corp.net;database=buhavore_buh;uid=buhavore_buh;pwd=GlCKGv_Pve3[;");
-
-        //public HubContext(DbContextOptions<HubContext> options) : base(options) { }
+                .UseMySql(Environment.GetEnvironmentVariable("BUHCS"));
 
         public DbSet<Account> Accounts { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Major> Majors{ get; set; }
+        public DbSet<Offering> Offerings { get; set; }
+        public DbSet<Professor> Professors { get; set; }
+        public DbSet<Section> Sections { get; set; }
+        public DbSet<Semester> Semesters { get; set; }
+        public DbSet<TimeSlot> Timeslots { get; set; }
+        public DbSet<Enrollment> Enrollments { get; set; }
     }
 }

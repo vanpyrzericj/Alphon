@@ -8,6 +8,7 @@ namespace WebApp.Models
     public class Enrollment
     {
         public int Id { get; set; }
-
+        public Account account { get; set; }
+        public Section section { get; set; }
     }
 }

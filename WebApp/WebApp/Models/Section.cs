@@ -9,6 +9,8 @@ namespace WebApp.Models
     {
         public int Id { get; set; }
         public string room { get; set; }
-
+        public Offering offering { get; set; }
+        public Professor professor { get; set; }
+        public ICollection<TimeSlot> TimeSlots { get; set; }
     }
 }

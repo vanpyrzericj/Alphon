@@ -61,7 +61,7 @@ namespace WebApp.Features.Students.Enroll
                 new Course
                 {
                     Id = 1,
-                    number = "CSE 442",
+                    number = 442,
                     name = "Software Engineering",
                     description = "Industry standard software development."
 
@@ -69,7 +69,7 @@ namespace WebApp.Features.Students.Enroll
                  new Course
                 {
                     Id = 2,
-                    number = "CSE 421",
+                    number = 421,
                     name = "Operating Systems",
                     description = "Just resign now."
 
@@ -89,7 +89,7 @@ namespace WebApp.Features.Students.Enroll
                 course = new Course()
                 {
                     name = "Name",
-                    number = "1",
+                    number = 1,
                     description = "Something"       
                 
                 },
