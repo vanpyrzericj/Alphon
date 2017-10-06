@@ -20,7 +20,7 @@ namespace WebApp.Features.Admin.Courses
                 new Course
                 {
                     name = "Software Engineering",
-                    number = "CSE442",
+                    number = 442,
                     Id = 1,
                     description = "github101"
                 }
@@ -37,7 +37,7 @@ namespace WebApp.Features.Admin.Courses
             var model = new Course
             {
 				name = "Software Engineering",
-				number = "CSE442",
+				number = 442,
 				Id = 1,
 				description = "github101"
             };

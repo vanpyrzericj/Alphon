@@ -9,8 +9,8 @@ namespace WebApp.Models
     {
         public int Id { get; set; }
         public string dayofweek { get; set; }
-        public DateTime starttime { get; set; }
-        public DateTime endtime { get; set; }
-
+        public string starttime { get; set; }
+        public string endtime { get; set; }
+        public Section section { get; set; }
     }
 }

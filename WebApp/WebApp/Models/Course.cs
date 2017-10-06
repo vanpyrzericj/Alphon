@@ -9,8 +9,9 @@ namespace WebApp.Models
     {
         public int Id { get; set; }
         public string name { get; set; }
-        public string number { get; set; }
+        public int number { get; set; }
         public string description { get; set; }
         public int credithours { get; set; }
+        public Major major { get; set; }
     }
 }
