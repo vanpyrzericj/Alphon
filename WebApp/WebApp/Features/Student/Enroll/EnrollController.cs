@@ -40,7 +40,7 @@ namespace WebApp.Features.Students.Enroll
             var result = _context.Sections
                 .Where(x => x.offering.semester.Id == SemesterID)
                 .Where(x => x.offering.course.major.Id == filter.MajorId)
-                //.Where(x => x.offering.type == "lecture")
+                .Where(x => x.offering.type == "lecture")
                 //.Where(x => x.offering.course.number == filter.CourseNumber)
                 .Include(y => y.offering)
                 .Include(y => y.offering.semester)
@@ -73,7 +73,7 @@ namespace WebApp.Features.Students.Enroll
                     break;
             }
 
-            ViewData["Title"] = "Fall 2017";
+            ViewData["Title"] = "Filtered Results";
             return View("Courses", result);
         }
 
