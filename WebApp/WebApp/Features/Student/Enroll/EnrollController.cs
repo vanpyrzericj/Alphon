@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
 using WebApp.Features.Student.Enroll;
 using WebApp.Infrastructure.Inherits;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApp.Features.Students.Enroll
 {
@@ -157,35 +158,31 @@ namespace WebApp.Features.Students.Enroll
 
         //FOR TESTING PURPOSES
         [Route("/Student/Enroll/{SemesterID}/TestCourses")]
-        public IActionResult TestCourseSelection(int SemesterID)
+        public JsonResult TestCourseSelection(int SemesterID)
         {
             //TODO: Manipulate the filter object as needed
             var filter = new ClassFilterVM();
-            filter.CourseNumber = 425;
+            filter.Career = 1;
+            filter.CourseNumber = 442;
+            filter.CourseNumberFilterOption = 1;
+            filter.MajorId = 1;
+            SemesterID = 1;
 
-            //TODO: Delete this fake model and have your returned results be the model object.
-            List<Course> model = new List<Course>
-            {
-                new Course
-                {
-                    Id = 1,
-                    number = 442,
-                    name = "Software Engineering",
-                    description = "Industry standard software development."
+            var result = _context.Offerings                
+                .Where(x => x.semester.Id == SemesterID)
+                .Where(x => x.course.major.Id == filter.MajorId)
+                .Where(x => x.type == "lecture")
+                .Where(x => x.course.number == filter.CourseNumber)
+                .Include(y => y.Id)
+                .Include(y => y.semester)
+                .Include(y => y.course.major)
+                .Include(y => y.course)
+                .ToList();
 
-                },
-                 new Course
-                {
-                    Id = 2,
-                    number = 421,
-                    name = "Operating Systems",
-                    description = "Just resign now."
-
-                }
-            };
-
-            ViewData["Title"] = "Fall 2017";
-            return View("Courses", model);
+            return new JsonResult(result);
         }
+
+
     }
+
 }

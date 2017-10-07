@@ -10,7 +10,7 @@ namespace WebApp.Features.Student.Enroll
         public int MajorId { get; set; }
         public int CourseNumber { get; set; }
         public int CourseNumberFilterOption { get; set; } // {1} IsExactly {2} Contains {3} >= {4} <=
-        public string Career { get; set; }
+        public int Career { get; set; }
         public bool ShowOpenClasses { get; set; }
         public string InstructorLastName { get; set; }
         public int InstructorNameFilterOption { get; set; } // {1} IsExactly {2} Contains
