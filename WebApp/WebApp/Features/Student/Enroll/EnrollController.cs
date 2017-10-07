@@ -144,7 +144,7 @@ namespace WebApp.Features.Students.Enroll
         {
             //For Prototyping: Just create an arbitrary list of Students (Accounts entity)
             ViewData["Title"] = "Course Search";
-            return View("CourseSearch", _context.Majors.ToList());
+            return View("CourseSearch", new CourseSearchVM { Majors = _context.Majors.ToList(), SemesterId = SemesterID});
         }
 
         [Route("/Student/Enroll/CheckoutResult")]

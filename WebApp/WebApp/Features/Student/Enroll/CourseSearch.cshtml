@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebApp.Models.Major>
+﻿@model WebApp.Features.Student.Enroll.CourseSearchVM
 <div class="page-content">
     <h1 class="page-title">
         Enrollment
@@ -11,55 +11,189 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                Enrollment
+                <a href="/Student/Enroll">Enrollment</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                @Model.SemesterId
             </li>
         </ul>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="portlet light bordered">
-                <div class="portlet-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>
-                                    Select Enrollment Semester
-                                </label>
-                            </div>
+    <form action="/Student/Enroll/@Model.SemesterId/Courses" method="post">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Create Your Search Filter
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>
-                                    Enter Three Letter Major ID
-                                </label>
-                                <input type="text" class="form-control"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>
-                                    Enter Course Number
-                                </label>
-                                <input type="text" class="form-control" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="pull-right">
-                                <div class="btn-group">
-                                    <a class="btn btn-fit-height blue" href="">
-                                        <i></i> Clear
-                                    </a>
+                    <div class="portlet-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>
+                                        Department
+                                    </label>
+                                    <select id="majorId" name="filter.majorId" class="form-control">
+                                        <option selected>
+                                            Select a Department
+                                        </option>
+                                        @foreach (var major in Model.Majors)
+                                        {
+                                            <option value="@major.Id">
+                                                @major.name
+                                            </option>
+                                        }
+                                    </select>
                                 </div>
-                                <div class="btn-group">
-                                    <a class="btn btn-fit-height blue" href="/Student/Enroll/1/Courses">
-                                        <i></i> Search
-                                    </a>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>
+                                        Career
+                                    </label>
+                                    <select id="career" name="filter.career" class="form-control">
+                                        <option selected value="1">
+                                            Undergraduate
+                                        </option>
+                                        <option value="2">
+                                            Graduate
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>
+                                        Mode of Instruction
+                                    </label>
+
+                                    <select id="modeOfInstruction" name="filter.modeOfInstruction" class="form-control">
+                                        <option value="1">
+                                            Online
+                                        </option>
+                                        <option selected value="2">
+                                            Classroom
+                                        </option>
+                                        <option value="3">
+                                            Hybrid
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>
+                                        Course #
+                                    </label>
+                                    <select id="courseNumberFilterOption" name="filter.courseNumberFilterOption" class="form-control">
+                                        <option selected value="1">
+                                            Is Exactly
+                                        </option>
+                                        <option value="2">
+                                            Contains
+                                        </option>
+                                        <option value="3">
+                                            Is Greater Than Or Equal To
+                                        </option>
+                                        <option value="4">
+                                            Is Less Than Or Equal To
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label>&nbsp;</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="courseNumber" name="filter.courseNumber" placeholder="Enter Class Number" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>&nbsp;</label>
+                                    <div class="mt-checkbox-inline">
+                                        <label class="mt-checkbox">
+                                            <input type="checkbox" id="showOpenClasses" name="filter.showOpenClasses" value="true"> Only Show Open Classes
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Days of the Week</label>
+                                    <div class="mt-checkbox-inline">
+                                        <label class="mt-checkbox">
+                                            <input type="checkbox" id="monday" name="filter.monday" value="true"> M
+                                            <span></span>
+                                        </label>
+                                        <label class="mt-checkbox">
+                                            <input type="checkbox" id="tuesday" name="filter.tuesday" value="true"> Tu
+                                            <span></span>
+                                        </label>
+                                        <label class="mt-checkbox">
+                                            <input type="checkbox" id="wednesday" name="filter.wednesday" value="true"> W
+                                            <span></span>
+                                        </label>
+                                        <label class="mt-checkbox">
+                                            <input type="checkbox" id="thursday" name="filter.thursday" value="true"> Th
+                                            <span></span>
+                                        </label>
+                                        <label class="mt-checkbox">
+                                            <input type="checkbox" id="friday" name="filter.friday" value="true"> F
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>
+                                        Instructor Last Name
+                                    </label>
+                                    <select id="instructorNameFilterOption" name="filter.instructorNameFilterOption" class="form-control">
+                                        <option selected value="1">
+                                            Is Exactly
+                                        </option>
+                                        <option value="2">
+                                            Contains
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label>&nbsp;</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="filter.instructorLastName" name="filter.instructorLastName" />
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="pull-right">
+                                    @*<div class="btn-group">
+                                        <button class="btn btn-fit-height blue" type="submit">
+                                            <i class="fa fa-save"></i> Save This Search
+                                        </button>
+                                    </div>*@
+                                    <div class="btn-group">
+                                        <button class="btn btn-fit-height blue" type="submit">
+                                            <i class="fa fa-search"></i> Search
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -67,7 +201,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </form>
     @section PageScripts{
 
     }
