@@ -12,6 +12,13 @@ namespace WebApp.Features.Students.Enroll
     [Area("Student")]
     public class EnrollController : Controller
     {
+        private HubContext _context;
+    
+        public EnrollController()
+        {
+            _context = new HubContext();
+        }
+
         [Route("/Student/Enroll")]
         public IActionResult Enroll()
         {
@@ -137,7 +144,7 @@ namespace WebApp.Features.Students.Enroll
         {
             //For Prototyping: Just create an arbitrary list of Students (Accounts entity)
             ViewData["Title"] = "Course Search";
-            return View("CourseSearch");
+            return View("CourseSearch", _context.Majors.ToList());
         }
 
         [Route("/Student/Enroll/CheckoutResult")]
