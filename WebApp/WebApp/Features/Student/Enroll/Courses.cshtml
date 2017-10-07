@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebApp.Models.Course>
+﻿@model IEnumerable<WebApp.Features.Student.Enroll.CourseFilterResult>
 <div class="page-content">
     <h1 class="page-title">
         Fall 2017
@@ -35,9 +35,9 @@
                             @foreach (var course in Model)
                             {
                                 <tr>
-                                    <th><a href="/Student/Enroll/1/Courses/@course.Id">@course.name</a></th>
-                                    <th>@course.number</th>
-                                    <th>@course.description</th>
+                                    <th><a href="/Student/Enroll/1/Courses/">@course.coursename</a></th>
+                                    <th>@course.coursenumber</th>
+                                    <th>@course.cousedescription</th>
                                 </tr>
                             }
                         </tbody>

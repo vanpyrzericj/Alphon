@@ -36,29 +36,45 @@ namespace WebApp.Features.Students.Enroll
         [Route("/Student/Enroll/{SemesterID}/Courses")]
         public IActionResult CourseSelection(int SemesterID, ClassFilterVM filter)
         {
-            //For Prototyping: Just create an arbitrary list of Students (Accounts entity)
-            List<Course> model = new List<Course>
+            //TODO: Manipulate the filter object as needed
+            var result = _context.Sections
+                .Where(x => x.offering.semester.Id == SemesterID)
+                .Where(x => x.offering.course.major.Id == filter.MajorId)
+                //.Where(x => x.offering.type == "lecture")
+                //.Where(x => x.offering.course.number == filter.CourseNumber)
+                .Include(y => y.offering)
+                .Include(y => y.offering.semester)
+                .Include(y => y.offering.course.major)
+                .Select(a => new CourseFilterResult
+                {
+                    offeringid = a.offering.Id,
+                    coursename = a.offering.course.name,
+                    professor = a.professor,
+                    credithours = a.offering.course.credithours,
+                    timeslot = a.TimeSlots,
+                    coursenumber = a.offering.course.number,
+                    cousedescription = a.offering.course.description
+
+                })
+                .ToList();
+
+            switch (filter.CourseNumberFilterOption)
             {
-                new Course
-                {
-                    Id = 1,
-                    number = 442,
-                    name = "Software Engineering",
-                    description = "Industry standard software development."
-
-                },
-                 new Course
-                {
-                    Id = 2,
-                    number = 421,
-                    name = "Operating Systems",
-                    description = "Just resign now."
-
-                }
-            };
+                case 1:
+                    result = result.Where(x => x.coursenumber == filter.CourseNumber).ToList();
+                    break;
+                case 3:
+                    result = result.Where(x => x.coursenumber >= filter.CourseNumber).ToList();
+                    break;
+                case 4:
+                    result = result.Where(x => x.coursenumber <= filter.CourseNumber).ToList();
+                    break;
+                default:
+                    break;
+            }
 
             ViewData["Title"] = "Fall 2017";
-            return View("Courses", model);
+            return View("Courses", result);
         }
 
         [Route("/Student/Enroll/{SemesterID}/Courses/{OfferingID}")]
@@ -119,35 +135,30 @@ namespace WebApp.Features.Students.Enroll
 
         //FOR TESTING PURPOSES
         [Route("/Student/Enroll/{SemesterID}/TestCourses")]
-        public IActionResult TestCourseSelection(int SemesterID)
+        public JsonResult TestCourseSelection(int SemesterID)
         {
             //TODO: Manipulate the filter object as needed
             var filter = new ClassFilterVM();
-            filter.CourseNumber = 425;
+            filter.Career = 1;
+            filter.CourseNumber = 442;
+            filter.CourseNumberFilterOption = 1;
+            filter.MajorId = 1;
+            SemesterID = 1;
 
-            //TODO: Delete this fake model and have your returned results be the model object.
-            List<Course> model = new List<Course>
-            {
-                new Course
-                {
-                    Id = 1,
-                    number = 442,
-                    name = "Software Engineering",
-                    description = "Industry standard software development."
+            var result = _context.Sections
+                .Where(x => x.offering.semester.Id == SemesterID)
+                .Where(x => x.offering.course.major.Id == filter.MajorId)
+                //.Where(x => x.offering.type == "lecture")
+                .Where(x => x.offering.course.number == filter.CourseNumber)
+                .Include(y => y.offering)
+                .Include(y => y.offering.semester)
+                .Include(y => y.offering.course.major)
+                .ToList();
 
-                },
-                 new Course
-                {
-                    Id = 2,
-                    number = 421,
-                    name = "Operating Systems",
-                    description = "Just resign now."
-
-                }
-            };
-
-            ViewData["Title"] = "Fall 2017";
-            return View("Courses", model);
+            return new JsonResult(result);
         }
+
+
     }
+
 }
