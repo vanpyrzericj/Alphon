@@ -16,7 +16,11 @@ namespace WebApp.Features.Student.Enroll
 
         public int credithours { get; set; }
 
-        public ICollection<TimeSlot> timeslot { get; set; }d
+        public ICollection<TimeSlot> timeslot { get; set; }
+
+        public int coursenumber { get; set; }
+
+        public string cousedescription { get; set; }
 
     }
 }
