@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
 using WebApp.Features.Student.Enroll;
 using WebApp.Infrastructure.Inherits;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApp.Features.Students.Enroll
 {
@@ -22,41 +23,8 @@ namespace WebApp.Features.Students.Enroll
         [Route("/Student/Enroll")]
         public IActionResult Enroll()
         {
-            //For Prototyping: Just create an arbitrary list of Students (Accounts entity)
-            List<Semester> model = new List<Semester>
-            {
-                new Semester
-                {
-                    Id = 1,
-                    season = "Fall",
-                    year = 2017
-
-                },
-                new Semester
-                {
-                    Id = 2,
-                    season = "Winter",
-                    year = 2017
-
-                },
-                new Semester
-                {
-                    Id = 3,
-                    season = "Spring",
-                    year = 2017
-
-                },
-                new Semester
-                {
-                    Id = 4,
-                    season = "Summer",
-                    year = 2017
-
-                },
-            };
-
             ViewData["Title"] = "Enroll";
-            return View("Semester", model);
+            return View("Semester", _context.Semesters.ToList());
         }
 
         /// <summary>
@@ -93,38 +61,34 @@ namespace WebApp.Features.Students.Enroll
             return View("Courses", model);
         }
 
-        [Route("/Student/Enroll/{SemesterID}/Courses/{CourseID}")]
-        public IActionResult CourseEnrollInfo(int SemesterID, int CourseID)
+        [Route("/Student/Enroll/{SemesterID}/Courses/{OfferingID}")]
+        public async Task<IActionResult> CourseEnrollInfoAsync(int SemesterID, int OfferingID)
         {
-            //For Prototyping: Just create an arbitrary student entity
+            var sectionId = (await _context.Sections.Where(x => x.offering.Id == OfferingID).FirstAsync()).Id;
+            var course = await _context.Offerings.Where(x => x.Id == OfferingID).Include(m => m.course.major).Select(a => a.course).FirstAsync();
+            var recitationOfferings = await _context.Offerings.Where(x => x.type == "recitation").Where(y => y.course.Id == course.Id).ToListAsync();
+            
             var model = new CourseEnrollInfoVM()
             {
-                course = new Course()
+                course = course,
+                professor = await _context.Sections.Where(x => x.Id == sectionId).Select(a => a.professor).FirstAsync(),
+                timeslots = await _context.Timeslots.Where(x => x.section.Id == sectionId).Select(x => new TimeSlot()
                 {
-                    name = "Name",
-                    number = 1,
-                    description = "Something"       
-                
-                },
-
-                sections = new List<Section>()
-                {
-                    new Section()
-                    {
-                        room = "BuildingA 40"
-                    },
-                    new Section()
-                    {
-                        room = "BuildingB 60"
-                    },
-                    new Section()
-                    {
-                        room = "BuildingC 80"
-                    }
-                }
+                    starttime = x.starttime,
+                    endtime = x.endtime,
+                    dayofweek = x.dayofweek
+                }).ToListAsync(),
+                OfferingId = OfferingID,
+                semester = await _context.Semesters.FindAsync(SemesterID)
             };
 
+            foreach(var offer in recitationOfferings)
+            {
+                model.recitations.Add(_context.Sections.Where(x => x.offering.Id == offer.Id).Include(p => p.professor).First());
+            }
+
             ViewData["Title"] = model.course.name;
+            //return new JsonResult(model);
             return View("Course", model);
         }
 
@@ -142,7 +106,6 @@ namespace WebApp.Features.Students.Enroll
         [Route("/Student/Enroll/{SemesterID}/Search")]
         public IActionResult CourseSearch(int SemesterID)
         {
-            //For Prototyping: Just create an arbitrary list of Students (Accounts entity)
             ViewData["Title"] = "Course Search";
             return View("CourseSearch", new CourseSearchVM { Majors = _context.Majors.ToList(), SemesterId = SemesterID});
         }
@@ -150,7 +113,6 @@ namespace WebApp.Features.Students.Enroll
         [Route("/Student/Enroll/CheckoutResult")]
         public IActionResult CheckoutResult()
         {
-            //For Prototyping: Just create an arbitrary list of Students (Accounts entity)
             ViewData["Title"] = "Checkout Result";
             return View("CheckoutResult");
         }

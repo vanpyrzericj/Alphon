@@ -11,6 +11,6 @@ namespace WebApp.Models
         public string dayofweek { get; set; }
         public string starttime { get; set; }
         public string endtime { get; set; }
-        public Section section { get; set; }
+        public virtual Section section { get; set; }
     }
 }
