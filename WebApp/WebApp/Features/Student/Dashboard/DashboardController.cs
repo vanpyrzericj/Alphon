@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using WebApp.Infrastructure.Inherits;
 using WebApp.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.Features.Student.Dashboard
 {
     [Area("Student")]
+    [Authorize("Student")]
     public class DashboardController : Controller
     {
         public HubContext _context;

@@ -31,41 +31,7 @@
     @Html.Raw(JavaScriptSnippet.FullScript)
 </head>
 <body class="page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-md">
-    <div class="page-header navbar navbar-fixed-top">
-        <div class="page-header-inner ">
-            <div class="page-logo">
-                <a href="/">
-                    <img src="~/logo.png" alt="logo" class="logo-default" style="width: 125px; margin-top: 0px;" />
-                </a>
-                <div class="menu-toggler sidebar-toggler">
-                </div>
-            </div>
-            <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse"> </a>
-            <div class="page-top">
-                <div class="top-menu">
-                    <ul class="nav navbar-nav pull-right">
-                        <!-- BEGIN USER LOGIN DROPDOWN -->
-                        <li class="dropdown dropdown-user">
-                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                <img alt="" class="img-circle" src="https://www.gravatar.com/avatar/cdd8bd45e3cda24da46ac86adc475bc2?s=45&d=homeruncs.com%2Fassets%2Flayouts%2Flayout%2Fimg%2Favatar.png" />
-                                <span class="username username-hide-on-mobile"> John Doe</span>
-                                <i class="fa fa-angle-down"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-default">
-                                <li class="divider"> </li>
-                                <li>
-                                    <a href="/SignOut">
-                                        <i class="fa fa-key"></i> Sign Out
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <!-- END USER LOGIN DROPDOWN -->
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+    @await Component.InvokeAsync("WebApp.Features.Admin.Components.TopHeader")
     <div class="clearfix"> </div>
     <div class="page-container">
         <div class="page-sidebar-wrapper">
