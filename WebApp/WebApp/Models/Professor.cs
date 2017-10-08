@@ -10,6 +10,6 @@ namespace WebApp.Models
         public int Id { get; set; }
         public string firstname { get; set; }
         public string lastname { get; set; }
-        public ICollection<Section> sections { get; set; }
+        //public ICollection<Section> sections { get; set; }
     }
 }

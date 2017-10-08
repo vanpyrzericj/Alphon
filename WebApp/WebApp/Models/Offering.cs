@@ -11,6 +11,8 @@ namespace WebApp.Models
         public Semester semester { get; set; }
         public Course course { get; set; }
         public string type { get; set; }
+        public int capacity { get; set; }
+        public int parentcourse { get; set; }
 
     }
 }

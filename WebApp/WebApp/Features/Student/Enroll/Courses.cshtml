@@ -1,7 +1,7 @@
-﻿@model IEnumerable<WebApp.Models.Course>
+﻿@model IEnumerable<WebApp.Features.Student.Enroll.CourseFilterResult>
 <div class="page-content">
     <h1 class="page-title">
-        Fall 2017
+        Search Results
     </h1>
     <div class="page-bar">
         <ul class="page-breadcrumb">
@@ -15,7 +15,11 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                Fall 2017
+                <a href="/Student/Enroll/1/Search">Fall 2017</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                Search Results
             </li>
         </ul>
     </div>
@@ -35,9 +39,9 @@
                             @foreach (var course in Model)
                             {
                                 <tr>
-                                    <th><a href="/Student/Enroll/1/Courses/@course.Id">@course.name</a></th>
-                                    <th>@course.number</th>
-                                    <th>@course.description</th>
+                                    <th><a href="/Student/Enroll/1/Courses/@course.offeringid">@course.coursename</a></th>
+                                    <th>@course.coursenumber</th>
+                                    <th>@course.cousedescription</th>
                                 </tr>
                             }
                         </tbody>
