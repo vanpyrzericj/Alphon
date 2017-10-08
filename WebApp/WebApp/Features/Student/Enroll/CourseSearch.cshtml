@@ -1,4 +1,5 @@
-﻿<div class="page-content">
+﻿@model WebApp.Features.Student.Enroll.CourseSearchVM
+<div class="page-content">
     <h1 class="page-title">
         Enrollment
     </h1>
@@ -14,51 +15,187 @@
             </li>
         </ul>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="portlet light bordered">
-                <div class="portlet-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>
-                                    Select Enrollment Semester
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>
-                                    Enter Three Letter Major ID
-                                </label>
-                                <input type="text" class="form-control"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>
-                                    Enter Course Number
-                                </label>
-                                <input type="text" class="form-control" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="pull-right">
-                                <div class="btn-group">
-                                    <a class="btn btn-fit-height blue" href="">
-                                        <i></i> Clear
-                                    </a>
+    <form action="/Student/Enroll/@Model.SemesterId/Courses" method="post">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet light bordered">
+                    <div class="portlet-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>
+                                        Create Your Search Filter
+                                    </label>
                                 </div>
-                                <div class="btn-group">
-                                    <a class="btn btn-fit-height blue" href="/Student/Enroll/1/Courses">
-                                        <i></i> Search
-                                    </a>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>
+                                        Department
+                                    </label>
+                                    <select id="majorId" name="majorId" class="form-control">
+                                        <option selected>
+                                            Select a Department
+                                        </option>
+                                        @foreach (var major in Model.Majors)
+                                        {
+                                            <option value="@major.Id">
+                                                @major.name
+                                            </option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>
+                                        Career
+                                    </label>
+                                    <select id="career" name="career" class="form-control">
+                                        <option selected value="1">
+                                            Undergraduate
+                                        </option>
+                                        <option value="2">
+                                            Graduate
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>
+                                        Mode of Instruction
+                                    </label>
+
+                                    <select id="modeOfInstruction" name="modeOfInstruction" class="form-control">
+                                        <option selected value="1">
+                                            Online
+                                        </option>
+                                        <option selected value="2">
+                                            Classroom
+                                        </option>
+                                        <option selected value="3">
+                                            Hybrid
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>                            
+                        </div>
+
+
+                        <div class="row">
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>
+                                        Course #
+                                    </label>
+                                    <select id="courseNumberFilterOption" name="courseNumberFilterOption" class="form-control">
+                                        <option selected value="1">
+                                            Is Exactly
+                                        </option>
+                                        <option value="2">
+                                            Contains
+                                        </option>
+                                        <option value="3">
+                                            Is Greater Than Or Equal To
+                                        </option>
+                                        <option value="4">
+                                            Is Less Than Or Equal To
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label>&nbsp;</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="courseNumber" name="courseNumber" placeholder="Enter Class Number" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>&nbsp;</label>
+                                    <div class="mt-checkbox-inline">
+                                        <label class="mt-checkbox">
+                                            <input type="checkbox" id="showOpenClasses" value="showOpenClasses"> Show Open Classes
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        @*<div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>
+                                        Instructor
+                                    </label>
+                                    <input type="text" class="form-control" />
+                                    <select id="instructorNameFilterOption" name="instructorNameFilterOption" class="form-control">
+                                        <option selected value="1">
+                                            Is Exactly
+                                        </option>
+                                        <option value="2">
+                                            Contains
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            @*<div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Days of the Week</label>
+                                    <div class="mt-checkbox-inline">
+                                        <label class="mt-checkbox">
+                                            <input type="checkbox" id="monday" value="monday"> M
+                                            <span></span>
+                                        </label>
+                                        <label class="mt-checkbox">
+                                            <input type="checkbox" id="tuesday" value="tuesday"> Tu
+                                            <span></span>
+                                        </label>
+                                        <label class="mt-checkbox">
+                                            <input type="checkbox" id="wednesday" value="wednesday"> W
+                                            <span></span>
+                                        </label>
+                                        <label class="mt-checkbox">
+                                            <input type="checkbox" id="thursday" value="thursday"> Th
+                                            <span></span>
+                                        </label>
+                                        <label class="mt-checkbox">
+                                            <input type="checkbox" id="friday" value="friday"> F
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>*@
+                        </div>*@
+
+                      
+
+                       
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="pull-right">
+                                    <div class="btn-group">
+                                        <a class="btn btn-fit-height blue" href="">
+                                            <i></i> Clear
+                                        </a>
+                                    </div>
+                                    <div class="btn-group">
+                                        <a class="btn btn-fit-height blue" href="/Student/Enroll/1/Courses">
+                                            <i></i> Search
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -66,7 +203,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </form>
     @section PageScripts{
 
     }
