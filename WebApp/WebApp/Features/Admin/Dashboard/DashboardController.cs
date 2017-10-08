@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using WebApp.Infrastructure.Inherits;
 
 namespace WebApp.Features.Admin.Dashboard
 {
     [Area("Admin")]
+    [Authorize("Admin")]
     public class DashboardController : Controller
     {
         /// <summary>
