@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
 using WebApp.Features.Student.Enroll;
 using WebApp.Infrastructure.Inherits;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.Features.Students.Enroll
 {
     [Area("Student")]
+    [Authorize("Student")]
     public class EnrollController : Controller
     {
         [Route("/Student/Enroll")]

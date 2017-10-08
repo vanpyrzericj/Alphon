@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -9,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using WebApp.Models;
 using MySQL.Data.EntityFrameworkCore.Extensions;
 using WebApp.Infrastructure.FeatureFolders;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApp
 {
@@ -32,6 +35,24 @@ namespace WebApp
             //});
 
             services.AddMvc().AddFeatureFolders();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Student",
+                policy => policy.RequireClaim("role", "Student"));
+            });
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin",
+                policy => policy.RequireClaim("role", "Admin"));
+            });
+
+            services.AddAuthentication("MyCookieAuthenticationScheme")
+            .AddCookie("MyCookieAuthenticationScheme", options =>
+                {
+                    options.AccessDeniedPath = "/Forbidden";
+                    options.LoginPath = "/SignIn";
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +69,8 @@ namespace WebApp
             }
 
             app.UseStaticFiles();
+            app.UseAuthentication();
+
 
             app.UseMvc(routes =>
             {

@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
 using WebApp.Infrastructure.Inherits;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.Features.Admin.Professors
 {
     [Area("Admin")]
+    [Authorize("Admin")]
     public class ProfessorsController : Controller
     {
         [Route("/Admin/Professors")]
