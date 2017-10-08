@@ -42,33 +42,52 @@ namespace WebApp.Controllers
         {
             ViewData["ReturnUrl"] = returnUrl;
 
-            if (!string.IsNullOrWhiteSpace(emailLogin))
+            try
             {
-                var account = _context.Accounts.Where(x => x.email == emailLogin).First();
+                if (!string.IsNullOrWhiteSpace(emailLogin))
+                {
+                    var account = _context.Accounts.Where(x => x.email == emailLogin).First();
 
-                //Check If Password Exists
-                if (account.password != GenerateHashedPassword(passwordLogin, GetBytes(account.salt)))
-                    return View("~/Views/SignInError.cshtml", "error");
+                    //Check If Password Exists
+                    if (account.password != GenerateHashedPassword(passwordLogin, GetBytes(account.salt)))
+                        return View("~/Views/Home/SignInError.cshtml", "error");
 
-                //If Account Exists, Create Principal Object For Authenticated User
-                var claims = new List<Claim>
+                    //If Account Exists, Create Principal Object For Authenticated User
+                    var claims = new List<Claim>
                 {
                     new Claim("sub", account.Id.ToString()),
                     new Claim("given_name", account.firstname + " " + account.lastname),
                     new Claim("role", account.usertype)
                 };
 
-                var id = new ClaimsIdentity(claims, "password");
-                var p = new ClaimsPrincipal(id);
+                    var id = new ClaimsIdentity(claims, "password");
+                    var p = new ClaimsPrincipal(id);
 
-                await HttpContext.SignInAsync("MyCookieAuthenticationScheme", p);
+                    await HttpContext.SignInAsync("MyCookieAuthenticationScheme", p);
 
-                if (!string.IsNullOrWhiteSpace(returnUrl)) return LocalRedirect(returnUrl);
-                else if (account.usertype == "Student") return LocalRedirect("/Student");
-                else return LocalRedirect("/Admin");
+                    account.lastlogin = DateTime.Now;
+                    _context.SaveChanges();
+
+                    if (!string.IsNullOrWhiteSpace(returnUrl)) return LocalRedirect(returnUrl);
+                    else if (account.usertype == "Student") return LocalRedirect("/Student");
+                    else return LocalRedirect("/Admin");
+                }
+            }
+            catch(Exception ex)
+            {
+                //A "Sequence contains no elements" exception will be thrown if the email/username provided cannot be found in the database. So we return an error.
+                return View("~/Views/Home/SignInError.cshtml", "error");
             }
 
-            return View("~/Views/SignInError.cshtml", "error");
+
+            return View("~/Views/Home/SignInError.cshtml", "error");
+        }
+
+        [Route("/Logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync("MyCookieAuthenticationScheme");
+            return Redirect("/?signedout");
         }
 
         public byte[] GenerateSalt()
