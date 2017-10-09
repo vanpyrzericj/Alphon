@@ -23,14 +23,14 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-9">
             <div class="portlet light bordered">
                 <div class="portlet-body">
                     <h3>Fall 2017</h3>
                     <table class="table table-striped table-bordered table-hover table-checkable order-column" id="">
                         <thead>
                             <tr>
-                                <th> Course </th>
+                                <th style="width: 20%;"> Course </th>
                                 <th> Room </th>
                                 <th> Times </th>
                                 <th> Professor </th>
@@ -43,9 +43,11 @@
                                 <tr>
                                     <th>@enrollment.section.offering.course.name</th>
                                     <th> @enrollment.section.room </th>
-                                    <th> @foreach (var timeSlot in enrollment.section.TimeSlots) { 
-                                        @timeSlot.dayofweek @:: @timeSlot.starttime - @timeSlot.endtime,
-                                    }</th>
+                                    <th>
+                                        @foreach (var timeSlot in enrollment.section.TimeSlots) {
+                                            @timeSlot.dayofweek @:: @timeSlot.starttime - @timeSlot.endtime,
+                                    }
+                                    </th>
                                     <th> @enrollment.section.professor.firstname @enrollment.section.professor.lastname </th>
                                     <th>
                                         <div class="btn-group">
@@ -71,13 +73,13 @@
                         <div class="col-md-12">
                             <div class="pull-right">
                                 <div class="btn-group">
-                                    <a class="btn btn-fit-height blue" href="/Student/Cart/Clear">
+                                    <a class="btn btn-fit-height red" href="/Student/Cart/Clear">
                                         <i class="fa fa-close"></i> Clear Cart
                                     </a>
                                 </div>
                                 <div class="btn-group">
-                                    <a class="btn btn-fit-height blue" href="/Student/Enroll/CheckoutResult">
-                                        <i class="fa fa-check"></i> Checkout
+                                    <a class="btn btn-fit-height green-jungle" href="/Student/Enroll/CheckoutResult">
+                                        Checkout <i class="fa fa-arrow-right"></i> 
                                     </a>
                                 </div>
                             </div>
@@ -86,12 +88,47 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-3">
+            <a class="dashboard-stat dashboard-stat-v2 blue" href="#">
+                <div class="visual">
+                    <i class="fa fa-clock-o"></i>
+                </div>
+                <div class="details">
+                    <div class="number">
+                        <span data-counter="counterup" data-value="1349">@Model.Sum(x => x.section.offering.course.credithours)</span>
+                    </div>
+                    <div class="desc"> Credit Hours In Cart</div>
+                </div>
+            </a>
+            <a class="dashboard-stat dashboard-stat-v2 green-meadow" href="#">
+                <div class="visual">
+                    <i class="fa fa-book"></i>
+                </div>
+                <div class="details">
+                    <div class="number">
+                        <span data-counter="counterup" data-value="1349">@Model.Count()</span>
+                    </div>
+                    <div class="desc"> Courses In Cart </div>
+                </div>
+            </a>
+            <a class="dashboard-stat dashboard-stat-v2 purple" href="#">
+                <div class="visual">
+                    <i class="fa fa-hourglass-half"></i>
+                </div>
+                <div class="details">
+                    <div class="number">
+                        <span data-counter="counterup" data-value="1349">0</span>
+                    </div>
+                    <div class="desc"> Wait Listed </div>
+                </div>
+            </a>
+        </div>
     </div>
+</div>
+@section PageScripts{
+    <script>
+        $(document).ready(function () {
 
-    @section PageScripts{
-        <script>
-            $(document).ready(function () {
-
-            });
-        </script>
-    }
+        });
+    </script>
+}
