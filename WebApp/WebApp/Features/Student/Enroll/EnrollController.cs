@@ -39,6 +39,7 @@ namespace WebApp.Features.Students.Enroll
         [Route("/Student/Enroll/{SemesterID}/Courses")]
         public IActionResult CourseSelection(int SemesterID, ClassFilterVM filter)
         {
+            ViewData["Title"] = "Filtered Results";
             //TODO: Manipulate the filter object as needed
             var result = _context.Sections
                 .Where(x => x.offering.semester.Id == SemesterID)
@@ -61,6 +62,7 @@ namespace WebApp.Features.Students.Enroll
                 })
                 .ToList();
 
+            if(filter.CourseNumber == 0) return View("Courses", result);
             switch (filter.CourseNumberFilterOption)
             {
                 case 1:
@@ -76,7 +78,6 @@ namespace WebApp.Features.Students.Enroll
                     break;
             }
 
-            ViewData["Title"] = "Filtered Results";
             return View("Courses", result);
         }
 
@@ -264,19 +265,20 @@ namespace WebApp.Features.Students.Enroll
             var enrolled = _context.Enrollments
                 .Where(x => x.section.offering.semester.Id == semesterID)
                 .Where(x => x.account.Id == account.Id)
-                .Where(x => x.status == 1)
+                .Where(x => x.status < 3)
+                //.Where(x => x.status == 2)
                 .Include(y => y.section.offering.course)
                 .ToList();
            
             
             foreach(var i in enrolled)
             {
-                if(i.section.offering.course.Id == course || i.section.offering.course.Id == rec)
+                if (i.section.offering.course.Id == course)
                 {
-                    return false;
+                    return (i.section.offering.course.Id == rec);
                 }
+                else if (i.section.offering.course.Id == rec) return false;
             }
-
 
             return true;
 
