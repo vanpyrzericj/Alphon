@@ -49,6 +49,7 @@ namespace WebApp.Features.Student.Dashboard
                         .Where(x => x.account.Id == acc.Id)
                         .Select(x => new MyCoursesVM
                         {
+                            id = x.Id,
                             professor = x.section.professor,
                             room = x.section.room,
                             timeslot = x.section.TimeSlots,

@@ -228,7 +228,24 @@ namespace WebApp.Features.Students.Enroll
         [Route("/Student/Cart/Remove/{enrollmentID}")]
         public IActionResult RemoveFromCart(int enrollmentID)
         {
-            _context.Enrollments.Remove(_context.Enrollments.Find(enrollmentID));
+            var course = _context.Enrollments.Where(x => x.Id == enrollmentID).Include(x => x.section).Include(x => x.section.offering.course).First();
+            if (course.section.offering.type == "lecture")
+            {
+                try
+                {
+                    _context.Enrollments.Remove(_context.Enrollments.Where(x => x.section.offering.parentcourse == course.section.offering.course.Id).First());
+                    _context.Enrollments.Remove(course);
+                }
+                catch(Exception ex)
+                {
+                    _context.Enrollments.Remove(course);
+                }
+                
+            }
+            else
+            {
+                _context.Enrollments.Remove(course);
+            }
             _context.SaveChanges();
 
             return Redirect("/Student/Cart");
