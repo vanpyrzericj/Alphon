@@ -10,5 +10,7 @@ namespace WebApp.Models
         public int Id { get; set; }
         public Account account { get; set; }
         public Section section { get; set; }
+        public int status { get; set; }
+        public DateTime dateadded { get; set; }
     }
 }
