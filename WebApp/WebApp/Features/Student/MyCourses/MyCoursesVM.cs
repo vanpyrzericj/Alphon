@@ -29,5 +29,6 @@ namespace WebApp.Features.Student.MyCourses
         public string coursename { get; set; }
 
         public string major{ get; set; }
+        public int id { get; internal set; }
     }
 }

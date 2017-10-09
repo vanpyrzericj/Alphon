@@ -113,7 +113,7 @@ namespace WebApp.Features.Students.Enroll
 
             foreach (var offer in recitationOfferings)
             {
-                model.recitations.Add(_context.Sections.Where(x => x.offering.Id == offer.Id).Include(p => p.professor).First());
+                model.recitations.Add(_context.Sections.Where(x => x.offering.Id == offer.Id).Where(x => x.offering.type == "recitation").Include(p => p.professor).First());
             }
 
             ViewData["Title"] = model.course.name;
@@ -197,7 +197,7 @@ namespace WebApp.Features.Students.Enroll
             var courseEnrollment = new Enrollment
             {
                 account = account,
-                section = _context.Sections.Find(courseId),
+                section = _context.Sections.Where(x => x.offering.Id == courseId).First(),
                 status = 2,
                 dateadded = DateTime.Now
             };
@@ -211,7 +211,7 @@ namespace WebApp.Features.Students.Enroll
             };
 
 
-            if (CheckCart(SemesterID, account, courseId, sectionForRecitationId))
+            if (CheckCart(SemesterID, account, courseEnrollment.section.Id, sectionForRecitationId))
             {
                 _context.Enrollments.Add(courseEnrollment);
                 _context.Enrollments.Add(recitationEnrollment);
@@ -228,7 +228,24 @@ namespace WebApp.Features.Students.Enroll
         [Route("/Student/Cart/Remove/{enrollmentID}")]
         public IActionResult RemoveFromCart(int enrollmentID)
         {
-            _context.Enrollments.Remove(_context.Enrollments.Find(enrollmentID));
+            var course = _context.Enrollments.Where(x => x.Id == enrollmentID).Include(x => x.section).Include(x => x.section.offering.course).First();
+            if (course.section.offering.type == "lecture")
+            {
+                try
+                {
+                    _context.Enrollments.Remove(_context.Enrollments.Where(x => x.section.offering.parentcourse == course.section.offering.course.Id).First());
+                    _context.Enrollments.Remove(course);
+                }
+                catch(Exception ex)
+                {
+                    _context.Enrollments.Remove(course);
+                }
+                
+            }
+            else
+            {
+                _context.Enrollments.Remove(course);
+            }
             _context.SaveChanges();
 
             return Redirect("/Student/Cart");
