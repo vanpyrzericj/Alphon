@@ -22,6 +22,8 @@
             </div>
         </div>
     </div>
+    <div class="alert alert-danger" style="display:none;" id="enrolledError">Unfortunately, we couldn't add the requested courses as you are already enrolled in them.</div>
+    <div class="alert alert-success" style="display:none;" id="enrolledSuccess">The selected course(s) were successfully added to your cart.</div>
     <div class="row">
         <div class="col-md-9">
             <div class="portlet light bordered">
@@ -79,7 +81,7 @@
                                     </a>
                                 </div>
                                 <div class="btn-group">
-                                    <a class="btn btn-fit-height green-jungle" href="/Student/Enroll/CheckoutResult">
+                                    <a id="checkoutBtn" class="btn btn-fit-height green-jungle" href="/Student/Enroll/Checkout">
                                         Checkout <i class="fa fa-arrow-right"></i>
                                     </a>
                                 </div>
@@ -129,11 +131,29 @@
 @section PageScripts{
     <script src="~/assets/global/plugins/bootstrap-confirmation/bootstrap-confirmation.min.js" type="text/javascript"></script>
     <script>
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        };
         $(document).ready(function () {
             $('#clearCartBtn').on('confirmed.bs.confirmation', function () {
                 window.location = "/Student/Cart/Clear";
             });
-
+            if (getUrlVars()["success"] == "true") {
+                $("#enrolledSuccess").fadeIn();
+            }
+            if (getUrlVars()["success"] == "false") {
+                $("#enrolledError").fadeIn();
+            }
+            if (@Model.Count() == 0) {
+                $("#checkoutBtn").addClass("disabled");
+            }
         });
     </script>
 }

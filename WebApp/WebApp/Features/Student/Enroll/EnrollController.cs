@@ -39,6 +39,7 @@ namespace WebApp.Features.Students.Enroll
         [Route("/Student/Enroll/{SemesterID}/Courses")]
         public IActionResult CourseSelection(int SemesterID, ClassFilterVM filter)
         {
+            ViewData["Title"] = "Filtered Results";
             //TODO: Manipulate the filter object as needed
             var result = _context.Sections
                 .Where(x => x.offering.semester.Id == SemesterID)
@@ -61,6 +62,7 @@ namespace WebApp.Features.Students.Enroll
                 })
                 .ToList();
 
+            if(filter.CourseNumber == 0) return View("Courses", result);
             switch (filter.CourseNumberFilterOption)
             {
                 case 1:
@@ -76,7 +78,6 @@ namespace WebApp.Features.Students.Enroll
                     break;
             }
 
-            ViewData["Title"] = "Filtered Results";
             return View("Courses", result);
         }
 
@@ -200,12 +201,17 @@ namespace WebApp.Features.Students.Enroll
                 dateadded = DateTime.Now
             };
 
-            _context.Enrollments.Add(courseEnrollment);
-            _context.Enrollments.Add(recitationEnrollment);
 
-            _context.SaveChanges();
-
-
+            if (CheckCart(SemesterID, account, courseId, sectionForRecitationId))
+            {
+                _context.Enrollments.Add(courseEnrollment);
+                _context.Enrollments.Add(recitationEnrollment);
+                _context.SaveChanges();
+            }
+            else
+            {
+                return new JsonResult(new { status = "false" });
+            }
             return new JsonResult(new { status = "success" });
 
         }
@@ -237,5 +243,46 @@ namespace WebApp.Features.Students.Enroll
 
             return Redirect("/Student/Cart");
         }
+
+        [Route("/Student/Enroll/Checkout")]
+        public IActionResult CheckOut()
+        {
+            var identity = (ClaimsIdentity)User.Identity;
+            IEnumerable<Claim> claims = identity.Claims;
+            var val = claims.First(x => x.Type == "sub");
+            var currentaccount = _context.Accounts.Find(Convert.ToInt32(val.Value));
+
+            foreach (var y in _context.Enrollments.Where(x => x.account.Id == currentaccount.Id).Where(x => x.status == 2))
+            {
+                y.status = 1;
+                _context.SaveChanges();
+            }
+            return Redirect("/Student/Enroll/CheckoutResult");
+        }
+
+        public bool CheckCart(int semesterID, Account account, int course, int rec)
+        {
+            var enrolled = _context.Enrollments
+                .Where(x => x.section.offering.semester.Id == semesterID)
+                .Where(x => x.account.Id == account.Id)
+                .Where(x => x.status < 3)
+                //.Where(x => x.status == 2)
+                .Include(y => y.section.offering.course)
+                .ToList();
+           
+            
+            foreach(var i in enrolled)
+            {
+                if (i.section.offering.course.Id == course)
+                {
+                    return (i.section.offering.course.Id == rec);
+                }
+                else if (i.section.offering.course.Id == rec) return false;
+            }
+
+            return true;
+
+        }
+        
     }
 }
