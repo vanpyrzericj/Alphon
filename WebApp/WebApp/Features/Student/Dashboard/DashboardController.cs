@@ -33,15 +33,15 @@ namespace WebApp.Features.Student.Dashboard
             var enrollments = _context.Enrollments.Where(x => x.account.Id == acc.Id).Where(x => x.section.offering.semester.Id == currentSemesterId).Include(s => s.section.offering.course).ToList();
             
             var model = new DashboardVM();
-            //model.CurrentCourses = enrollments.Where(c => c.status == 1).Count();
-            //model.CurrentCreditHours = enrollments.Where(c => c.status == 1).Sum(s => s.section.offering.course.credithours);
-            //model.AvailableCreditHours = 16 - model.CurrentCreditHours;
-            //model.ShoppingCartCourses = enrollments.Where(c => c.status == 2).Count();
+            model.CurrentCourses = enrollments.Where(c => c.status == 1).Count();
+            model.CurrentCreditHours = enrollments.Where(c => c.status == 1).Sum(s => s.section.offering.course.credithours);
+            model.AvailableCreditHours = 16 - model.CurrentCreditHours;
+            model.ShoppingCartCourses = enrollments.Where(c => c.status == 2).Count();
 
-            model.CurrentCourses = 1;
-            model.CurrentCreditHours = 1;
-            model.AvailableCreditHours = 1;
-            model.ShoppingCartCourses = 1;
+            //model.CurrentCourses = 1;
+            //model.CurrentCreditHours = 1;
+            //model.AvailableCreditHours = 1;
+            //model.ShoppingCartCourses = 1;
 
             model.Semester = semester;
             model.Enrollments = _context.Enrollments

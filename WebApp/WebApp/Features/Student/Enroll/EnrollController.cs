@@ -113,7 +113,7 @@ namespace WebApp.Features.Students.Enroll
 
             foreach (var offer in recitationOfferings)
             {
-                model.recitations.Add(_context.Sections.Where(x => x.offering.Id == offer.Id).Include(p => p.professor).First());
+                model.recitations.Add(_context.Sections.Where(x => x.offering.Id == offer.Id).Where(x => x.offering.type == "recitation").Include(p => p.professor).First());
             }
 
             ViewData["Title"] = model.course.name;
@@ -197,7 +197,7 @@ namespace WebApp.Features.Students.Enroll
             var courseEnrollment = new Enrollment
             {
                 account = account,
-                section = _context.Sections.Find(courseId),
+                section = _context.Sections.Where(x => x.offering.Id == courseId).First(),
                 status = 2,
                 dateadded = DateTime.Now
             };
@@ -211,7 +211,7 @@ namespace WebApp.Features.Students.Enroll
             };
 
 
-            if (CheckCart(SemesterID, account, courseId, sectionForRecitationId))
+            if (CheckCart(SemesterID, account, courseEnrollment.section.Id, sectionForRecitationId))
             {
                 _context.Enrollments.Add(courseEnrollment);
                 _context.Enrollments.Add(recitationEnrollment);
