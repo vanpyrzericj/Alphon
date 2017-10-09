@@ -13,8 +13,7 @@ Follow the Compile from Source instructions to get you a copy of the project up 
 ## Live Release Preview
 
 A live preview of both the develop and master branches can be viewed by accessing one of the two URLs below.
-* [Development Branch](http://dev.buh.avorex.net/)
-* [Master Branch (Minimum Viable Product)](http://buh.avorex.net/)
+* [Development Branch (Minimum Viable Product)](http://dev.buh.avorex.net/)
 
 ### Prerequisites
 
