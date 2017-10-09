@@ -125,6 +125,8 @@ namespace WebApp.Features.Students.Enroll
                 .Include(x => x.section.offering.course)
                 .Include(x => x.section.TimeSlots)
                 .ToList();
+
+            ViewData["Title"] = "Cart";
             return View("Cart", model);
         }
 
@@ -236,9 +238,4 @@ namespace WebApp.Features.Students.Enroll
             return Redirect("/Student/Cart");
         }
     }
-
-
-
-
-
 }
