@@ -53,7 +53,7 @@
                                     @foreach (var enrolledCourse in Model.enrollments)
                                     {
                                         <tr>
-                                            <th><a href="">@enrolledCourse.major @enrolledCourse.coursenumber</a></th>
+                                            <th>@enrolledCourse.major @enrolledCourse.coursenumber</th>
                                             <th> @enrolledCourse.coursename </th>
                                             <th>
                                                 @foreach (var timeslot in @enrolledCourse.timeslot)
