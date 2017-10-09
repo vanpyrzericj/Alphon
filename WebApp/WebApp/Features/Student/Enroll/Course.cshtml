@@ -157,7 +157,10 @@
             courseId: @Model.OfferingId,
             sectionForRecitationId: selectedRow
         }, function (response) {
-            //TODO: If successful, redirect to cart page.
+            if (response.status == "success") {
+                window.location = "/Student/Cart?success=true";
+
+            }
         });
     }
 </script>

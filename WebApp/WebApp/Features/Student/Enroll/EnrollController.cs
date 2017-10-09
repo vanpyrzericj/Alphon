@@ -8,6 +8,7 @@ using WebApp.Features.Student.Enroll;
 using WebApp.Infrastructure.Inherits;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace WebApp.Features.Students.Enroll
 {
@@ -16,7 +17,7 @@ namespace WebApp.Features.Students.Enroll
     public class EnrollController : Controller
     {
         private HubContext _context;
-    
+
         public EnrollController()
         {
             _context = new HubContext();
@@ -85,7 +86,7 @@ namespace WebApp.Features.Students.Enroll
             var sectionId = (await _context.Sections.Where(x => x.offering.Id == OfferingID).FirstAsync()).Id;
             var course = await _context.Offerings.Where(x => x.Id == OfferingID).Include(m => m.course.major).Select(a => a.course).FirstAsync();
             var recitationOfferings = await _context.Offerings.Where(x => x.type == "recitation").Where(y => y.course.Id == course.Id).ToListAsync();
-            
+
             var model = new CourseEnrollInfoVM()
             {
                 course = course,
@@ -100,7 +101,7 @@ namespace WebApp.Features.Students.Enroll
                 semester = await _context.Semesters.FindAsync(SemesterID)
             };
 
-            foreach(var offer in recitationOfferings)
+            foreach (var offer in recitationOfferings)
             {
                 model.recitations.Add(_context.Sections.Where(x => x.offering.Id == offer.Id).Include(p => p.professor).First());
             }
@@ -113,9 +114,20 @@ namespace WebApp.Features.Students.Enroll
         [Route("/Student/Cart")]
         public IActionResult Cart()
         {
-            return View("Cart");
+            var identity = (ClaimsIdentity)User.Identity;
+            IEnumerable<Claim> claims = identity.Claims;
+            var val = claims.First(x => x.Type == "sub");
+            var model = _context.Enrollments
+                .Where(x => x.account.Id == Convert.ToInt32(val.Value))
+                .Where(x => x.status != 1)
+                .Include(x => x.section)
+                .Include(x => x.section.professor)
+                .Include(x => x.section.offering.course)
+                .Include(x => x.section.TimeSlots)
+                .ToList();
+            return View("Cart", model);
         }
-        
+
         /// <summary>
         /// This is the page that displays the filter form
         /// </summary>
@@ -125,7 +137,7 @@ namespace WebApp.Features.Students.Enroll
         public IActionResult CourseSearch(int SemesterID)
         {
             ViewData["Title"] = "Course Search";
-            return View("CourseSearch", new CourseSearchVM { Majors = _context.Majors.ToList(), SemesterId = SemesterID});
+            return View("CourseSearch", new CourseSearchVM { Majors = _context.Majors.ToList(), SemesterId = SemesterID });
         }
 
         [Route("/Student/Enroll/CheckoutResult")]
@@ -160,7 +172,73 @@ namespace WebApp.Features.Students.Enroll
             return new JsonResult(result);
         }
 
+        [HttpPost]
+        [Route("/Student/Enroll/{SemesterID}/AddToCart")]
+        public JsonResult AddToCart(int SemesterID, int courseId, int sectionForRecitationId)
+        {
+            var identity = (ClaimsIdentity)User.Identity;
+            IEnumerable<Claim> claims = identity.Claims;
+            var val = claims.First(x => x.Type == "sub");
 
+            var account = _context.Accounts.Find(Convert.ToInt32(val.Value));
+
+            var courseEnrollment = new Enrollment
+            {
+                account = account,
+                section = _context.Sections.Find(courseId),
+                status = 2,
+                dateadded = DateTime.Now
+            };
+
+            var recitationEnrollment = new Enrollment
+            {
+                account = account,
+                section = _context.Sections.Find(sectionForRecitationId),
+                status = 2,
+                dateadded = DateTime.Now
+            };
+
+            _context.Enrollments.Add(courseEnrollment);
+            _context.Enrollments.Add(recitationEnrollment);
+
+            _context.SaveChanges();
+
+
+            return new JsonResult(new { status = "success" });
+
+        }
+
+        [Route("/Student/Cart/Remove/{enrollmentID}")]
+        public IActionResult RemoveFromCart(int enrollmentID)
+        {
+            _context.Enrollments.Remove(_context.Enrollments.Find(enrollmentID));
+            _context.SaveChanges();
+
+            return Redirect("/Student/Cart");
+        }
+
+        [Route("/Student/Cart/Clear")]
+        public IActionResult ClearCart()
+        {
+            var identity = (ClaimsIdentity)User.Identity;
+            IEnumerable<Claim> claims = identity.Claims;
+            var val = claims.First(x => x.Type == "sub");
+            var account = _context.Accounts.Find(Convert.ToInt32(val.Value));
+
+            var enrollments = _context.Enrollments.Where(x => x.account.Id == account.Id).Where(x => x.status == 2).ToList();
+
+            foreach (var enrollment in enrollments)
+            {
+                _context.Enrollments.Remove(enrollment);
+            }
+            _context.SaveChanges();
+
+            return Redirect("/Student/Cart");
+        }
     }
+
+
+
+
 
 }
