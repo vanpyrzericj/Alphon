@@ -16,5 +16,6 @@ namespace WebApp.Models
         public string salt { get; set; }
         public DateTime lastlogin { get; set; }
         public string usertype { get; set; }
+        public int firstsemester { get; set; }
     }
 }
