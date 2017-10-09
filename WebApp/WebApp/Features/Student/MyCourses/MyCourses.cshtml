@@ -1,4 +1,4 @@
-﻿@model WebApp.Features.Student.MyCourses.MyCoursesController
+﻿@model IEnumerable<WebApp.Features.Student.MyCourses.MyCoursesVM>
 <div class="page-content">
     <h1 class="page-title">
         My Courses
@@ -27,12 +27,20 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label col-md-3">Semester:</label>
-                                <div class="col-md-3">
-                                    <p class="form-control-static">Fall 2017</p>
-                                </div>
+                                    <label>
+                                        Semester
+                                    </label>
+                                    <select id="semesterId" name="filter.semesterId" class="form-control input-small" >
+                                        @foreach (var semester in Model)
+                                        {
+                                            <option value="@semester.year">
+                                                @semester.year
+                                            </option>
+                                        }
+                                    </select>
+                            </div>
                             </div>
                         </div>
                         <div class="row">
@@ -40,28 +48,30 @@
                                 <table class="table table-striped table-bordered table-hover table-checkable order-column" id="courseList">
                                     <thead>
                                         <tr>
-                                            <th> Room </th>
+                                            <th> Course ID </th>
+                                            <th> Course Name </th>
                                             <th> Times </th>
+                                            <th> Room </th>
+                                            <th> Credit Hours </th>
                                             <th> Professor </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th><a href="">Course1</a></th>
-                                            <th> Monday 4pm / Tuesday 4pm </th>
-                                            <th> Prof Name </th>
-                                        </tr>
-                                        <tr>
-                                            <th><a href="">Course2</a></th>
-                                            <th> Wednesday 4pm / Thursday 4pm </th>
-                                            <th> Prof Name </th>
-                                        </tr>
-                                        <tr>
-                                        <tr>
-                                            <th><a href="">Course3</a></th>
-                                            <th> Friday 4pm </th>
-                                            <th> Prof Name </th>
-                                        </tr>
+                                        @foreach (var enrolledCourse in Model)
+                                        {
+                                            <tr>
+                                                <th><a href="">@enrolledCourse.major @enrolledCourse.coursenumber</a></th>
+                                                <th> @enrolledCourse.coursename </th>
+                                                <th> @foreach (var timeslot in @enrolledCourse.timeslot)
+                                                {
+                                                    <p style="margin: 5px 0 5px 0"> @timeslot.dayofweek&#58; <span style="color:#337ab7">@timeslot.starttime - @timeslot.endtime</span></p>
+                                                }
+                                                </th>
+                                                <th> @enrolledCourse.room </th>
+                                                <th> @enrolledCourse.credithours </th>
+                                                <th> @enrolledCourse.professor.lastname, @enrolledCourse.professor.firstname </th>
+                                            </tr>
+                                        }
                                     </tbody>
                                 </table>
                             </div>
