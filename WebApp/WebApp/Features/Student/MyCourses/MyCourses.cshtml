@@ -1,4 +1,4 @@
-﻿@model WebApp.Features.Student.MyCourses.MyCoursesController
+﻿@model WebApp.Features.Student.MyCourses.CourseViewerVM
 <div class="page-content">
     <h1 class="page-title">
         My Courses
@@ -23,48 +23,51 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>
-                                    <h4>My Courses</h4>
+                                    <h4>My Courses in @Model.semester.season @Model.semester.year</h4>
                                 </label>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label col-md-3">Semester:</label>
-                                <div class="col-md-3">
-                                    <p class="form-control-static">Fall 2017</p>
-                                </div>
+                                <label>
+                                    Semester
+                                </label>
+                                <select id="semesterId" name="filter.semesterId" class="form-control input-small" onchange="ChangeSemester();"></select>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="courseList">
-                                    <thead>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-striped table-bordered table-hover table-checkable order-column" id="courseList">
+                                <thead>
+                                    <tr>
+                                        <th> Course ID </th>
+                                        <th> Course Name </th>
+                                        <th> Times </th>
+                                        <th> Room </th>
+                                        <th> Credit Hours </th>
+                                        <th> Professor </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var enrolledCourse in Model.enrollments)
+                                    {
                                         <tr>
-                                            <th> Room </th>
-                                            <th> Times </th>
-                                            <th> Professor </th>
+                                            <th>@enrolledCourse.major @enrolledCourse.coursenumber</th>
+                                            <th> @enrolledCourse.coursename </th>
+                                            <th>
+                                                @foreach (var timeslot in @enrolledCourse.timeslot)
+                                                {
+                                                    <p style="margin: 5px 0 5px 0"> @timeslot.dayofweek&#58; <span style="color:#337ab7">@timeslot.starttime - @timeslot.endtime</span></p>
+                                                }
+                                            </th>
+                                            <th> @enrolledCourse.room </th>
+                                            <th> @enrolledCourse.credithours </th>
+                                            <th> @enrolledCourse.professor.lastname, @enrolledCourse.professor.firstname </th>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th><a href="">Course1</a></th>
-                                            <th> Monday 4pm / Tuesday 4pm </th>
-                                            <th> Prof Name </th>
-                                        </tr>
-                                        <tr>
-                                            <th><a href="">Course2</a></th>
-                                            <th> Wednesday 4pm / Thursday 4pm </th>
-                                            <th> Prof Name </th>
-                                        </tr>
-                                        <tr>
-                                        <tr>
-                                            <th><a href="">Course3</a></th>
-                                            <th> Friday 4pm </th>
-                                            <th> Prof Name </th>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                    }
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -72,3 +75,28 @@
         </div>
     </div>
 </div>
+@section PageScripts{ 
+    <script>
+        function ChangeSemester() {
+            window.location = "/Student/Courses/" + $("#semesterId").val();
+        }
+        $(document).ready(function () {
+            $.getJSON("/Student/Courses/AvailbleSemesters/" + @Model.semester.Id, function (data) {
+                $.each(data, function (index, semester) {
+                    if (semester.current) {
+                        $('#semesterId').append($('<option>', {
+                            value: semester.id,
+                            text: semester.season + " " + semester.year,
+                            selected: true
+                        }));
+                    } else {
+                        $('#semesterId').append($('<option>', {
+                            value: semester.id,
+                            text: semester.season + " " + semester.year,
+                        }));
+                    }
+                });
+            });
+        });
+    </script>
+}

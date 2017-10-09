@@ -1,61 +1,110 @@
-﻿<div class="page-content">
+﻿@model WebApp.Features.Student.Dashboard.DashboardVM
+<div class="page-content">
     <h1 class="page-title">
         Student Dashboard
     </h1>
     <div class="page-bar">
         <ul class="page-breadcrumb">
             <li>
-                Hello John Doe. Welcome to your dashboard.
+                <i class="fa fa-home"></i>
+                Dashboard
             </li>
         </ul>
     </div>
     <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <a class="dashboard-stat dashboard-stat-v2 blue" href="/Student/Courses">
+                <div class="visual">
+                    <i class="fa fa-book"></i>
+                </div>
+                <div class="details">
+                    <div class="number">
+                        <span data-counter="counterup" data-value="0">@Model.CurrentCourses</span>
+                    </div>
+                    <div class="desc"> Courses <br />Enrolled</div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <a class="dashboard-stat dashboard-stat-v2 green-meadow" href="/Student/Courses">
+                <div class="visual">
+                    <i class="fa fa-clock-o"></i>
+                </div>
+                <div class="details">
+                    <div class="number">
+                        <span data-counter="counterup" data-value="0">@Model.CurrentCreditHours</span>
+                    </div>
+                    <div class="desc"> Credit Hours<br />Enrolled </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <a class="dashboard-stat dashboard-stat-v2 grey-mint" href="/Student/Enroll">
+                <div class="visual">
+                    <i class="fa fa-dashboard"></i>
+                </div>
+                <div class="details">
+                    <div class="number">
+                        <span data-counter="counterup" data-value="0">@Model.AvailableCreditHours</span>
+                    </div>
+                    <div class="desc"> Credit Hours<br />Still Available </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <a class="dashboard-stat dashboard-stat-v2 purple" href="/Student/Cart">
+                <div class="visual">
+                    <i class="fa fa-shopping-cart"></i>
+                </div>
+                <div class="details">
+                    <div class="number">
+                        <span data-counter="counterup" data-value="0">@Model.ShoppingCartCourses</span>
+                    </div>
+                    <div class="desc"> Courses<br />In Shopping Cart </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-12">
             <div class="portlet light bordered" id="">
+                <div class="portlet-title">
+                    <div class="caption">
+                        My @Model.Semester.season @Model.Semester.year Schedule
+                    </div>
+                </div>
                 <div class="portlet-body">
                     <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>
-                                    <h4>My Schedule (Calendar)</h4>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label col-md-3">Semester:</label>
-                                <div class="col-md-3">
-                                    <p class="form-control-static">Fall 2017</p>
-                                </div>
-                            </div>
-                        </div>
                         <div class="row">
                             <div class="col-md-12">
                                 <table class="table table-striped table-bordered table-hover table-checkable order-column" id="courseList">
                                     <thead>
                                         <tr>
-                                            <th> Room </th>
+                                            <th> Course ID </th>
+                                            <th> Course Name </th>
                                             <th> Times </th>
+                                            <th> Room </th>
+                                            <th> Credit Hours </th>
                                             <th> Professor </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th><a href="">Course1</a></th>
-                                            <th> Monday 4pm / Tuesday 4pm </th>
-                                            <th> Prof Name </th>
-                                        </tr>
-                                        <tr>
-                                            <th><a href="">Course2</a></th>
-                                            <th> Wednesday 4pm / Thursday 4pm </th>
-                                            <th> Prof Name </th>
-                                        </tr>
-                                        <tr>
-                                        <tr>
-                                            <th><a href="">Course3</a></th>
-                                            <th> Friday 4pm </th>
-                                            <th> Prof Name </th>
-                                        </tr>
+                                        @foreach (var enrolledCourse in Model.Enrollments)
+                                        {
+                                            <tr>
+                                                <th>@enrolledCourse.major @enrolledCourse.coursenumber</th>
+                                                <th> @enrolledCourse.coursename </th>
+                                                <th>
+                                                    @foreach (var timeslot in @enrolledCourse.timeslot)
+                                                    {
+                                                        <p style="margin: 5px 0 5px 0"> @timeslot.dayofweek&#58; <span style="color:#337ab7">@timeslot.starttime - @timeslot.endtime</span></p>
+                                                    }
+                                                </th>
+                                                <th> @enrolledCourse.room </th>
+                                                <th> @enrolledCourse.credithours </th>
+                                                <th> @enrolledCourse.professor.lastname, @enrolledCourse.professor.firstname </th>
+                                            </tr>
+                                        }
                                     </tbody>
                                 </table>
                             </div>
@@ -65,44 +114,44 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="portlet light bordered" id="">
-                <div class="portlet-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>
-                                    <h4>Notifications</h4>
-                                </label>
-                            </div>
-                        </div>
+    @*<div class="row">
+            <div class="col-md-12">
+                <div class="portlet light bordered" id="">
+                    <div class="portlet-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="notificationList">
-                                    <thead>
-                                        <tr>
-                                            <th> Title </th>
-                                            <th> Description </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th> Add/Drop Day </th>
-                                            <th> Make sure to add/drop your classes by September 5th!</th>
-                                        </tr>
-                                        <tr>
-                                            <th> Tuition Payment</th>
-                                            <th> Your bill is due on October 14th. Please pay by this date to avoid any late fee.</th>
-                                        </tr>
-                                        <tr>
-                                    </tbody>
-                                </table>
+                                <div class="form-group">
+                                    <label>
+                                        <h4>Notifications</h4>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-striped table-bordered table-hover table-checkable order-column" id="notificationList">
+                                        <thead>
+                                            <tr>
+                                                <th> Title </th>
+                                                <th> Description </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th> Add/Drop Day </th>
+                                                <th> Make sure to add/drop your classes by September 5th!</th>
+                                            </tr>
+                                            <tr>
+                                                <th> Tuition Payment</th>
+                                                <th> Your bill is due on October 14th. Please pay by this date to avoid any late fee.</th>
+                                            </tr>
+                                            <tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </div>*@
 </div>

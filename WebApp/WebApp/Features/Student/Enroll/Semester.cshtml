@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebApp.Models.Semester>
+﻿@model WebApp.Features.Student.Enroll.SemesterPickerVM
 <div class="page-content">
     <h1 class="page-title">
         Enrollment
@@ -16,7 +16,7 @@
         </ul>
     </div>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6 col-sm-12">
             <div class="portlet light bordered">
                 <div class="portlet-body">
                     <div class="row">
@@ -25,11 +25,11 @@
                                 <label>
                                     Select Enrollment Semester
                                 </label>
-                                <select id="semester" name="semester" onchange="SelectSemester();">
+                                <select class="form-control" id="semester" name="semester" onchange="SelectSemester();">
                                     <option selected>
                                         Select a Semester
                                     </option>
-                                    @foreach (var semester in Model)
+                                    @foreach (var semester in Model.AvailableSemesters)
                                     {
                                         <option value="@semester.Id">
                                             @semester.season
@@ -43,12 +43,32 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="portlet light bordered">
+                <div class="portlet-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h2>Enrollment Dates</h2>
+                            @foreach(var semester in Model.AllSemesters)
+                            {
+                                <h4>@semester.season  @semester.year</h4>
+                                <strong>Enrollment Opens: </strong> @semester.enrollopen.ToLongDateString()
+                                <strong>Enrollment Closes: </strong> @semester.enrollclose.ToLongDateString()
+                                <strong>Semester Begins: </strong> @semester.startdate.ToLongDateString()
+                                <strong>Semester Ends: </strong> @semester.enddate.ToLongDateString()
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    @section PageScripts{
-        <script>
-            function SelectSemester() {
-                window.location = '/Student/Enroll/' + $("#semester").val() + '/Search';
-                //Redirects to: /Students/Enroll/123
-            }
-        </script>
-    }
+</div>
+@section PageScripts{
+    <script>
+        function SelectSemester() {
+            window.location = '/Student/Enroll/' + $("#semester").val() + '/Search';
+            //Redirects to: /Students/Enroll/123
+        }
+    </script>
+}

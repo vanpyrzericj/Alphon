@@ -12,5 +12,6 @@ namespace WebApp.Models
         public Offering offering { get; set; }
         public Professor professor { get; set; }
         public ICollection<TimeSlot> TimeSlots { get; set; }
+        public ICollection<Enrollment> Enrollments { get; set; }
     }
 }

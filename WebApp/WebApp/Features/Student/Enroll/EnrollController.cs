@@ -25,8 +25,17 @@ namespace WebApp.Features.Students.Enroll
         [Route("/Student/Enroll")]
         public IActionResult Enroll()
         {
+            var model = new SemesterPickerVM()
+            {
+                AvailableSemesters = _context.Semesters
+                .Where(x => x.enrollopen <= DateTime.Now).Where(x => x.enrollclose >= DateTime.Now)
+                .ToList(),
+                AllSemesters = _context.Semesters.Where(x => x.enddate >= DateTime.Now).ToList()
+            };
+
             ViewData["Title"] = "Enroll";
-            return View("Semester", _context.Semesters.ToList());
+
+            return View("Semester", model);
         }
 
         /// <summary>
