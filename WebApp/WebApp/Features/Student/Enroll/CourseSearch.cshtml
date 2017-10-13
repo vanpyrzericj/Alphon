@@ -35,10 +35,8 @@
                                     <label>
                                         Department
                                     </label>
-                                    <select id="majorId" name="filter.majorId" class="form-control">
-                                        <option selected>
-                                            Select a Department
-                                        </option>
+                                    <select id="majorId" name="filter.majorId" class="form-control" required>
+
                                         @foreach (var major in Model.Majors)
                                         {
                                             <option value="@major.Id">
@@ -72,11 +70,11 @@
                                     </label>
 
                                     <select id="modeOfInstruction" name="filter.modeOfInstruction" class="form-control">
-                                        <option value="1">
-                                            Online
-                                        </option>
-                                        <option selected value="2">
+                                        <option selected value="1">
                                             Classroom
+                                        </option>
+                                        <option value="2">
+                                            Online
                                         </option>
                                         <option value="3">
                                             Hybrid
