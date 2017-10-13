@@ -69,7 +69,7 @@ namespace WebApp.Features.Students.Enroll
                     timeslot = a.TimeSlots,
                     coursenumber = a.offering.course.number,
                     cousedescription = a.offering.course.description,
-                    type = Capitalize(a.offering.type)
+                    type = Capitalize(a.offering.type),
                     capacity = a.offering.capacity,
                     enrolled = _context.Enrollments.Count(x => x.section.Id == a.Id)
                 })
