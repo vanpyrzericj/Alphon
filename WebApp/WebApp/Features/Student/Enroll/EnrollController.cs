@@ -151,7 +151,7 @@ namespace WebApp.Features.Students.Enroll
                 .Include(x => x.section.professor)
                 .Include(x => x.section.offering.course)
                 .Include(x => x.section.TimeSlots)
-                .Include(x => x.section.offering.type)
+                .Include(x => x.section.offering)
                 .ToList();
 
             ViewData["Title"] = "Cart";
