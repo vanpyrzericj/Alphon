@@ -54,6 +54,8 @@ namespace WebApp.Features.Students.Enroll
                 .Where(x => x.offering.semester.Id == SemesterID)
                 .Where(x => x.offering.course.major.Id == filter.MajorId)
                 .Where(x => x.offering.type == "lecture")
+                .Where(x => x.offering.course.career == filter.Career)
+                .Where(x => x.offering.course.modeofinstruction == filter.ModeOfInstruction)
                 //.Where(x => x.offering.course.number == filter.CourseNumber)
                 .Include(y => y.offering)
                 .Include(y => y.offering.semester)
@@ -66,10 +68,16 @@ namespace WebApp.Features.Students.Enroll
                     credithours = a.offering.course.credithours,
                     timeslot = a.TimeSlots,
                     coursenumber = a.offering.course.number,
-                    cousedescription = a.offering.course.description
-
+                    cousedescription = a.offering.course.description,
+                    capacity = a.offering.capacity,
+                    enrolled = _context.Enrollments.Count(x => x.section.Id == a.Id)
                 })
                 .ToList();
+
+            if(filter.ShowOpenClasses)
+            {
+                result = result.Where(x => x.enrolled < x.capacity).ToList();
+            }
 
             if(filter.CourseNumber == 0) return View("Courses", result);
             switch (filter.CourseNumberFilterOption)
@@ -108,7 +116,10 @@ namespace WebApp.Features.Students.Enroll
                     dayofweek = x.dayofweek
                 }).ToListAsync(),
                 OfferingId = OfferingID,
-                semester = await _context.Semesters.FindAsync(SemesterID)
+                semester = await _context.Semesters.FindAsync(SemesterID),
+                capacity = (await _context.Offerings.Where(x => x.Id == OfferingID).FirstAsync()).capacity,
+                enrolled = await _context.Enrollments.CountAsync(x => x.section.Id == sectionId),
+                waitlist = false
             };
 
             foreach (var offer in recitationOfferings)

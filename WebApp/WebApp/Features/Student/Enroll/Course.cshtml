@@ -60,7 +60,9 @@
                             <div class="form-group">
                                 <label class="control-label col-md-5 sbold">Enrollment</label>
                                 <div class="col-md-7">
-                                    <p class="form-control-static"><strong>7</strong> enrolled out of <strong>10</strong> available seats</p>
+                                    <p class="form-control-static"><strong>@Model.enrolled</strong> enrolled out of <strong>@Model.capacity</strong> available seats</p>
+                                    @if (!Model.waitlist)
+                                    { <em>This course does not offer wait listing.</em> }
                                 </div>
                             </div>
                         </div>
