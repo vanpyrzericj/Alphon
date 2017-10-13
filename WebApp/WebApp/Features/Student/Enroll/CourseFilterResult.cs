@@ -22,5 +22,7 @@ namespace WebApp.Features.Student.Enroll
 
         public string cousedescription { get; set; }
 
+        public string type { get; set; }
+
     }
 }

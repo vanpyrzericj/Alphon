@@ -33,6 +33,7 @@
                         <thead>
                             <tr>
                                 <th style="width: 20%;"> Course </th>
+                                <th> Type </th>
                                 <th> Room </th>
                                 <th> Times </th>
                                 <th> Professor </th>
@@ -44,6 +45,7 @@
                             {
                                 <tr>
                                     <th>@enrollment.section.offering.course.name</th>
+                                    <th>@enrollment.section.offering.type</th>
                                     <th> @enrollment.section.room </th>
                                     <th>
                                         @foreach (var timeSlot in enrollment.section.TimeSlots)

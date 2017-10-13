@@ -66,7 +66,8 @@ namespace WebApp.Features.Students.Enroll
                     credithours = a.offering.course.credithours,
                     timeslot = a.TimeSlots,
                     coursenumber = a.offering.course.number,
-                    cousedescription = a.offering.course.description
+                    cousedescription = a.offering.course.description,
+                    type = Capitalize(a.offering.type)
 
                 })
                 .ToList();
@@ -88,6 +89,11 @@ namespace WebApp.Features.Students.Enroll
             }
 
             return View("Courses", result);
+        }
+
+        public string Capitalize(string original)
+        {
+            return char.ToUpper(original[0]) + original.Substring(1);
         }
 
         [Route("/Student/Enroll/{SemesterID}/Courses/{OfferingID}")]
@@ -134,6 +140,7 @@ namespace WebApp.Features.Students.Enroll
                 .Include(x => x.section.professor)
                 .Include(x => x.section.offering.course)
                 .Include(x => x.section.TimeSlots)
+                .Include(x => x.section.offering.type)
                 .ToList();
 
             ViewData["Title"] = "Cart";

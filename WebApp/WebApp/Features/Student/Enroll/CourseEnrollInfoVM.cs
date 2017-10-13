@@ -18,5 +18,6 @@ namespace WebApp.Features.Student.Enroll
         public int OfferingId { get; set; }
         public ICollection<TimeSlot> timeslots { get; set; }
         public ICollection<Section> recitations { get; set; }
+        public string type { get; set; }
     }
 }
