@@ -82,6 +82,7 @@
                                         <tr>
                                             <th> Course ID </th>
                                             <th> Course Name </th>
+                                            <th> Type</th>
                                             <th> Times </th>
                                             <th> Room </th>
                                             <th> Credit Hours </th>
@@ -95,6 +96,7 @@
                                             <tr>
                                                 <th>@enrolledCourse.major @enrolledCourse.coursenumber</th>
                                                 <th> @enrolledCourse.coursename </th>
+                                                <th>@enrolledCourse.type</th>
                                                 <th>
                                                     @foreach (var timeslot in @enrolledCourse.timeslot)
                                                     {

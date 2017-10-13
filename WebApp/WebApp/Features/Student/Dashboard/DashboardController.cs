@@ -56,12 +56,18 @@ namespace WebApp.Features.Student.Dashboard
                             credithours = x.section.offering.course.credithours,
                             coursename = x.section.offering.course.name,
                             coursenumber = x.section.offering.course.number,
-                            major = x.section.offering.course.major.name
+                            major = x.section.offering.course.major.name,
+                            type = Capitalize(x.section.offering.type)
                         })
                         .ToList();
 
             ViewData["Title"] = "Dashboard";
             return View("Dashboard", model);
+        }
+
+        public string Capitalize(string original)
+        {
+            return char.ToUpper(original[0]) + original.Substring(1);
         }
 
         [Route("/Student/AllCourses")]

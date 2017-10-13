@@ -30,5 +30,6 @@ namespace WebApp.Features.Student.MyCourses
 
         public string major{ get; set; }
         public int id { get; internal set; }
+        public string type { get; set; }
     }
 }

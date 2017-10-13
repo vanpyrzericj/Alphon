@@ -21,6 +21,8 @@ namespace WebApp.Features.Student.Enroll
         public int coursenumber { get; set; }
 
         public string cousedescription { get; set; }
+
+        public string type { get; set; }
         public int capacity { get; set; }
         public int enrolled { get; set; }
     }
