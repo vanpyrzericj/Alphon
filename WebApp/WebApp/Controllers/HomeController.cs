@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
+using CryptSharp;
 
 namespace WebApp.Controllers
 {
@@ -21,7 +22,33 @@ namespace WebApp.Controllers
 
         public IActionResult Index()
         {
-            return Redirect("/SignIn");
+            return View("~/Views/Home/Index.cshtml");
+        }
+
+        [HttpPost]
+        [Route("/Register")]
+        public IActionResult ProcessRegister(Account account)
+        {
+            if(!_context.Accounts.Any(x => x.email == account.email)){
+                account.password = Crypter.Blowfish.Crypt(account.password, Crypter.Blowfish.GenerateSalt());
+                account.firstsemester = 1;
+                account.lastlogin = DateTime.MinValue;
+                account.usertype = "Student";
+                _context.Accounts.Add(account);
+                _context.SaveChanges();
+                return View("~/Views/Home/RegisterResult.cshtml");
+            }
+            else
+            {
+                //TODO: Email already exists
+                return View("~/Views/Home/RegisterResult.cshtml");
+            }
+        }
+
+        [Route("/Register")]
+        public IActionResult Register()
+        {
+            return View("~/Views/Home/Register.cshtml");
         }
 
         [Route("/Forbidden")]
@@ -47,9 +74,9 @@ namespace WebApp.Controllers
                 if (!string.IsNullOrWhiteSpace(emailLogin))
                 {
                     var account = _context.Accounts.Where(x => x.email == emailLogin).First();
-
+                    
                     //Check If Password Exists
-                    if (account.password != GenerateHashedPassword(passwordLogin, GetBytes(account.salt)))
+                    if (!Crypter.CheckPassword(passwordLogin, account.password))
                         return View("~/Views/Home/SignInError.cshtml", "error");
 
                     //If Account Exists, Create Principal Object For Authenticated User
@@ -106,7 +133,7 @@ namespace WebApp.Controllers
             string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
             password: password,
             salt: salt,
-            prf: KeyDerivationPrf.HMACSHA1,
+            prf: KeyDerivationPrf.HMACSHA256,
             iterationCount: 10000,
             numBytesRequested: 256 / 8));
             return hashed;
