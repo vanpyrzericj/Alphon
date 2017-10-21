@@ -27,6 +27,7 @@ namespace WebApp.Controllers
 
         [HttpPost]
         [Route("/Register")]
+        [ValidateAntiForgeryToken]
         public IActionResult ProcessRegister(Account account)
         {
             if(!_context.Accounts.Any(x => x.email == account.email)){
@@ -40,7 +41,6 @@ namespace WebApp.Controllers
             }
             else
             {
-                //TODO: Email already exists
                 return View("~/Views/Home/RegisterResult.cshtml");
             }
         }

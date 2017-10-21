@@ -1,5 +1,152 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    Layout = "";
 }
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Register | BuH</title>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet" />
+
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <h2 class="mt-4">Register for a BuH Demo Account</h2>
+                <p>You can use this form to generate testing credentials for yourself (for the student portal). This can also be used for developers to generate testing accounts.</p>
+                <form action="/Register" id="form-username" class="form-horizontal form-bordered" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">First Name</label>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" name="account.firstname">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Last Name</label>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" name="account.lastname">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Email Address</label>
+                            <div class="col-md-4">
+                                <input type="email" class="form-control" name="account.email">
+                            </div>
+                        </div>
+                        <div class="form-group last password-strength">
+                            <label class="control-label col-md-3">Password</label>
+                            <div class="col-md-4">
+                                <input type="password" class="form-control" name="account.password" id="password_strength">
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Important Information</h3>
+                    <p>
+                        We use the following tools to collect data about your beta session on this application. None of this data is linked directly to you.
+                        <ul>
+                            <li>Google Analytics: Measuring Site Visitors</li>
+                            <li>Aure Application Insights: Tracking Server-Side Exceptions w/ trace</li>
+                            <li>Sentry: Tracking Client-Side Javascript Errors</li>
+                            <li>Heap Analytics: Tracking Heatmaps and Popular Actions (Button clicks, etc.)</li>
+                        </ul>
+                        By creating and signing in with your testing credentials, you agree to allow us to collect this data, anonymously, for improving the application.<br/>
+                        If you wish to still test the application, but want to disable all tracking software, simply download the <a href="https://tools.google.com/dlpage/gaoptout">Google Opt-Out plugin</a> and your data will be discarded when delivered to the pipline.
+                    </p>
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-offset-3 col-md-9">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fa fa-check"></i> Submit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container -->
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; @DateTime.Now.Year</p>
+        </div>
+        <!-- /.container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script src="~/assets/global/plugins/bootstrap-pwstrength/pwstrength-bootstrap.min.js"></script>
+    <style>
+        /*!
+        * Start Bootstrap - Busines Frontpage (http://startbootstrap.com/template-overviews/business-frontpage)
+        * Copyright 2013-2017 Start Bootstrap
+        * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-business-frontpage/blob/master/LICENSE)
+        */
+
+        body {
+            padding-top: 54px;
+        }
+
+        @@media (min-width: 992px) {
+            body {
+                padding-top: 56px;
+            }
+        }
+
+        .business-header {
+            height: 50vh;
+            min-height: 300px;
+            background: url('~/home-dash-screenshot.png') center center no-repeat scroll;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            background-size: cover;
+            -o-background-size: cover;
+        }
+
+        .card {
+            height: 100%;
+        }
+    </style>
+    <script>
+        var initialized = false;
+        var input = $("#password_strength");
+
+        input.keydown(function () {
+            if (initialized === false) {
+                // set base options
+                input.pwstrength({
+                    raisePower: 1.4,
+                    minChar: 8,
+                    verdicts: ["Weak", "Normal", "Medium", "Strong", "Very Strong"],
+                    scores: [17, 26, 40, 50, 60]
+                });
+
+                // add your own rule to calculate the password strength
+                input.pwstrength("addRule", "demoRule", function (options, word, score) {
+                    return word.match(/[a-z].[0-9]/) && score;
+                }, 10, true);
+
+                // set as initialized
+                initialized = true;
+            }
+        });
+    </script>
+</body>
+
+</html>
