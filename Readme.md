@@ -13,8 +13,8 @@ Follow the Compile from Source instructions to get you a copy of the project up 
 ## Live Release Preview
 
 A live preview of both the develop and master branches can be viewed by accessing one of the two URLs below.
-* [Master Branch (BETA Testers Use This Link)](https://buh.avorex.net/)
-* [Development Branch (Minimum Viable Product)](https://dev.buh.avorex.net/)
+* [Master Branch (BETA TESTERS Use This Link)](https://buh.avorex.net/)
+* [Development Branch](https://dev.buh.avorex.net/)
 
 ### Prerequisites
 
@@ -31,8 +31,8 @@ A live preview of both the develop and master branches can be viewed by accessin
 3. Clone the repository into the local development folder of your choice.
 4. Within the WebApp\WebApp folder, create a new folder (not tracked by Git) called 'Properties', and within that folder, copy the 'launchSettings.json' file from the 'SQLStuff' folder.
 5. Edit the 'launchSettings.json' file and look for the setting called "BUHCS" which will be found in two places. In both places, edit the connection string to match your SQL server and database credentials. Alternatively, if you are using Visual Studio on Windows, going to the Properties section of the project, and clicking on the "Debug" tab will also allow you to edit the environmental variable.
-6. To run the application (this is how to do it after making edits, too), simply enter `dotnet` on the command line, from within the 'WebApp\WebApp' folder. This will restore packages, build the project, and run it in your default browser.
-7. You should see a printout of the port the web application is locally running on (by default, http://localhost:5000). Use CTRL+C to exit the application.
+6. To run the application (this is how to do it after making edits, too), simply enter `dotnet run` on the command line, from within the 'WebApp\WebApp' folder. This will restore packages, build the project, and run it in your default browser. Lost? Run the command from within the folder that `WebApp.csproj` resides.
+7. You should see a printout of the port the web application is locally running on. Use CTRL+C to exit the application.
 8. Navigate to the printed URL to view the application, if the command line utility doesn't do so for you automatically.
 
 ### Deploying into Production
@@ -44,5 +44,5 @@ background process management tool and is capable of running .NET Core applicati
 
 1. Begin by installing mySQL 5.6 or higher (community edition is fine) to your local machine.
 2. After installing a mysql server instance, create a user (or just use root if you wish) and an empty database.
-3. There are two SQL dump files located in the 'SQLStuff' folder of the repository. `structure.sql` will populate your database with the necessary empty tables. `struct-and-data.sql` will populate your database with demo data, which can be used for development and testing purposes (people forking the repo are best to use this latter file).
+3. There are two SQL dump files located in the 'SQLStuff' folder of the repository. `structure.sql` will populate your database with the necessary empty tables. `structure-and-data.sql` will populate your database with demo data, which can be used for development and testing purposes (people forking the repo are best to use this latter file).
 4. Using the dump file of your choice, run the contents of the SQL file as a query against your newely created database.
