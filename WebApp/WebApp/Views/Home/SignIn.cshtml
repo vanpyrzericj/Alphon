@@ -39,8 +39,7 @@
         <div class="row">
             <div class="col-lg-12 text-center">
                 <h1 class="mt-5">Welcome to BuH: Student Course Management System</h1>
-                <p class="lead"><strong>Demo Student: </strong> username: <em>school</em> password: <em>sucks</em></p>
-                <p class="lead"><strong>Demo Administrator: </strong> username: <em>admin</em> password: <em>admin</em></p>
+                <p class="lead"><a href="/Register">Need Testing Credentials?</a></p>
                 <form asp-route="areaRoute" asp-route-controller="SignIn" asp-route-action="SignIn" asp-route-returnurl="@ViewData["ReturnUrl"]" class="login-form" method="post">
                     <div id="loginForm">
                         <div class="alert alert-danger" style="display: none;">
@@ -81,7 +80,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script>
         function getIP() {
-            $.getJSON("http://jsonip.com/?callback=?", function (data) {
+            $.getJSON("https://jsonip.com/?callback=?", function (data) {
                 $("#ip1").val(data.ip);
                 $("#ip2").val(data.ip);
             });

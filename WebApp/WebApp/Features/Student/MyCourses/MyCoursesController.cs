@@ -118,8 +118,88 @@ namespace WebApp.Features.Student.MyCourses
         /// <returns>Whether or not the given semester is currently happening.</returns>
         public bool IsCurrentSemester(DateTime start, DateTime end, int semesterId, int currentSemesterId)
         {
-            if(currentSemesterId == 0) return DateTime.Now >= start && DateTime.Now <= end;
+            if (currentSemesterId == 0) return DateTime.Now >= start && DateTime.Now <= end;
             return (currentSemesterId == semesterId);
+        }
+
+        [Route("/Student/Courses/Calendar")]
+        public JsonResult Calendar()
+        {
+            int semesterId = 0;
+            Semester sem;
+            var identity = (ClaimsIdentity)User.Identity;
+            IEnumerable<Claim> claims = identity.Claims;
+            var val = claims.First(x => x.Type == "sub");
+            var acc = _context.Accounts.Find(Convert.ToInt32(val.Value));
+
+            sem = _context.Semesters.Where(x => x.startdate <= DateTime.Now).Where(x => x.enddate >= DateTime.Now).First();
+            semesterId = sem.Id;
+
+            var enrollments = _context.Enrollments
+                        .Where(x => x.section.offering.semester.Id == semesterId)
+                        .Where(x => x.account.Id == acc.Id)
+                        .Select(x => new
+                        {
+                            room = x.section.room,
+                            timeslot = x.section.TimeSlots,
+                            coursename = x.section.offering.course.name,
+                            coursenumber = x.section.offering.course.number
+                        })
+                        .ToList();
+
+            var model = new List<dynamic>();
+            foreach (var course in enrollments)
+            {
+                var temp = new
+                {
+                    title = course.coursename,
+                    description = course.room,
+                    start = course.timeslot.ElementAt(0).starttime,
+                    end = course.timeslot.ElementAt(0).endtime,
+                    dow = GetDaysOfWeekArray(course.timeslot),
+                    ranges = new List<dynamic>()
+                };
+                temp.ranges.Add(new {
+                    start = sem.startdate.ToShortDateString(),
+                    end = sem.enddate.ToShortDateString()
+                });
+                model.Add(temp);
+            }
+
+            return new JsonResult(model);
+        }
+
+        [Route("/Student/Calendar")]
+        public IActionResult MyCalendar()
+        {
+            return View("Calendar");
+        }
+
+        private object GetDaysOfWeekArray(ICollection<TimeSlot> timeslot)
+        {
+            var dow = new List<int>();
+            foreach (var slot in timeslot)
+            {
+                switch (slot.dayofweek)
+                {
+                    case "Monday":
+                        dow.Add(1);
+                        continue;
+                    case "Tuesday":
+                        dow.Add(2);
+                        continue;
+                    case "Wednesday":
+                        dow.Add(3);
+                        continue;
+                    case "Thursday":
+                        dow.Add(4);
+                        continue;
+                    case "Friday":
+                        dow.Add(5);
+                        continue;
+                }
+            }
+            return dow;
         }
     }
 }
