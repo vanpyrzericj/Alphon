@@ -13,7 +13,8 @@ Follow the Compile from Source instructions to get you a copy of the project up 
 ## Live Release Preview
 
 A live preview of both the develop and master branches can be viewed by accessing one of the two URLs below.
-* [Development Branch (Minimum Viable Product)](http://dev.buh.avorex.net/)
+* [Master Branch (BETA Testers Use This Link)](https://buh.avorex.net/)
+* [Development Branch (Minimum Viable Product)](https://dev.buh.avorex.net/)
 
 ### Prerequisites
 
@@ -21,6 +22,7 @@ A live preview of both the develop and master branches can be viewed by accessin
 * Supported Windows Operating Systems: Windows 7 or higher.
 * Supported Mac Operating Systems: See .NET Core Website for details (link below).
 * [ASP.NET Core 2.0](https://www.microsoft.com/net/core) - .NET Core can be run on any of the listed operating systems above. Install the 2.0 SDK.
+* [MySQL Server Community Edition 5.7+](https://dev.mysql.com/downloads/mysql/)
 
 ### Installing (Compiling from Source)
 
@@ -41,6 +43,6 @@ background process management tool and is capable of running .NET Core applicati
 ### Setting Up The Database
 
 1. Begin by installing mySQL 5.6 or higher (community edition is fine) to your local machine.
-2. After installing a mysql server instance, create a user and an empty database.
-3a. There are two SQL dump files located in the 'SQLStuff' folder of the repository. `structure.sql` will populate your database with the necessary empty tables and a user with credentials admin/pass. `struct-and-data.sql` will populate your database with demo data, which can be used for development and testing purposes.
-3b. Using the dump file of your choice, run the contents of the SQL file as a query against your newely created database.
+2. After installing a mysql server instance, create a user (or just use root if you wish) and an empty database.
+3. There are two SQL dump files located in the 'SQLStuff' folder of the repository. `structure.sql` will populate your database with the necessary empty tables. `struct-and-data.sql` will populate your database with demo data, which can be used for development and testing purposes (people forking the repo are best to use this latter file).
+4. Using the dump file of your choice, run the contents of the SQL file as a query against your newely created database.
