@@ -6,6 +6,9 @@ using WebApp.Models;
 
 namespace WebApp.Features.Student.Enroll
 {
+    /// <summary>
+    /// Course filter result get/set
+    /// </summary>
     public class CourseFilterResult
     {
         public int offeringid { get; set; }

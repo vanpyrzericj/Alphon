@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace WebApp.Models
 {
+    /// <summary>
+    /// Information about an account. 
+    /// </summary>
     public class Account
     {
         public int Id { get; set; }

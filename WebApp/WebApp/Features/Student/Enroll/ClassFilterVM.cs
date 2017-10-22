@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace WebApp.Features.Student.Enroll
 {
+    /// <summary>
+    /// Class search filter viewmodel get/set
+    /// </summary>
     public class ClassFilterVM
     {
         public int MajorId { get; set; }

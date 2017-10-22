@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace WebApp.Models
 {
+    /// <summary>
+    /// Holds information for the time of a class section
+    /// </summary>
     public class TimeSlot
     {
         public int Id { get; set; }

@@ -22,20 +22,27 @@ namespace WebApp.Features.Student.MyCourses
             _context = new HubContext();
         }
 
-
+        /// <summary>
+        /// For the student courses page given a semester id to populate the table 
+        /// </summary>
+        /// <param name="semesterId"></param>
+        /// <returns>View("MyCourses", masterModel)</returns>
         [Route("/Student/Courses/{semesterId?}")]
         public IActionResult Index(int semesterId)
         {
+            //Get info about the current account
             var identity = (ClaimsIdentity)User.Identity;
             IEnumerable<Claim> claims = identity.Claims;
             var val = claims.First(x => x.Type == "sub");
             var acc = _context.Accounts.Find(Convert.ToInt32(val.Value));
 
-            if (semesterId == 0)
+            //If 0 semester id, get the id based on current time frame
+            if(semesterId == 0)
             {
                 semesterId = _context.Semesters.Where(x => x.startdate <= DateTime.Now).Where(x => x.enddate >= DateTime.Now).First().Id;
             }
 
+            //Populate the model with the current student's enrollment info for the given semester
             var model = _context.Enrollments
                         .Where(x => x.section.offering.semester.Id == semesterId)
                         .Where(x => x.account.Id == acc.Id)
@@ -52,6 +59,7 @@ namespace WebApp.Features.Student.MyCourses
                         })
                         .ToList();
 
+            //Populate new CourseViewerVM with filtered results model
             var masterModel = new CourseViewerVM
             {
                 enrollments = model,
@@ -62,21 +70,33 @@ namespace WebApp.Features.Student.MyCourses
             return View("MyCourses", masterModel);
         }
 
+        /// <summary>
+        /// Given a string, return that string with the first letter capitalized (for certain ui elements)
+        /// </summary>
+        /// <param name="original"></param>
+        /// <returns>String with capitalized first letter</returns>
         public string Capitalize(string original)
         {
             return char.ToUpper(original[0]) + original.Substring(1);
         }
 
+        /// <summary>
+        /// Calculates the earliest semester available for the student - the first semester the student was enrolled in
+        /// </summary>
+        /// <param name="currentSemesterId"></param>
+        /// <returns>JSON result of semesters</returns>
         [Route("/Student/Courses/AvailbleSemesters/{currentSemesterId?}")]
         public JsonResult AvailableSemesters(int currentSemesterId)
         {
+            //Get info about the current account
             var identity = (ClaimsIdentity)User.Identity;
             IEnumerable<Claim> claims = identity.Claims;
             var val = claims.First(x => x.Type == "sub");
             var acc = _context.Accounts.Find(Convert.ToInt32(val.Value));
 
+            //Allow account to only see semesters starting from their first semester at the school
             var model = _context.Semesters
-                .Where(x => x.Id >= acc.firstsemester) //Allow account to only see semesters starting from their first semester at the school
+                .Where(x => x.Id >= acc.firstsemester) 
                 .OrderBy(x => x.startdate)
                 .Select(x => new
                 {

@@ -23,6 +23,10 @@ namespace WebApp.Features.Students.Enroll
             _context = new HubContext();
         }
 
+        /// <summary>
+        /// Populates the semester selection drop down with available semesters
+        /// </summary>
+        /// <returns>View("Semester", model)</returns>
         [Route("/Student/Enroll")]
         public IActionResult Enroll()
         {
@@ -35,28 +39,26 @@ namespace WebApp.Features.Students.Enroll
             };
 
             ViewData["Title"] = "Enroll";
-
             return View("Semester", model);
         }
 
         /// <summary>
-        /// Page with filtered results
+        /// Applying course search filters and returning the resulting courses
         /// </summary>
         /// <param name="SemesterID"></param>
-        /// <returns></returns>
+        /// <returns>View("Courses", result)</returns>
         [HttpPost]
         [Route("/Student/Enroll/{SemesterID}/Courses")]
         public IActionResult CourseSelection(int SemesterID, ClassFilterVM filter)
         {
             ViewData["Title"] = "Filtered Results";
-            //TODO: Manipulate the filter object as needed
+            //Apply garunteed filters first and populate new CourseFilterResult
             var result = _context.Sections
                 .Where(x => x.offering.semester.Id == SemesterID)
                 .Where(x => x.offering.course.major.Id == filter.MajorId)
                 .Where(x => x.offering.type == "lecture")
                 .Where(x => x.offering.course.career == filter.Career)
                 .Where(x => x.offering.course.modeofinstruction == filter.ModeOfInstruction)
-                //.Where(x => x.offering.course.number == filter.CourseNumber)
                 .Include(y => y.offering)
                 .Include(y => y.offering.semester)
                 .Include(y => y.offering.course.major)
@@ -75,11 +77,13 @@ namespace WebApp.Features.Students.Enroll
                 })
                 .ToList();
 
+            //Filter for "show open classes" search option
             if(filter.ShowOpenClasses)
             {
                 result = result.Where(x => x.enrolled < x.capacity).ToList();
             }
 
+            //Filter for course number search options
             if(filter.CourseNumber == 0) return View("Courses", result);
             switch (filter.CourseNumberFilterOption)
             {
@@ -99,14 +103,25 @@ namespace WebApp.Features.Students.Enroll
             return View("Courses", result);
         }
 
+        /// <summary>
+        /// Given a string, return that string with the first letter capitalized (for certain ui elements)
+        /// </summary>
+        /// <param name="original"></param>
+        /// <returns>String with capitalized first letter</returns>
         public string Capitalize(string original)
         {
             return char.ToUpper(original[0]) + original.Substring(1);
         }
 
+        /// <summary>
+        /// Page for the offering of a course in a particular semester. Get the course info and the associated recitations.
+        /// </summary>
+        /// <param name="SemesterID"></param>
+        /// <param name="OfferingID"></param>
+        /// <returns>View("Course", model)</returns>
         [Route("/Student/Enroll/{SemesterID}/Courses/{OfferingID}")]
         public async Task<IActionResult> CourseEnrollInfoAsync(int SemesterID, int OfferingID)
-        {
+        {            
             var sectionId = (await _context.Sections.Where(x => x.offering.Id == OfferingID).FirstAsync()).Id;
             var course = await _context.Offerings.Where(x => x.Id == OfferingID).Include(m => m.course.major).Select(a => a.course).FirstAsync();
             var recitationOfferings = await _context.Offerings.Where(x => x.type == "recitation").Where(y => y.course.Id == course.Id).ToListAsync();
@@ -138,6 +153,10 @@ namespace WebApp.Features.Students.Enroll
             return View("Course", model);
         }
 
+        /// <summary>
+        /// For cart page, populate with class information which has been added to the cart
+        /// </summary>
+        /// <returns>View("Cart", model</returns>
         [Route("/Student/Cart")]
         public IActionResult Cart()
         {
@@ -159,10 +178,10 @@ namespace WebApp.Features.Students.Enroll
         }
 
         /// <summary>
-        /// This is the page that displays the filter form
+        /// This is the page that displays the course search filter form
         /// </summary>
         /// <param name="SemesterID"></param>
-        /// <returns></returns>
+        /// <returns>Class search filter form</returns>
         [Route("/Student/Enroll/{SemesterID}/Search")]
         public IActionResult CourseSearch(int SemesterID)
         {
@@ -170,6 +189,10 @@ namespace WebApp.Features.Students.Enroll
             return View("CourseSearch", new CourseSearchVM { Majors = _context.Majors.ToList(), SemesterId = SemesterID });
         }
 
+        /// <summary>
+        /// Shows the result of the checkout action
+        /// </summary>
+        /// <returns>View("CheckoutResult")</returns>
         [Route("/Student/Enroll/CheckoutResult")]
         public IActionResult CheckoutResult()
         {
@@ -177,31 +200,13 @@ namespace WebApp.Features.Students.Enroll
             return View("CheckoutResult");
         }
 
-        //FOR TESTING PURPOSES
-        [Route("/Student/Enroll/{SemesterID}/TestCourses")]
-        public JsonResult TestCourseSelection(int SemesterID)
-        {
-            //TODO: Manipulate the filter object as needed
-            var filter = new ClassFilterVM();
-            filter.Career = 1;
-            filter.CourseNumber = 442;
-            filter.CourseNumberFilterOption = 1;
-            filter.MajorId = 1;
-            SemesterID = 1;
-
-            var result = _context.Sections
-                .Where(x => x.offering.semester.Id == SemesterID)
-                .Where(x => x.offering.course.major.Id == filter.MajorId)
-                //.Where(x => x.offering.type == "lecture")
-                .Where(x => x.offering.course.number == filter.CourseNumber)
-                .Include(y => y.offering)
-                .Include(y => y.offering.semester)
-                .Include(y => y.offering.course.major)
-                .ToList();
-
-            return new JsonResult(result);
-        }
-
+        /// <summary>
+        /// Gets enrollment info for the courses and if checks pass, then adds class/recitation to the database
+        /// </summary>
+        /// <param name="SemesterID"></param>
+        /// <param name="courseId"></param>
+        /// <param name="sectionForRecitationId"></param>
+        /// <returns>JsonResult(new { status = "success" })</returns>
         [HttpPost]
         [Route("/Student/Enroll/{SemesterID}/AddToCart")]
         public JsonResult AddToCart(int SemesterID, int courseId, int sectionForRecitationId)
@@ -243,6 +248,11 @@ namespace WebApp.Features.Students.Enroll
 
         }
 
+        /// <summary>
+        /// Removes desired course from the cart and updates the database with the changes
+        /// </summary>
+        /// <param name="enrollmentID"></param>
+        /// <returns>Redirect("/Student/Cart")</returns>
         [Route("/Student/Cart/Remove/{enrollmentID}")]
         public IActionResult RemoveFromCart(int enrollmentID)
         {
@@ -269,6 +279,10 @@ namespace WebApp.Features.Students.Enroll
             return Redirect("/Student/Cart");
         }
 
+        /// <summary>
+        /// Removes courses from the cart and updates the database with the changes
+        /// </summary>
+        /// <returns>Redirect("/Student/Cart")</returns>
         [Route("/Student/Cart/Clear")]
         public IActionResult ClearCart()
         {
@@ -288,6 +302,10 @@ namespace WebApp.Features.Students.Enroll
             return Redirect("/Student/Cart");
         }
 
+        /// <summary>
+        /// Changes status for classes in cart to registered
+        /// </summary>
+        /// <returns>Redirect("/Student/Enroll/CheckoutResult")</returns>
         [Route("/Student/Enroll/Checkout")]
         public IActionResult CheckOut()
         {
@@ -304,16 +322,22 @@ namespace WebApp.Features.Students.Enroll
             return Redirect("/Student/Enroll/CheckoutResult");
         }
 
+        /// <summary>
+        /// Checks if classes are valid to add to cart
+        /// </summary>
+        /// <param name="semesterID"></param>
+        /// <param name="account"></param>
+        /// <param name="course"></param>
+        /// <param name="rec"></param>
+        /// <returns>True if classes can be added. False otherwise</returns>
         public bool CheckCart(int semesterID, Account account, int course, int rec)
         {
             var enrolled = _context.Enrollments
                 .Where(x => x.section.offering.semester.Id == semesterID)
                 .Where(x => x.account.Id == account.Id)
                 .Where(x => x.status < 3)
-                //.Where(x => x.status == 2)
                 .Include(y => y.section.offering.course)
-                .ToList();
-           
+                .ToList();           
             
             foreach(var i in enrolled)
             {
