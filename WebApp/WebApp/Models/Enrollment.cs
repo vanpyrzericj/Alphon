@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace WebApp.Models
 {
+    /// <summary>
+    /// Information about an enrollment
+    /// </summary>
     public class Enrollment
     {
         public int Id { get; set; }

@@ -6,6 +6,9 @@ using WebApp.Models;
 
 namespace WebApp.Features.Student.MyCourses
 {
+    /// <summary>
+    /// MuCourses viewmodel get/set
+    /// </summary>
     public class MyCoursesVM
     {
         public IEnumerable<WebApp.Models.Semester> Semester { get; set; }

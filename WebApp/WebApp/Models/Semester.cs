@@ -2,6 +2,9 @@
 
 namespace WebApp.Models
 {
+    /// <summary>
+    /// Holds information about a semester
+    /// </summary>
     public class Semester
     {
         public int Id { get; set; }

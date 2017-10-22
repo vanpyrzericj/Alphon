@@ -5,11 +5,15 @@ using System.Threading.Tasks;
 
 namespace WebApp.Models
 {
+    //Information about a major
     public class Major
     {
         public int Id { get; set; }
-        public string name { get; set; } //CSE
-        public string fullname { get; set; } //Computer Science
+        //Three letter name (ie CSE)
+        public string name { get; set; } 
+        //Full name (ie - Computer Science)
+        public string fullname { get; set; }
+        //Lecture or recitation
         public string type { get; set; }
 
     }

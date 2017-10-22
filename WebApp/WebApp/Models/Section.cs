@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace WebApp.Models
 {
+    /// <summary>
+    /// Holds information about a class section. Each class can have multiple sections
+    /// </summary>
     public class Section
     {
         public int Id { get; set; }

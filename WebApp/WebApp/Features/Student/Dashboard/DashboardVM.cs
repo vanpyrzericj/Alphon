@@ -4,6 +4,9 @@ using WebApp.Models;
 
 namespace WebApp.Features.Student.Dashboard
 {
+    /// <summary>
+    /// Dashboard viewmodel get/set
+    /// </summary>
     public class DashboardVM
     {
         public int CurrentCourses { get; set; }

@@ -6,6 +6,9 @@ using WebApp.Models;
 
 namespace WebApp.Features.Student.Enroll
 {
+    /// <summary>
+    /// Course enrollment viewmodel get/set
+    /// </summary>
     public class CourseEnrollInfoVM
     {
         public CourseEnrollInfoVM()

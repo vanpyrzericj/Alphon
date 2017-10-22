@@ -21,9 +21,15 @@ namespace WebApp.Features.Student.Dashboard
         {
             _context = new HubContext();
         }
+
+        /// <summary>
+        /// /Student page (the student's personal dashboard) 
+        /// </summary>
+        /// <returns>View("Dashboard", model)</returns>
         [Route("/Student")]
         public IActionResult Index()
         {
+            //Get information about current user (user account, registration info) and semester
             var identity = (ClaimsIdentity)User.Identity;
             IEnumerable<Claim> claims = identity.Claims;
             var val = claims.First(x => x.Type == "sub");
@@ -32,6 +38,7 @@ namespace WebApp.Features.Student.Dashboard
             var currentSemesterId = semester.Id;
             var enrollments = _context.Enrollments.Where(x => x.account.Id == acc.Id).Where(x => x.section.offering.semester.Id == currentSemesterId).Include(s => s.section.offering.course).ToList();
             
+            //Create new dashboard viewmodel and populate using filtered results
             var model = new DashboardVM();
             model.CurrentCourses = enrollments.Where(c => c.status == 1).Count();
             model.CurrentCreditHours = enrollments.Where(c => c.status == 1).Sum(s => s.section.offering.course.credithours);
@@ -43,6 +50,7 @@ namespace WebApp.Features.Student.Dashboard
             //model.AvailableCreditHours = 1;
             //model.ShoppingCartCourses = 1;
 
+            //Populate with enrollment info based on the current semester and current student
             model.Semester = semester;
             model.Enrollments = _context.Enrollments
                         .Where(x => x.section.offering.semester.Id == currentSemesterId)
@@ -65,21 +73,26 @@ namespace WebApp.Features.Student.Dashboard
             return View("Dashboard", model);
         }
 
+        /// <summary>
+        /// Given a string, return that string with the first letter capitalized (for certain ui elements)
+        /// </summary>
+        /// <param name="original"></param>
+        /// <returns>String with capitalized first letter</returns>
         public string Capitalize(string original)
         {
             return char.ToUpper(original[0]) + original.Substring(1);
         }
-
-        [Route("/Student/AllCourses")]
-        public JsonResult AllCourses()
-        {
-            var model = _context.Sections
-                .Include(x => x.offering)
-                .Include(x => x.offering.course)
-                .Include(x => x.offering.course.major)
-                .Include(x => x.TimeSlots)
-                .Include(x => x.offering.semester).ToList();
-            return new JsonResult(model);
-        }
+        
+        //[Route("/Student/AllCourses")]
+        //public JsonResult AllCourses()
+        //{
+        //    var model = _context.Sections
+        //        .Include(x => x.offering)
+        //        .Include(x => x.offering.course)
+        //        .Include(x => x.offering.course.major)
+        //        .Include(x => x.TimeSlots)
+        //        .Include(x => x.offering.semester).ToList();
+        //    return new JsonResult(model);
+        //}
     }
 }
