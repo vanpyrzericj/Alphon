@@ -45,6 +45,17 @@ namespace WebApp.Features.Student.Dashboard
             model.AvailableCreditHours = 16 - model.CurrentCreditHours;
             model.ShoppingCartCourses = enrollments.Where(c => c.status == 2).Count();
 
+            model.Notifications.Add(new Notification()
+            {
+                title = "Add/Drop Day",
+                content = "Make sure to add/drop your classes by September 5th!"
+            });
+            model.Notifications.Add(new Notification()
+            {
+                title = "Tuition Payment",
+                content = "Your bill is due on October 14th. Please pay by this date to avoid any late fee."
+            });
+
             //model.CurrentCourses = 1;
             //model.CurrentCreditHours = 1;
             //model.AvailableCreditHours = 1;
