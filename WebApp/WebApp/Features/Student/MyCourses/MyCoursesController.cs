@@ -46,6 +46,7 @@ namespace WebApp.Features.Student.MyCourses
             var model = _context.Enrollments
                         .Where(x => x.section.offering.semester.Id == semesterId)
                         .Where(x => x.account.Id == acc.Id)
+                        .Where(x => x.status == 1)
                         .Select(x => new MyCoursesVM
                         {
                             professor = x.section.professor,
