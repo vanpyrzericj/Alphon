@@ -55,6 +55,7 @@ namespace WebApp.Features.Student.Dashboard
             model.Enrollments = _context.Enrollments
                         .Where(x => x.section.offering.semester.Id == currentSemesterId)
                         .Where(x => x.account.Id == acc.Id)
+                        .Where(x => x.status == 1)
                         .Select(x => new MyCoursesVM
                         {
                             id = x.Id,
