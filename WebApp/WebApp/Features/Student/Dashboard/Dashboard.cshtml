@@ -106,21 +106,24 @@
                                                 <th> @enrolledCourse.room </th>
                                                 <th> @enrolledCourse.credithours </th>
                                                 <th> @enrolledCourse.professor.lastname, @enrolledCourse.professor.firstname </th>
-                                                <th>
-                                                    <div class="btn-group">
-                                                        <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-                                                            Course Options
-                                                            <i class="fa fa-angle-down"></i>
-                                                        </button>
-                                                        <ul class="dropdown-menu pull-left" role="menu">
-                                                            <li>
-                                                                <a href="/Student/Cart/Remove/@enrolledCourse.id">
-                                                                    Drop Class
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </th>
+                                                @if (enrolledCourse.type == "Lecture")
+                                                {
+                                                    <th>
+                                                        <div class="btn-group">
+                                                            <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                                                                Course Options
+                                                                <i class="fa fa-angle-down"></i>
+                                                            </button>
+                                                            <ul class="dropdown-menu pull-left" role="menu">
+                                                                <li>
+                                                                    <a href="/Student/Cart/Remove/@enrolledCourse.id">
+                                                                        Drop Class
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </th>
+                                                }
                                             </tr>
                                         }
                                     </tbody>
