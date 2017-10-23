@@ -136,7 +136,7 @@
 @section PageScripts{ 
 <script>
     $(document).ready(function () {
-        if (@Model.timeslots.Count > 0) {
+        if (@Model.recitations.Count > 0) {
             $("#addToCartBtn").addClass("disabled");
         }
     });
@@ -154,13 +154,17 @@
         }
     }
     function AddCourseToCart() {
-        $.post("/Student/Enroll/@Model.semester.Id/AddToCart", 
-        {
-            courseId: @Model.OfferingId,
-            sectionForRecitationId: selectedRow
-        }, function (response) {
-            window.location = "/Student/Cart?success="+response.status;
-        });
+        if (selectedRow > 0) {
+            $.post("/Student/Enroll/@Model.semester.Id/AddToCart",
+                {
+                    courseId: @Model.OfferingId,
+                    sectionForRecitationId: selectedRow
+                }, function (response) {
+                    window.location = "/Student/Cart?success=" + response.status;
+                });
+        } else {
+            alert("Please select a recitation.");
+        }
     }
 </script>
 }

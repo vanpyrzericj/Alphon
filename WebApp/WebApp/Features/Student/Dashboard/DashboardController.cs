@@ -40,7 +40,7 @@ namespace WebApp.Features.Student.Dashboard
             
             //Create new dashboard viewmodel and populate using filtered results
             var model = new DashboardVM();
-            model.CurrentCourses = enrollments.Where(c => c.status == 1).Count();
+            model.CurrentCourses = enrollments.Where(x => x.section.offering.type == "lecture").Where(c => c.status == 1).Count();
             model.CurrentCreditHours = enrollments.Where(c => c.status == 1).Sum(s => s.section.offering.course.credithours);
             model.AvailableCreditHours = 16 - model.CurrentCreditHours;
             model.ShoppingCartCourses = enrollments.Where(c => c.status == 2).Count();
