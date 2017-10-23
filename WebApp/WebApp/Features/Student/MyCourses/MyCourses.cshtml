@@ -48,6 +48,7 @@
                                         <th> Room </th>
                                         <th> Credit Hours </th>
                                         <th> Professor </th>
+                                        <th> Actions </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -66,6 +67,24 @@
                                             <th> @enrolledCourse.room </th>
                                             <th> @enrolledCourse.credithours </th>
                                             <th> @enrolledCourse.professor.lastname, @enrolledCourse.professor.firstname </th>
+                                            <th>
+                                                @if (enrolledCourse.type == "Lecture")
+                                                {
+                                                    <div class="btn-group">
+                                                        <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                                                            Course Options
+                                                            <i class="fa fa-angle-down"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu pull-left" role="menu">
+                                                            <li>
+                                                                <a href="/Student/Cart/Remove/@enrolledCourse.id">
+                                                                    Drop Class
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                }
+                                            </th>
                                         </tr>
                                     }
                                 </tbody>
@@ -77,7 +96,7 @@
         </div>
     </div>
 </div>
-@section PageScripts{ 
+@section PageScripts{
     <script>
         function ChangeSemester() {
             window.location = "/Student/Courses/" + $("#semesterId").val();

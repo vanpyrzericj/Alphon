@@ -55,19 +55,22 @@
                                     </th>
                                     <th> @enrollment.section.professor.firstname @enrollment.section.professor.lastname </th>
                                     <th>
-                                        <div class="btn-group">
-                                            <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-                                                Course Options
-                                                <i class="fa fa-angle-down"></i>
-                                            </button>
-                                            <ul class="dropdown-menu pull-left" role="menu">
-                                                <li>
-                                                    <a href="/Student/Cart/Remove/@enrollment.Id">
-                                                        Remove From Cart
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                        @if (enrollment.section.offering.type == "lecture")
+                                        {
+                                            <div class="btn-group">
+                                                <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                                                    Course Options
+                                                    <i class="fa fa-angle-down"></i>
+                                                </button>
+                                                <ul class="dropdown-menu pull-left" role="menu">
+                                                    <li>
+                                                        <a href="/Student/Cart/Remove/@enrollment.Id">
+                                                            Remove From Cart
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        }
                                     </th>
                                 </tr>
                             }

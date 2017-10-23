@@ -55,7 +55,8 @@ namespace WebApp.Features.Student.MyCourses
                             coursename = x.section.offering.course.name,
                             coursenumber = x.section.offering.course.number,
                             major = x.section.offering.course.major.name,
-                            type = Capitalize(x.section.offering.type)
+                            type = Capitalize(x.section.offering.type),
+                            id = x.Id
                         })
                         .ToList();
 
