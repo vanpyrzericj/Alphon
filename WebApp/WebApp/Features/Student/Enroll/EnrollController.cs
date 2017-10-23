@@ -280,6 +280,68 @@ namespace WebApp.Features.Students.Enroll
         }
 
         /// <summary>
+        /// Removes desired course from the cart and updates the database with the changes. Dashboard drop
+        /// </summary>
+        /// <param name="enrollmentID"></param>
+        /// <returns>Redirect("/Student")</returns>
+        [Route("/Student/Cart/Remove/Dashboard/{enrollmentID}")]
+        public IActionResult DashboardDropButton(int enrollmentID)
+        {
+            var course = _context.Enrollments.Where(x => x.Id == enrollmentID).Include(x => x.section).Include(x => x.section.offering.course).First();
+            if (course.section.offering.type == "lecture")
+            {
+                try
+                {
+                    _context.Enrollments.Remove(_context.Enrollments.Where(x => x.section.offering.parentcourse == course.section.offering.course.Id).First());
+                    _context.Enrollments.Remove(course);
+                }
+                catch (Exception ex)
+                {
+                    _context.Enrollments.Remove(course);
+                }
+
+            }
+            else
+            {
+                _context.Enrollments.Remove(course);
+            }
+            _context.SaveChanges();
+
+            return Redirect("/Student");
+        }
+
+        /// <summary>
+        /// Removes desired course from the cart and updates the database with the changes. MyCourses drop
+        /// </summary>
+        /// <param name="enrollmentID"></param>
+        /// <returns>Redirect("/Student/Courses")</returns>
+        [Route("/Student/Cart/Remove/MyCourses/{enrollmentID}")]
+        public IActionResult MyCoursesDropButton(int enrollmentID)
+        {
+            var course = _context.Enrollments.Where(x => x.Id == enrollmentID).Include(x => x.section).Include(x => x.section.offering.course).First();
+            if (course.section.offering.type == "lecture")
+            {
+                try
+                {
+                    _context.Enrollments.Remove(_context.Enrollments.Where(x => x.section.offering.parentcourse == course.section.offering.course.Id).First());
+                    _context.Enrollments.Remove(course);
+                }
+                catch (Exception ex)
+                {
+                    _context.Enrollments.Remove(course);
+                }
+
+            }
+            else
+            {
+                _context.Enrollments.Remove(course);
+            }
+            _context.SaveChanges();
+
+            return Redirect("/Student/Courses");
+        }
+
+        /// <summary>
         /// Removes courses from the cart and updates the database with the changes
         /// </summary>
         /// <returns>Redirect("/Student/Cart")</returns>
