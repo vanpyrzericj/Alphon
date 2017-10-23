@@ -1,0 +1,98 @@
+﻿@{
+    Layout = "";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Welcome to BuH</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+    <style>
+        body {
+            padding-top: 54px;
+        }
+
+        @@media (min-width: 992px) {
+            body {
+                padding-top: 56px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Page Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h1 class="mt-5">Welcome to BuH: Student Course Management System</h1>
+                <p class="lead"><a href="/Register">Need Testing Credentials?</a></p>
+                <form asp-route="areaRoute" asp-route-controller="SignIn" asp-route-action="SignIn" asp-route-returnurl="@ViewData["ReturnUrl"]" class="login-form" method="post">
+                    <div id="loginForm">
+                        <div class="alert alert-danger" style="display: none;">
+                            <button class="close" data-close="alert"></button>
+                            <span>Enter A Valid Email Address &amp; Passsword </span>
+                        </div>
+                        <div class="alert alert-danger" style="display: none;">
+                            <button class="close" data-close="alert"></button>
+                            <span>Invalid Credentials. Please Try Again. </span>
+                        </div>
+                        <div class="alert alert-danger">
+                            <button class="close" data-close="alert"></button>
+                            <span>You are not authorized to view this page. Please login.</span>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <input class="form-control form-control-solid placeholder-no-fix form-group" type="text" autocomplete="off" placeholder="Email Address" name="emailLogin" required />
+                            </div>
+                            <div class="col-xs-6">
+                                <input class="form-control form-control-solid placeholder-no-fix form-group" type="password" autocomplete="off" placeholder="Password" name="passwordLogin" required />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+
+                            </div>
+                            <div class="col-sm-8 text-right">
+                                <div class="forgot-password">
+                                    @*<a href="javascript:;" id="forget-password" class="forget-password">Forgot Password?</a>*@
+                                </div>
+                                <button class="btn btn-primary" type="submit">Sign In</button>
+                                <input type="hidden" name="ip1" id="ip1" value="" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script>
+        function getIP() {
+            $.getJSON("https://jsonip.com/?callback=?", function (data) {
+                $("#ip1").val(data.ip);
+                $("#ip2").val(data.ip);
+            });
+        }
+        $(document).ready(function () {
+            getIP();
+        });
+    </script>
+</body>
+
+</html>

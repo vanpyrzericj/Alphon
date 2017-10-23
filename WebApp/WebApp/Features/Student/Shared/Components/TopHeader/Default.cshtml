@@ -1,0 +1,47 @@
+﻿@model WebApp.Models.Account
+<div class="page-header navbar navbar-fixed-top">
+    <div class="page-header-inner ">
+        <div class="page-logo">
+            <a href="/Student">
+                <img src="~/logo.png" alt="logo" class="logo-default" style="width: 125px; margin-top: 0px;" />
+            </a>
+            <div class="menu-toggler sidebar-toggler">
+                <span></span>
+            </div>
+        </div>
+        <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
+            <span></span>
+        </a>
+        <div class="top-menu" data-model="TopBarModel">
+            <ul class="nav navbar-nav pull-right">
+                <li class="dropdown dropdown-user">
+                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                        <img alt="Profile Photo" class="img-circle" src="~/assets/global/img/avatar.png" id="ProfileImage" name="ProfileImage" />
+                        <span class="username username-hide-on-mobile"> @Model.firstname @Model.lastname</span>
+                        <i class="fa fa-angle-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-default">
+                        <li>
+                            <a href="/Student">
+                                <i class="fa fa-id-card"></i> My Dashboard
+                            </a>
+                        </li>
+                        <li class="divider"> </li>
+                        <li>
+                            <a href="/Logout">
+                                <i class="fa fa-key"></i> Log Out
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                @*<li class="dropdown dropdown-quick-sidebar-toggler">
+                <a href="javascript:;" class="dropdown-toggle">
+                    <i class="icon-logout"></i>
+                </a>
+            </li>*@
+            </ul>
+        </div>
+    </div>
+</div>
+<input type="hidden" value="@Model.email" id="emailGrav" name="emailGrav" />
+<input type="hidden" value="@Model.firstname" id="currentUserName" name="currentUserName" />

@@ -1,0 +1,101 @@
+﻿@{
+    Layout = "";
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="refresh" content="5;URL='/SignIn'" />
+
+    <title>Success | BuH</title>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet" />
+
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <h2 class="mt-4">Success!</h2>
+                <p>Hooray! You can now login with the testing credentials you created. We'll redirect you to the <a href="/SignIn">Sign In</a> page in about 5 seconds...</p>
+                
+            </div>
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container -->
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; @DateTime.Now.Year</p>
+        </div>
+        <!-- /.container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <style>
+        /*!
+        * Start Bootstrap - Busines Frontpage (http://startbootstrap.com/template-overviews/business-frontpage)
+        * Copyright 2013-2017 Start Bootstrap
+        * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-business-frontpage/blob/master/LICENSE)
+        */
+
+        body {
+            padding-top: 54px;
+        }
+
+        @@media (min-width: 992px) {
+            body {
+                padding-top: 56px;
+            }
+        }
+
+        .business-header {
+            height: 50vh;
+            min-height: 300px;
+            background: url('http://placehold.it/1920x400') center center no-repeat scroll;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            background-size: cover;
+            -o-background-size: cover;
+        }
+
+        .card {
+            height: 100%;
+        }
+    </style>
+    <script>
+        var initialized = false;
+        var input = $("#password_strength");
+
+        input.keydown(function () {
+            if (initialized === false) {
+                // set base options
+                input.pwstrength({
+                    raisePower: 1.4,
+                    minChar: 8,
+                    verdicts: ["Weak", "Normal", "Medium", "Strong", "Very Strong"],
+                    scores: [17, 26, 40, 50, 60]
+                });
+
+                // add your own rule to calculate the password strength
+                input.pwstrength("addRule", "demoRule", function (options, word, score) {
+                    return word.match(/[a-z].[0-9]/) && score;
+                }, 10, true);
+
+                // set as initialized
+                initialized = true;
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,170 @@
+﻿@model WebApp.Features.Student.Enroll.CourseEnrollInfoVM
+<div class="page-content">
+    <h1 class="page-title">
+        @Model.course.name
+    </h1>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="fa fa-home"></i>
+                <a href="/Student">Dashboard</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="/Student/Enroll">Enroll</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="/Student/Enroll/@Model.semester.Id">@Model.semester.season @Model.semester.year</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                @Model.course.name
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-10">
+            <div class="portlet light bordered">
+                <div class="portlet-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-3 sbold">Name</label>
+                                <div class="col-md-9">
+                                    <p class="form-control-static">@Model.course.name</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-5 sbold">Credit Hours</label>
+                                <div class="col-md-7">
+                                    <p class="form-control-static">@Model.course.credithours</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-5 sbold">Course Number</label>
+                                <div class="col-md-5">
+                                    <p class="form-control-static">@Model.course.number</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 sbold">Professor</label>
+                                <div class="col-md-9">
+                                    <p class="form-control-static">@Model.professor.firstname @Model.professor.lastname</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-5 sbold">Enrollment</label>
+                                <div class="col-md-7">
+                                    <p class="form-control-static"><strong>@Model.enrolled</strong> enrolled out of <strong>@Model.capacity</strong> available seats</p>
+                                    @if (!Model.waitlist)
+                                    { <em>This course does not offer wait listing.</em> }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label col-md-3 sbold">Course Description</label>
+                                <div class="col-md-9">
+                                    <p class="form-control-static">@Model.course.description</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Recitations</h4>
+                            <em>Click on a recitation row to select it for enrollment</em>
+                            <table class="table table-striped table-bordered table-hover table-checkable order-column" id="courseList">
+                                <thead>
+                                    <tr>
+                                        <th> Room </th>
+                                        <th> Times </th>
+                                        <th> Professor </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var recitation in Model.recitations)
+                                    {
+                                        <tr id="recitation_row_@recitation.Id" onclick="SelectRow('@recitation.Id');" style="cursor: pointer">
+                                            <th>@recitation.room</th>
+                                            <th>Tuesday/Thursday, 4pm - 5pm</th>
+                                            <th>@recitation.professor.firstname @recitation.professor.lastname</th>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="pull-right">
+                                <div class="btn-group">
+                                    <button class="btn btn-fit-height blue" id="addToCartBtn" onclick="AddCourseToCart();">
+                                        <i class="fa fa-shopping-cart"></i> Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="portlet light bordered">
+                <div class="portlet-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h3 style="margin-top: 0px;">Scheduled Times:</h3>
+                            @foreach (var timeslot in Model.timeslots)
+                            {
+                                <strong>@timeslot.dayofweek</strong> @timeslot.starttime @: - @timeslot.endtime
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section PageScripts{ 
+<script>
+    $(document).ready(function () {
+        if (@Model.recitations.Count > 0) {
+            $("#addToCartBtn").addClass("disabled");
+        }
+    });
+    var selectedRow = 0;
+    function SelectRow(id) {
+        if (selectedRow > 0) {
+            $("#recitation_row_" + selectedRow).removeClass("bg-green-jungle");
+            $("#recitation_row_" + id).addClass("bg-green-jungle");
+            $("#addToCartBtn").removeClass("disabled");
+            selectedRow = id;
+        } else {
+            $("#recitation_row_" + id).addClass("bg-green-jungle");
+            $("#addToCartBtn").removeClass("disabled");
+            selectedRow = id;
+        }
+    }
+    function AddCourseToCart() {
+        if (selectedRow > 0) {
+            $.post("/Student/Enroll/@Model.semester.Id/AddToCart",
+                {
+                    courseId: @Model.OfferingId,
+                    sectionForRecitationId: selectedRow
+                }, function (response) {
+                    window.location = "/Student/Cart?success=" + response.status;
+                });
+        } else {
+            alert("Please select a recitation.");
+        }
+    }
+</script>
+}

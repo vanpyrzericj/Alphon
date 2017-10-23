@@ -1,0 +1,33 @@
+{
+  "name": "asp.net",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "v3.3.7",
+    "jquery": "3.1.1",
+    "jquery-validation": "1.16.0",
+    "jquery-validation-unobtrusive": "3.2.6",
+    "font-awesome": "Font-Awesome#v4.7.0",
+    "eonasdan-bootstrap-datetimepicker": "v4.17.45",
+    "fullcalendar-scheduler": "v1.5.1",
+    "DataTables": "RELEASE_1_9_4",
+    "socicon": "3.0.5",
+    "select2": "4.0.3",
+    "pwstrength-bootstrap": "2.0.8",
+    "clipboard.js": "v0.3.3",
+    "bootstrap-wysihtml5": "*",
+    "blockui": "v2.65",
+    "moment": "2.18.1",
+    "mustache.js": "mustache#v2.3.0",
+    "knockout": "v3.4.2",
+    "simple-line-icons": "v0.1.2",
+    "jquery-slimscroll": "v1.3.8",
+    "bootstrap-switch": "v4.0.0-alpha.1",
+    "inputmask": "jquery.inputmask#3.3.6",
+    "jquery-ui": "1.12.1"
+  },
+  "resolutions": {
+    "jquery": ">=1.7.0",
+    "jquery-validation": "1.16.0",
+    "moment": "2.18.1"
+  }
+}

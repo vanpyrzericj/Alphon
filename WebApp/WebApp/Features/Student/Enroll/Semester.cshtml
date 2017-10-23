@@ -1,0 +1,74 @@
+﻿@model WebApp.Features.Student.Enroll.SemesterPickerVM
+<div class="page-content">
+    <h1 class="page-title">
+        Enrollment
+    </h1>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="fa fa-home"></i>
+                <a href="/Student/">Dashboard</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                Enrollment
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <div class="portlet light bordered">
+                <div class="portlet-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>
+                                    Select Enrollment Semester
+                                </label>
+                                <select class="form-control" id="semester" name="semester" onchange="SelectSemester();">
+                                    <option selected>
+                                        Select a Semester
+                                    </option>
+                                    @foreach (var semester in Model.AvailableSemesters)
+                                    {
+                                        <option value="@semester.Id">
+                                            @semester.season
+                                            @semester.year
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="portlet light bordered">
+                <div class="portlet-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h2>Enrollment Dates</h2>
+                            @foreach(var semester in Model.AllSemesters)
+                            {
+                                <h4>@semester.season  @semester.year</h4>
+                                <strong>Enrollment Opens: </strong> @semester.enrollopen.ToLongDateString()
+                                <strong>Enrollment Closes: </strong> @semester.enrollclose.ToLongDateString()
+                                <strong>Semester Begins: </strong> @semester.startdate.ToLongDateString()
+                                <strong>Semester Ends: </strong> @semester.enddate.ToLongDateString()
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section PageScripts{
+    <script>
+        function SelectSemester() {
+            window.location = '/Student/Enroll/' + $("#semester").val() + '/Search';
+            //Redirects to: /Students/Enroll/123
+        }
+    </script>
+}
