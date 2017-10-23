@@ -48,45 +48,46 @@
                                         <th> Room </th>
                                         <th> Credit Hours </th>
                                         <th> Professor </th>
+                                        <th> Actions </th>
                                     </tr>
                                 </thead>
-                                    <tbody>
-                                        @foreach (var enrolledCourse in Model.enrollments)
-                                        {
-                                            <tr>
-                                                <th>@enrolledCourse.major @enrolledCourse.coursenumber</th>
-                                                <th> @enrolledCourse.coursename </th>
-                                                <th>@enrolledCourse.type</th>
-                                                <th>
-                                                    @foreach (var timeslot in @enrolledCourse.timeslot)
-                                                    {
-                                                        <p style="margin: 5px 0 5px 0"> @timeslot.dayofweek&#58; <span style="color:#337ab7">@timeslot.starttime - @timeslot.endtime</span></p>
-                                                    }
-                                                </th>
-                                                <th> @enrolledCourse.room </th>
-                                                <th> @enrolledCourse.credithours </th>
-                                                <th> @enrolledCourse.professor.lastname, @enrolledCourse.professor.firstname </th>
+                                <tbody>
+                                    @foreach (var enrolledCourse in Model.enrollments)
+                                    {
+                                        <tr>
+                                            <th>@enrolledCourse.major @enrolledCourse.coursenumber</th>
+                                            <th> @enrolledCourse.coursename </th>
+                                            <th>@enrolledCourse.type</th>
+                                            <th>
+                                                @foreach (var timeslot in @enrolledCourse.timeslot)
+                                                {
+                                                    <p style="margin: 5px 0 5px 0"> @timeslot.dayofweek&#58; <span style="color:#337ab7">@timeslot.starttime - @timeslot.endtime</span></p>
+                                                }
+                                            </th>
+                                            <th> @enrolledCourse.room </th>
+                                            <th> @enrolledCourse.credithours </th>
+                                            <th> @enrolledCourse.professor.lastname, @enrolledCourse.professor.firstname </th>
+                                            <th>
                                                 @if (enrolledCourse.type == "Lecture")
                                                 {
-                                                    <th>
-                                                        <div class="btn-group">
-                                                            <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-                                                                Course Options
-                                                                <i class="fa fa-angle-down"></i>
-                                                            </button>
-                                                            <ul class="dropdown-menu pull-left" role="menu">
-                                                                <li>
-                                                                    <a href="/Student/Cart/Remove/@enrolledCourse.id">
-                                                                        Drop Class
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </th>
+                                                    <div class="btn-group">
+                                                        <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                                                            Course Options
+                                                            <i class="fa fa-angle-down"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu pull-left" role="menu">
+                                                            <li>
+                                                                <a href="/Student/Cart/Remove/@enrolledCourse.id">
+                                                                    Drop Class
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
                                                 }
-                                            </tr>
-                                        }
-                                    </tbody>
+                                            </th>
+                                        </tr>
+                                    }
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -95,7 +96,7 @@
         </div>
     </div>
 </div>
-@section PageScripts{ 
+@section PageScripts{
     <script>
         function ChangeSemester() {
             window.location = "/Student/Courses/" + $("#semesterId").val();

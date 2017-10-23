@@ -106,9 +106,9 @@
                                                 <th> @enrolledCourse.room </th>
                                                 <th> @enrolledCourse.credithours </th>
                                                 <th> @enrolledCourse.professor.lastname, @enrolledCourse.professor.firstname </th>
-                                                @if (enrolledCourse.type == "Lecture")
-                                                {
-                                                    <th>
+                                                <th>
+                                                    @if (enrolledCourse.type == "Lecture")
+                                                    {
                                                         <div class="btn-group">
                                                             <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
                                                                 Course Options
@@ -122,8 +122,8 @@
                                                                 </li>
                                                             </ul>
                                                         </div>
-                                                    </th>
-                                                }
+                                                    }
+                                                </th>
                                             </tr>
                                         }
                                     </tbody>

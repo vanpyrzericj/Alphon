@@ -54,8 +54,9 @@
                                     }
                                     </th>
                                     <th> @enrollment.section.professor.firstname @enrollment.section.professor.lastname </th>
-                                    @if(enrollment.section.offering.type == "lecture"){
-                                        <th>
+                                    <th>
+                                        @if (enrollment.section.offering.type == "lecture")
+                                        {
                                             <div class="btn-group">
                                                 <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
                                                     Course Options
@@ -69,8 +70,8 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                        </th>
-                                    }
+                                        }
+                                    </th>
                                 </tr>
                             }
                         </tbody>
