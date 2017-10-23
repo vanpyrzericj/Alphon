@@ -46,3 +46,5 @@ background process management tool and is capable of running .NET Core applicati
 2. After installing a mysql server instance, create a user (or just use root if you wish) and an empty database.
 3. There are two SQL dump files located in the 'SQLStuff' folder of the repository. `structure.sql` will populate your database with the necessary empty tables. `structure-and-data.sql` will populate your database with demo data, which can be used for development and testing purposes (people forking the repo are best to use this latter file).
 4. Using the dump file of your choice, run the contents of the SQL file as a query against your newely created database.
+
+This is a comment for the in class activity.
