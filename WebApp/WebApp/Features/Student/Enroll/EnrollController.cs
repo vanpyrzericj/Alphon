@@ -186,7 +186,7 @@ namespace WebApp.Features.Students.Enroll
         public IActionResult CourseSearch(int SemesterID)
         {
             ViewData["Title"] = "Course Search";
-            return View("CourseSearch", new CourseSearchVM { Majors = _context.Majors.ToList(), SemesterId = SemesterID });
+            return View("CourseSearch", new CourseSearchVM { Majors = _context.Majors.ToList(), SemesterId = SemesterID, semester= _context.Semesters.Find(SemesterID) });
         }
 
         /// <summary>
