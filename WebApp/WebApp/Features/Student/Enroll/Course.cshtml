@@ -94,9 +94,14 @@
                                     {
                                         <tr id="recitation_row_@recitation.Id" onclick="SelectRow('@recitation.Id');" style="cursor: pointer">
                                             <th>@recitation.room</th>
-                                            <th>Tuesday/Thursday, 4pm - 5pm</th>
-                                            <th>@recitation.professor.firstname @recitation.professor.lastname</th>
-                                        </tr>
+                                            <th>
+                                                @foreach (var time in recitation.TimeSlots)
+                                            {
+                                                @time.dayofweek @: @time.starttime - @time.endtime,
+                                            }
+                                        </th>
+                                        <th>@recitation.professor.firstname @recitation.professor.lastname</th>
+                                    </tr>
                                     }
                                 </tbody>
                             </table>
@@ -133,8 +138,8 @@
         </div>
     </div>
 </div>
-@section PageScripts{ 
-<script>
+@section PageScripts{
+    <script>
     $(document).ready(function () {
         if (@Model.recitations.Count > 0) {
             $("#addToCartBtn").addClass("disabled");
@@ -166,5 +171,5 @@
             alert("Please select a recitation.");
         }
     }
-</script>
+    </script>
 }

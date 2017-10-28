@@ -124,7 +124,13 @@ namespace WebApp.Features.Students.Enroll
         {            
             var sectionId = (await _context.Sections.Where(x => x.offering.Id == OfferingID).FirstAsync()).Id;
             var course = await _context.Offerings.Where(x => x.Id == OfferingID).Include(m => m.course.major).Select(a => a.course).FirstAsync();
-            var recitationOfferings = await _context.Offerings.Where(x => x.type == "recitation").Where(y => y.course.Id == course.Id).ToListAsync();
+            var recitationOfferings = await
+                _context.Sections
+                .Where(x => x.offering.parentcourse == sectionId)
+                .Where(x => x.offering.type == "recitation")
+                .Include(x => x.TimeSlots)
+                .Include(x => x.professor)
+                .Include(x => x.offering.semester).ToListAsync();
 
             var model = new CourseEnrollInfoVM()
             {
@@ -145,7 +151,7 @@ namespace WebApp.Features.Students.Enroll
 
             foreach (var offer in recitationOfferings)
             {
-                model.recitations.Add(_context.Sections.Where(x => x.offering.Id == offer.Id).Where(x => x.offering.type == "recitation").Include(p => p.professor).First());
+                model.recitations.Add(offer);
             }
 
             ViewData["Title"] = model.course.name;
