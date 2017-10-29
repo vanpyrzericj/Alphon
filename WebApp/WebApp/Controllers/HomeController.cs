@@ -32,11 +32,49 @@ namespace WebApp.Controllers
         {
             if(!_context.Accounts.Any(x => x.email == account.email)){
                 account.password = Crypter.Blowfish.Crypt(account.password, Crypter.Blowfish.GenerateSalt());
-                account.firstsemester = 1;
+                account.firstsemester = 2;
                 account.lastlogin = DateTime.MinValue;
                 account.usertype = "Student";
                 _context.Accounts.Add(account);
+
+                try
+                {
+                    _context.Enrollments.Add(new Enrollment
+                    {
+                        account = account,
+                        section = _context.Sections.Find(24),
+                        status = 1,
+                        dateadded = DateTime.Now
+                    });
+                    _context.Enrollments.Add(new Enrollment
+                    {
+                        account = account,
+                        section = _context.Sections.Find(25),
+                        status = 1,
+                        dateadded = DateTime.Now
+                    });
+                    _context.Enrollments.Add(new Enrollment
+                    {
+                        account = account,
+                        section = _context.Sections.Find(28),
+                        status = 1,
+                        dateadded = DateTime.Now
+                    });
+                    _context.Enrollments.Add(new Enrollment
+                    {
+                        account = account,
+                        section = _context.Sections.Find(29),
+                        status = 1,
+                        dateadded = DateTime.Now
+                    });
+                } catch(Exception ex)
+                {
+                    //This means the offering doesn't exist. They must not be using demo database. Ignore and continue.
+                }
+                
+
                 _context.SaveChanges();
+
                 return View("~/Views/Home/RegisterResult.cshtml");
             }
             else

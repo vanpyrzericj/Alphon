@@ -10,5 +10,6 @@ namespace WebApp.Features.Student.MyCourses
         /// </summary>
         public Semester semester { get; set; }  
         public ICollection<MyCoursesVM> enrollments { get; set; }
+        public bool IsWithinDropPeriod { get; set; }
     }
 }

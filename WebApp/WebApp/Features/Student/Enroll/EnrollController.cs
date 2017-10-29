@@ -262,23 +262,28 @@ namespace WebApp.Features.Students.Enroll
         [Route("/Student/Cart/Remove/{enrollmentID}")]
         public IActionResult RemoveFromCart(int enrollmentID)
         {
-            var course = _context.Enrollments.Where(x => x.Id == enrollmentID).Include(x => x.section).Include(x => x.section.offering.course).First();
-            if (course.section.offering.type == "lecture")
+            var courseEnrollment = _context.Enrollments.Where(x => x.Id == enrollmentID).Include(x => x.section).Include(x => x.section.offering.course).First();
+            if (courseEnrollment.section.offering.type == "lecture")
             {
                 try
                 {
-                    _context.Enrollments.Remove(_context.Enrollments.Where(x => x.section.offering.parentcourse == course.section.offering.course.Id).First());
-                    _context.Enrollments.Remove(course);
+                    _context.Enrollments.Remove(
+                        _context.Enrollments
+                        //.Where(x => x.section.offering.type == "recitation")
+                        .Where(x => x.section.offering.parentcourse == courseEnrollment.section.Id)
+                        .First()
+                        );
+                    _context.Enrollments.Remove(courseEnrollment);
                 }
                 catch(Exception ex)
                 {
-                    _context.Enrollments.Remove(course);
+                    _context.Enrollments.Remove(courseEnrollment);
                 }
                 
             }
             else
             {
-                _context.Enrollments.Remove(course);
+                _context.Enrollments.Remove(courseEnrollment);
             }
             _context.SaveChanges();
 
@@ -298,7 +303,7 @@ namespace WebApp.Features.Students.Enroll
             {
                 try
                 {
-                    _context.Enrollments.Remove(_context.Enrollments.Where(x => x.section.offering.parentcourse == course.section.offering.course.Id).First());
+                    _context.Enrollments.Remove(_context.Enrollments.Where(x => x.section.offering.parentcourse == course.section.Id).First());
                     _context.Enrollments.Remove(course);
                 }
                 catch (Exception ex)
@@ -329,7 +334,7 @@ namespace WebApp.Features.Students.Enroll
             {
                 try
                 {
-                    _context.Enrollments.Remove(_context.Enrollments.Where(x => x.section.offering.parentcourse == course.section.offering.course.Id).First());
+                    _context.Enrollments.Remove(_context.Enrollments.Where(x => x.section.offering.parentcourse == course.section.Id).First());
                     _context.Enrollments.Remove(course);
                 }
                 catch (Exception ex)

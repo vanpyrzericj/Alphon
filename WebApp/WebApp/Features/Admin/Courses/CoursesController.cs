@@ -104,6 +104,7 @@ namespace WebApp.Features.Admin.Courses
             };
             if(offeringvm.type == "recitation")
             {
+                //offeringvm.offeringid is the parent LECTURE offering
                 offering.parentcourse = offeringvm.offeringid;
             }
             else
