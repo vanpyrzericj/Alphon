@@ -23,7 +23,7 @@ namespace WebApp.Features.Student.Dashboard
         }
 
         /// <summary>
-        /// /Student page (the student's personal dashboard) 
+        /// /Student page (the student's personal dashboard)
         /// </summary>
         /// <returns>View("Dashboard", model)</returns>
         [Route("/Student")]
@@ -37,13 +37,15 @@ namespace WebApp.Features.Student.Dashboard
             var semester = _context.Semesters.Where(x => x.startdate <= DateTime.Now).Where(x => x.enddate >= DateTime.Now).First();
             var currentSemesterId = semester.Id;
             var enrollments = _context.Enrollments.Where(x => x.account.Id == acc.Id).Where(x => x.section.offering.semester.Id == currentSemesterId).Include(s => s.section.offering.course).ToList();
-            
+
             //Create new dashboard viewmodel and populate using filtered results
             var model = new DashboardVM();
             model.CurrentCourses = enrollments.Where(c => c.status == 1).Count();
             model.CurrentCreditHours = enrollments.Where(c => c.status == 1).Sum(s => s.section.offering.course.credithours);
             model.AvailableCreditHours = 16 - model.CurrentCreditHours;
             model.ShoppingCartCourses = enrollments.Where(c => c.status == 2).Count();
+
+            model.Notifications = new List<Notification>();
 
             model.Notifications.Add(new Notification()
             {
@@ -93,7 +95,7 @@ namespace WebApp.Features.Student.Dashboard
         {
             return char.ToUpper(original[0]) + original.Substring(1);
         }
-        
+
         //[Route("/Student/AllCourses")]
         //public JsonResult AllCourses()
         //{

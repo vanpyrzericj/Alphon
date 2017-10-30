@@ -154,12 +154,12 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- TODO: BEGIN NOTIFICATIONS FOR LOOP-->
+                                        @foreach(var notification in Model.Notifications){
                                         <tr>
-                                            <th> Title </th>
-                                            <th> Content</th>
+                                            <th> @notification.title </th>
+                                            <th> @notification.content </th>
                                         </tr>
-                                        <!-- TODO: END NOTIFICATIONS FOR LOOP-->
+                                        }
                                         <tr>
                                     </tbody>
                                 </table>
