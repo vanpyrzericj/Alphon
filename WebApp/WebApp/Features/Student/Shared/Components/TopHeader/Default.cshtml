@@ -17,29 +17,30 @@
                 <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
                     <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                         <i class="fa fa-shopping-cart"></i>
-                        <!-- TODO: BEGIN Show Only If Model.CartItems.Count > 0 -->
-                        <span class="badge badge-default"> 12 <!--TODO: Update This Number To Reflect Model.CartItems.Count --> </span>
-                        <!-- TODO: END Show Only If Model.CartItems.Count > 0 -->
+						@if(Model.CartItems.Count > 0)
+						{
+							<span class="badge badge-default"> @Model.CartItems.Count </span>
+						}
                     </a>
                     <ul class="dropdown-menu">
                         <li class="external">
                             <h3>
-                                <span class="bold">12 <!--TODO: Update This Number To Reflect Model.CartItems.Count --> courses</span> in cart
+                                <span class="bold"> @Model.CartItems.Count courses</span> in cart
                             </h3>
                             <a href="/Student/Cart">view cart</a>
                         </li>
                         <li>
                             <ul class="dropdown-menu-list scroller" style="height: 250px;" data-handle-color="#637283">
-                                <!-- TODO: For Loop The Below LI Tag For Each Item in Model.CartItems -->
                                 <!-- BEGIN LOOP -->
-                                <li>
-                                    <a href="javascript:;">
-                                        <span class="time">CSE 442</span>
-                                        <span class="details"> 
-                                            Software Engineering
-                                        </span>
-                                    </a>
-                                </li>
+								@foreach (var course in Model.CartItems)
+								{
+									<li>
+										<a href="javascript:;">
+											<span class="time"> @course.section.offering.course.number </span>
+											<span class="details"> @course.section.offering.course.name </span>
+										</a>
+									</li>
+								}
                                 <!-- END LOOP -->
                             </ul>
                         </li>
