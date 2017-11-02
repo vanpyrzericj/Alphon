@@ -157,14 +157,12 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @foreach(var notification in Model.Notifications){
                                         <tr>
-                                            <th> Add/Drop Day </th>
-                                            <th> Make sure to add/drop your classes by September 5th!</th>
+                                            <th> @notification.title </th>
+                                            <th> @notification.content </th>
                                         </tr>
-                                        <tr>
-                                            <th> Tuition Payment</th>
-                                            <th> Your bill is due on October 14th. Please pay by this date to avoid any late fee.</th>
-                                        </tr>
+                                        }
                                         <tr>
                                     </tbody>
                                 </table>
