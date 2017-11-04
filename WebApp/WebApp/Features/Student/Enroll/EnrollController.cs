@@ -9,6 +9,7 @@ using WebApp.Infrastructure.Inherits;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using Itenso.TimePeriod;
 
 namespace WebApp.Features.Students.Enroll
 {
@@ -246,10 +247,12 @@ namespace WebApp.Features.Students.Enroll
                 _context.Enrollments.Add(recitationEnrollment);
                 _context.SaveChanges();
             }
+
             else
             {
                 return new JsonResult(new { status = "false" });
             }
+
             return new JsonResult(new { status = "success" });
 
         }
@@ -410,16 +413,32 @@ namespace WebApp.Features.Students.Enroll
                 .Where(x => x.account.Id == account.Id)
                 .Where(x => x.status < 3)
                 .Include(y => y.section.offering.course)
+                .Include(t => t.section.TimeSlots)
                 .ToList();           
             
-            foreach(var i in enrolled)
+            foreach(var item in enrolled)
             {
-                if (i.section.offering.course.Id == course)
+                if (item.section.Id == course) return false;
+                if (item.section.Id == rec) return false;
+
+                foreach(var itemSlot in item.section.TimeSlots)
                 {
-                    return (i.section.offering.course.Id == rec);
+                    foreach(var courseSlot in _context.Sections.Where(x => x.Id == course).Include(t => t.TimeSlots).First().TimeSlots)
+                    {
+
+                    }
                 }
-                else if (i.section.offering.course.Id == rec) return false;
+
             }
+
+            //foreach(var i in enrolled)
+            //{
+            //    if (i.section.offering.course.Id == course)
+            //    {
+            //        return (i.section.offering.course.Id == rec);
+            //    }
+            //    else if (i.section.offering.course.Id == rec) return false;
+            //}
 
             return true;
 
