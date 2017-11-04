@@ -3,15 +3,15 @@
 
  Source Server         : Local Dev
  Source Server Type    : MySQL
- Source Server Version : 100122
+ Source Server Version : 50719
  Source Host           : localhost:3306
- Source Schema         : buh
+ Source Schema         : buhdev
 
  Target Server Type    : MySQL
- Target Server Version : 100122
+ Target Server Version : 50719
  File Encoding         : 65001
 
- Date: 28/10/2017 22:55:34
+ Date: 04/11/2017 17:43:35
 */
 
 SET NAMES utf8mb4;
@@ -35,7 +35,7 @@ CREATE TABLE `accounts`  (
   `firstsemester` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_account__major`(`major`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 19 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 21 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for courses
@@ -86,7 +86,8 @@ CREATE TABLE `enrollments`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_enrollment__account`(`accountId`) USING BTREE,
   INDEX `idx_enrollment__section`(`sectionId`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 129 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Fixed;
+) ENGINE = MyISAM AUTO_INCREMENT = 137 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Fixed;
+
 
 -- ----------------------------
 -- Table structure for majors
@@ -109,6 +110,20 @@ INSERT INTO `majors` VALUES (3, 'MTH', 'Mathematics', 'B.S.');
 INSERT INTO `majors` VALUES (4, 'CHE', 'Chemistry', 'B.A.');
 INSERT INTO `majors` VALUES (5, 'PHY', 'Physics', 'B.S.');
 INSERT INTO `majors` VALUES (6, 'STA', 'Statistics', 'B.S.');
+
+-- ----------------------------
+-- Table structure for notifications
+-- ----------------------------
+DROP TABLE IF EXISTS `notifications`;
+CREATE TABLE `notifications`  (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` datetime(0) NULL DEFAULT NULL,
+  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `accountId` int(11) NULL DEFAULT NULL,
+  `status` int(255) NULL DEFAULT 0,
+  PRIMARY KEY (`Id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for offerings
@@ -243,18 +258,18 @@ CREATE TABLE `semesters`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `season` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `year` int(11) NULL DEFAULT NULL,
-  `enrollopen` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
-  `enrollclose` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
-  `resignclose` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
-  `startdate` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
-  `enddate` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
+  `enrollopen` datetime(0) NULL DEFAULT NULL,
+  `enrollclose` datetime(0) NULL DEFAULT NULL,
+  `resignclose` datetime(0) NULL DEFAULT NULL,
+  `startdate` datetime(0) NULL DEFAULT NULL,
+  `enddate` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = MyISAM AUTO_INCREMENT = 3 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of semesters
 -- ----------------------------
-INSERT INTO `semesters` VALUES (1, 'Fall', 2017, '2017-08-01 21:21:52', '2017-10-31 21:22:01', '2017-11-30 21:22:07', '2017-08-28 21:22:13', '2017-12-23 21:22:19');
+INSERT INTO `semesters` VALUES (1, 'Fall', 2017, '2017-08-01 21:21:52', '2017-12-25 21:22:01', '2017-11-30 21:22:07', '2017-08-28 21:22:13', '2017-12-23 21:22:19');
 INSERT INTO `semesters` VALUES (2, 'Spring', 2017, '2016-11-20 21:27:42', '2017-01-31 21:27:53', '2017-04-14 21:28:04', '2017-01-30 21:28:12', '2017-05-19 21:28:18');
 
 -- ----------------------------

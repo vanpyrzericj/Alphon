@@ -3,15 +3,15 @@
 
  Source Server         : Local Dev
  Source Server Type    : MySQL
- Source Server Version : 100122
+ Source Server Version : 50719
  Source Host           : localhost:3306
- Source Schema         : buh
+ Source Schema         : buhdev
 
  Target Server Type    : MySQL
- Target Server Version : 100122
+ Target Server Version : 50719
  File Encoding         : 65001
 
- Date: 28/10/2017 22:55:49
+ Date: 04/11/2017 17:43:45
 */
 
 SET NAMES utf8mb4;
@@ -35,7 +35,7 @@ CREATE TABLE `accounts`  (
   `firstsemester` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_account__major`(`major`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 19 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 21 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for courses
@@ -67,7 +67,7 @@ CREATE TABLE `enrollments`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_enrollment__account`(`accountId`) USING BTREE,
   INDEX `idx_enrollment__section`(`sectionId`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 129 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Fixed;
+) ENGINE = MyISAM AUTO_INCREMENT = 137 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Fixed;
 
 -- ----------------------------
 -- Table structure for majors
@@ -80,6 +80,20 @@ CREATE TABLE `majors`  (
   `type` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'B.S.',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = MyISAM AUTO_INCREMENT = 7 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for notifications
+-- ----------------------------
+DROP TABLE IF EXISTS `notifications`;
+CREATE TABLE `notifications`  (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` datetime(0) NULL DEFAULT NULL,
+  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `accountId` int(11) NULL DEFAULT NULL,
+  `status` int(255) NULL DEFAULT 0,
+  PRIMARY KEY (`Id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for offerings
@@ -130,11 +144,11 @@ CREATE TABLE `semesters`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `season` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `year` int(11) NULL DEFAULT NULL,
-  `enrollopen` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
-  `enrollclose` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
-  `resignclose` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
-  `startdate` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
-  `enddate` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
+  `enrollopen` datetime(0) NULL DEFAULT NULL,
+  `enrollclose` datetime(0) NULL DEFAULT NULL,
+  `resignclose` datetime(0) NULL DEFAULT NULL,
+  `startdate` datetime(0) NULL DEFAULT NULL,
+  `enddate` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = MyISAM AUTO_INCREMENT = 3 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
