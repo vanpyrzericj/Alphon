@@ -18,5 +18,6 @@ namespace WebApp.Models
         public DbSet<Semester> Semesters { get; set; }
         public DbSet<TimeSlot> Timeslots { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
     }
 }

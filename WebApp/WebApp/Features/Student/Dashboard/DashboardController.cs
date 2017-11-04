@@ -1,14 +1,12 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using WebApp.Infrastructure.Inherits;
-using WebApp.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using WebApp.Features.Student.MyCourses;
+using WebApp.Models;
 
 namespace WebApp.Features.Student.Dashboard
 {
@@ -23,7 +21,7 @@ namespace WebApp.Features.Student.Dashboard
         }
 
         /// <summary>
-        /// /Student page (the student's personal dashboard)
+        /// /Student page (the student's personal dashboard) 
         /// </summary>
         /// <returns>View("Dashboard", model)</returns>
         [Route("/Student")]
@@ -37,26 +35,15 @@ namespace WebApp.Features.Student.Dashboard
             var semester = _context.Semesters.Where(x => x.startdate <= DateTime.Now).Where(x => x.enddate >= DateTime.Now).First();
             var currentSemesterId = semester.Id;
             var enrollments = _context.Enrollments.Where(x => x.account.Id == acc.Id).Where(x => x.section.offering.semester.Id == currentSemesterId).Include(s => s.section.offering.course).ToList();
-
+            
             //Create new dashboard viewmodel and populate using filtered results
             var model = new DashboardVM();
-            model.CurrentCourses = enrollments.Where(x => x.section.offering.type == "lecture").Where(c => c.status == 1).Count();
+            model.CurrentCourses = enrollments.Where(c => c.status == 1).Count();
             model.CurrentCreditHours = enrollments.Where(c => c.status == 1).Sum(s => s.section.offering.course.credithours);
             model.AvailableCreditHours = 16 - model.CurrentCreditHours;
             model.ShoppingCartCourses = enrollments.Where(c => c.status == 2).Count();
 
-            model.Notifications = new List<Notification>();
-
-            model.Notifications.Add(new Notification()
-            {
-                title = "Add/Drop Day",
-                content = "Make sure to add/drop your classes by September 5th!"
-            });
-            model.Notifications.Add(new Notification()
-            {
-                title = "Tuition Payment",
-                content = "Your bill is due on October 14th. Please pay by this date to avoid any late fee."
-            });
+            model.Notifications = _context.Notifications.Where(x => x.account.Id == acc.Id).Where(x => x.status != 1).ToList();
 
             //model.CurrentCourses = 1;
             //model.CurrentCreditHours = 1;
@@ -68,7 +55,6 @@ namespace WebApp.Features.Student.Dashboard
             model.Enrollments = _context.Enrollments
                         .Where(x => x.section.offering.semester.Id == currentSemesterId)
                         .Where(x => x.account.Id == acc.Id)
-                        .Where(x => x.status == 1)
                         .Select(x => new MyCoursesVM
                         {
                             id = x.Id,
@@ -96,7 +82,7 @@ namespace WebApp.Features.Student.Dashboard
         {
             return char.ToUpper(original[0]) + original.Substring(1);
         }
-
+        
         //[Route("/Student/AllCourses")]
         //public JsonResult AllCourses()
         //{
