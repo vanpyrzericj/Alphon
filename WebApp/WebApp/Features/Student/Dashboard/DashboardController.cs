@@ -43,8 +43,9 @@ namespace WebApp.Features.Student.Dashboard
             model.AvailableCreditHours = 16 - model.CurrentCreditHours;
             model.ShoppingCartCourses = enrollments.Where(c => c.status == 2).Count();
 
+            //User Notifications
             model.Notifications = _context.Notifications.Where(x => x.account.Id == acc.Id).Where(x => x.status != 1).ToList();
-
+            
             //model.CurrentCourses = 1;
             //model.CurrentCreditHours = 1;
             //model.AvailableCreditHours = 1;
