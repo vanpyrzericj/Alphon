@@ -425,7 +425,26 @@ namespace WebApp.Features.Students.Enroll
                 {
                     foreach(var courseSlot in _context.Sections.Where(x => x.Id == course).Include(t => t.TimeSlots).First().TimeSlots)
                     {
+                        if (itemSlot.dayofweek == courseSlot.dayofweek)
+                        {
+                            var splitItemSlotStart = itemSlot.starttime.Split(':');
+                            var splitItemSlotEnd = itemSlot.endtime.Split(':');
+                            var splitCourseSlotStart = courseSlot.starttime.Split(':');
+                            var splitCourseSlotEnd = courseSlot.endtime.Split(':');
 
+                            var itemSlotDate = new TimeRange(
+                                new DateTime(2017, 1, 1, Convert.ToInt32(splitItemSlotStart[0]), Convert.ToInt32(splitItemSlotStart[1]), 0),
+                                new DateTime(2017,1,1, Convert.ToInt32(splitItemSlotEnd[0]), Convert.ToInt32(splitItemSlotEnd[1]), 0));
+                            var itemCourseDate = new TimeRange(
+                                new DateTime(2017, 1, 1, Convert.ToInt32(splitCourseSlotStart[0]), Convert.ToInt32(splitCourseSlotStart[1]), 0),
+                                new DateTime(2017, 1, 1, Convert.ToInt32(splitCourseSlotEnd[0]), Convert.ToInt32(splitCourseSlotEnd[1]), 0));
+
+                            if (itemSlotDate.IntersectsWith(itemCourseDate))
+                            {
+                                //We have a conflict on both the day and times.
+                                return false;
+                            }
+                        }
                     }
                 }
 
