@@ -32,6 +32,7 @@ namespace WebApp.Features.Student.Components
                 .Include(x => x.section.offering.course)
                 .Include(x => x.section.TimeSlots)
                 .Include(x => x.section.offering)
+                .Include(x => x.section.offering.course.major)
                 .ToListAsync(),
                 Account = await _context.Accounts
                 .Where(x => x.Id == Convert.ToInt32(val.Value))
