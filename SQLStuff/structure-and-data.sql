@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : Local Dev
+ Source Server         : Buh
  Source Server Type    : MySQL
  Source Server Version : 50719
  Source Host           : localhost:3306
@@ -18,10 +18,10 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for accounts
+-- Table structure for Accounts
 -- ----------------------------
-DROP TABLE IF EXISTS `accounts`;
-CREATE TABLE `accounts`  (
+DROP TABLE IF EXISTS `Accounts`;
+CREATE TABLE `Accounts`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `firstname` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `lastname` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
@@ -38,10 +38,10 @@ CREATE TABLE `accounts`  (
 ) ENGINE = MyISAM AUTO_INCREMENT = 21 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for courses
+-- Table structure for Courses
 -- ----------------------------
-DROP TABLE IF EXISTS `courses`;
-CREATE TABLE `courses`  (
+DROP TABLE IF EXISTS `Courses`;
+CREATE TABLE `Courses`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `number` int(11) NULL DEFAULT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE `courses`  (
 ) ENGINE = MyISAM AUTO_INCREMENT = 17 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of courses
+-- Records of Courses
 -- ----------------------------
 INSERT INTO `courses` VALUES (1, 'Software Engineering', 442, 'Industry standard software development', 1, 4, 1, 1);
 INSERT INTO `courses` VALUES (2, 'Signals and Systems', 205, 'Signals and Systems', 2, 4, 1, 1);
@@ -74,10 +74,10 @@ INSERT INTO `courses` VALUES (15, 'Introduction to Algorithms', 331, 'Intro to A
 INSERT INTO `courses` VALUES (16, 'Nanophotonics', 412, 'Nanophotonics', 2, 4, 1, 1);
 
 -- ----------------------------
--- Table structure for enrollments
+-- Table structure for Enrollments
 -- ----------------------------
-DROP TABLE IF EXISTS `enrollments`;
-CREATE TABLE `enrollments`  (
+DROP TABLE IF EXISTS `Enrollments`;
+CREATE TABLE `Enrollments`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `accountId` int(11) NOT NULL,
   `sectionId` int(11) NOT NULL,
@@ -90,10 +90,10 @@ CREATE TABLE `enrollments`  (
 
 
 -- ----------------------------
--- Table structure for majors
+-- Table structure for Majors
 -- ----------------------------
-DROP TABLE IF EXISTS `majors`;
-CREATE TABLE `majors`  (
+DROP TABLE IF EXISTS `Majors`;
+CREATE TABLE `Majors`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `fullname` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
@@ -102,7 +102,7 @@ CREATE TABLE `majors`  (
 ) ENGINE = MyISAM AUTO_INCREMENT = 7 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of majors
+-- Records of Majors
 -- ----------------------------
 INSERT INTO `majors` VALUES (1, 'CSE', 'Computer Science', 'B.S.');
 INSERT INTO `majors` VALUES (2, 'EE', 'Electrical Engineering', 'B.S.');
@@ -126,10 +126,10 @@ CREATE TABLE `notifications`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for offerings
+-- Table structure for Offerings
 -- ----------------------------
-DROP TABLE IF EXISTS `offerings`;
-CREATE TABLE `offerings`  (
+DROP TABLE IF EXISTS `Offerings`;
+CREATE TABLE `Offerings`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `semesterId` int(11) NOT NULL,
   `courseId` int(11) NOT NULL,
@@ -142,7 +142,7 @@ CREATE TABLE `offerings`  (
 ) ENGINE = MyISAM AUTO_INCREMENT = 41 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of offerings
+-- Records of Offerings
 -- ----------------------------
 INSERT INTO `offerings` VALUES (10, 1, 2, 'recitation', 10, 2);
 INSERT INTO `offerings` VALUES (7, 1, 1, 'lecture', 10, 0);
@@ -180,10 +180,10 @@ INSERT INTO `offerings` VALUES (39, 1, 16, 'lecture', 40, 0);
 INSERT INTO `offerings` VALUES (40, 1, 16, 'recitation', 40, 37);
 
 -- ----------------------------
--- Table structure for professors
+-- Table structure for Professors
 -- ----------------------------
-DROP TABLE IF EXISTS `professors`;
-CREATE TABLE `professors`  (
+DROP TABLE IF EXISTS `Professors`;
+CREATE TABLE `Professors`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `firstname` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `lastname` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
@@ -191,18 +191,19 @@ CREATE TABLE `professors`  (
 ) ENGINE = MyISAM AUTO_INCREMENT = 5 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of professors
+-- Records of Professors
 -- ----------------------------
+
 INSERT INTO `professors` VALUES (1, 'Jimmy', 'Brooks');
 INSERT INTO `professors` VALUES (2, 'Sandy', 'Robinson');
 INSERT INTO `professors` VALUES (3, 'Melinda', 'Fink');
 INSERT INTO `professors` VALUES (4, 'Jacob', 'Blake');
 
 -- ----------------------------
--- Table structure for sections
+-- Table structure for Sections
 -- ----------------------------
-DROP TABLE IF EXISTS `sections`;
-CREATE TABLE `sections`  (
+DROP TABLE IF EXISTS `Sections`;
+CREATE TABLE `Sections`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `offeringId` int(11) NOT NULL,
   `room` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
@@ -213,7 +214,7 @@ CREATE TABLE `sections`  (
 ) ENGINE = MyISAM AUTO_INCREMENT = 39 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of sections
+-- Records of Sections
 -- ----------------------------
 INSERT INTO `sections` VALUES (1, 7, 'NSC 210', 1);
 INSERT INTO `sections` VALUES (3, 8, 'NSC 216', 3);
@@ -251,10 +252,10 @@ INSERT INTO `sections` VALUES (37, 39, 'N200', 4);
 INSERT INTO `sections` VALUES (38, 40, 'N21', 1);
 
 -- ----------------------------
--- Table structure for semesters
+-- Table structure for Semesters
 -- ----------------------------
-DROP TABLE IF EXISTS `semesters`;
-CREATE TABLE `semesters`  (
+DROP TABLE IF EXISTS `Semesters`;
+CREATE TABLE `Semesters`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `season` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `year` int(11) NULL DEFAULT NULL,
@@ -267,16 +268,16 @@ CREATE TABLE `semesters`  (
 ) ENGINE = MyISAM AUTO_INCREMENT = 3 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of semesters
+-- Records of Semesters
 -- ----------------------------
 INSERT INTO `semesters` VALUES (1, 'Fall', 2017, '2017-08-01 21:21:52', '2017-12-25 21:22:01', '2017-11-30 21:22:07', '2017-08-28 21:22:13', '2017-12-23 21:22:19');
 INSERT INTO `semesters` VALUES (2, 'Spring', 2017, '2016-11-20 21:27:42', '2017-01-31 21:27:53', '2017-04-14 21:28:04', '2017-01-30 21:28:12', '2017-05-19 21:28:18');
 
 -- ----------------------------
--- Table structure for timeslots
+-- Table structure for Timeslots
 -- ----------------------------
-DROP TABLE IF EXISTS `timeslots`;
-CREATE TABLE `timeslots`  (
+DROP TABLE IF EXISTS `Timeslots`;
+CREATE TABLE `Timeslots`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `dayofweek` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `starttime` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
@@ -287,7 +288,7 @@ CREATE TABLE `timeslots`  (
 ) ENGINE = MyISAM AUTO_INCREMENT = 64 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of timeslots
+-- Records of Timeslots
 -- ----------------------------
 INSERT INTO `timeslots` VALUES (1, 'Monday', '12:00', '13:00', 1);
 INSERT INTO `timeslots` VALUES (2, 'Wednesday', '12:00', '13:00', 1);
@@ -349,5 +350,6 @@ INSERT INTO `timeslots` VALUES (60, 'Monday', '8:00', '8:50', 36);
 INSERT INTO `timeslots` VALUES (61, 'Tuesday', '16:00', '16:50', 37);
 INSERT INTO `timeslots` VALUES (62, 'Thursday', '16:00', '16:50', 37);
 INSERT INTO `timeslots` VALUES (63, 'Tuesday', '17:00', '17:50', 38);
+
 
 SET FOREIGN_KEY_CHECKS = 1;

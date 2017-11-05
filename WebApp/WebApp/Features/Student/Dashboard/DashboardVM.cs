@@ -14,6 +14,7 @@ namespace WebApp.Features.Student.Dashboard
         public int AvailableCreditHours { get; set; }
         public int ShoppingCartCourses { get; set; }
         public ICollection<MyCoursesVM> Enrollments { get; set; }
+        public ICollection<Notification> Notifications { get; set; }
         public Semester Semester { get; internal set; }
         public bool IsWithinDropPeriod { get; set; }
     }
