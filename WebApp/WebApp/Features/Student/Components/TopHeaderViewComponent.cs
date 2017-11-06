@@ -22,9 +22,24 @@ namespace WebApp.Features.Student.Components
             var identity = (ClaimsIdentity)User.Identity;
             IEnumerable<Claim> claims = identity.Claims;
             var val = claims.First(x => x.Type == "sub");
-            return View(await _context.Accounts
+            var model = new TopHeaderVM
+            {
+                CartItems = await _context.Enrollments
+                .Where(x => x.account.Id == Convert.ToInt32(val.Value))
+                .Where(x => x.status != 1)
+                .Where(x => x.section.offering.type == "lecture")
+                .Include(x => x.section)
+                .Include(x => x.section.professor)
+                .Include(x => x.section.offering.course)
+                .Include(x => x.section.TimeSlots)
+                .Include(x => x.section.offering)
+                .Include(x => x.section.offering.course.major)
+                .ToListAsync(),
+                Account = await _context.Accounts
                 .Where(x => x.Id == Convert.ToInt32(val.Value))
-                .FirstAsync());
+                .FirstAsync()
+            };
+            return View(model);
         }
     }
 }
