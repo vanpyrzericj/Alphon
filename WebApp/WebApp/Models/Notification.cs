@@ -11,5 +11,8 @@ namespace WebApp.Models
         public DateTime date { get; set; }
         public string title { get; set; }
         public string content { get; set; }
+        //User Account
+        public Account account { get; set; }
+        public int status { get; set; } // {0} Unread {1} Cleared
     }
 }
