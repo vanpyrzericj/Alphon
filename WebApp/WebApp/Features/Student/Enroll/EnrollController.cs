@@ -430,7 +430,7 @@ namespace WebApp.Features.Students.Enroll
                 .Include(t => t.section.TimeSlots)
                 .ToList();    
 
-            foreach (var i in enrolled)
+            foreach (var item in enrolled)
 
             {
                 if (item.section.Id == course) return false;
