@@ -22,7 +22,7 @@
             </div>
         </div>
     </div>
-    <div class="alert alert-danger" style="display:none;" id="enrolledError">Unfortunately, we couldn't add the requested courses as you are already enrolled in them.</div>
+    <div class="alert alert-danger" style="display:none;" id="enrolledError">Unfortunately, we couldn't add the requested courses as you are already enrolled in them <em>or they conflict with a course already in your cart/enrolled</em>.</div>
     <div class="alert alert-success" style="display:none;" id="enrolledSuccess">The selected course(s) were successfully added to your cart.</div>
     <div class="row">
         <div class="col-md-9">
@@ -103,7 +103,7 @@
                 </div>
                 <div class="details">
                     <div class="number">
-                        <span data-counter="counterup" data-value="1349">@Model.Sum(x => x.section.offering.course.credithours)</span>
+                        <span data-counter="counterup" data-value="1349">@Model.Where(c => c.section.offering.type == "lecture").Sum(x => x.section.offering.course.credithours)</span>
                     </div>
                     <div class="desc"> Credit Hours In Cart</div>
                 </div>
@@ -114,7 +114,7 @@
                 </div>
                 <div class="details">
                     <div class="number">
-                        <span data-counter="counterup" data-value="1349">@Model.Count()</span>
+                        <span data-counter="counterup" data-value="1349">@Model.Where(c => c.section.offering.type == "lecture").Count()</span>
                     </div>
                     <div class="desc"> Courses In Cart </div>
                 </div>

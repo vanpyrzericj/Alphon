@@ -1,4 +1,4 @@
-@model IEnumerable<WebApp.Models.Course>
+@model WebApp.Features.Admin.Courses.CoursesVM
 <div class="page-content">
     <h1 class="page-title">
         Courses
@@ -35,7 +35,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var course in Model)
+                            @foreach (var course in Model.courses)
                             {
                                 <tr>
                                     <th><a href="/Admin/Courses/@course.Id">@course.name</a></th>
@@ -65,17 +65,45 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Name</label>
-                                    <input class="form-control" type="text" name="name" />
+                                    <input class="form-control" type="text" name="coursevm.name" />
                                 </div>
                                 <div class="form-group">
                                     <label>Number</label>
-                                    <input class="form-control" type="text" name="number" />
+                                    <input class="form-control" type="text" name="coursevm.number" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Mode of Instruction</label>
+                                    <select class="form-control" name="coursevm.modeofinstruction">
+                                        <option value="1">Classroom</option>
+                                        <option value="2">Online</option>
+                                        <option value="3">Hybrid</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Career</label>
+                                    <select class="form-control" name="coursevm.career">
+                                        <option value="1">Undergraduate</option>
+                                        <option value="2">Graduate</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Description</label>
-                                    <input class="form-control" type="text" name="description" />
+                                    <input class="form-control" type="text" name="coursevm.description" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Credit Hours</label>
+                                    <input class="form-control" type="text" name="coursevm.credithours" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Major</label>
+                                    <select class="form-control" name="coursevm.majorid">
+                                        @foreach(var major in Model.majors)
+                                        {
+                                            <option value="@major.Id">@major.name</option>
+                                        }
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -94,9 +122,6 @@
         $(document).ready(function () {
             $("#courseList")
                 .dataTable();
-            $('#datetimepicker1').datepicker({
-
-            });
         });
     </script>
 }

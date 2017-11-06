@@ -30,25 +30,25 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">First Name</label>
                             <div class="col-md-4">
-                                <input type="text" class="form-control" name="account.firstname">
+                                <input type="text" class="form-control" name="account.firstname" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3">Last Name</label>
                             <div class="col-md-4">
-                                <input type="text" class="form-control" name="account.lastname">
+                                <input type="text" class="form-control" name="account.lastname" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3">Email Address</label>
                             <div class="col-md-4">
-                                <input type="email" class="form-control" name="account.email">
+                                <input type="text" class="form-control" name="account.email" id="account.email" required>
                             </div>
                         </div>
                         <div class="form-group last password-strength">
                             <label class="control-label col-md-3">Password</label>
                             <div class="col-md-4">
-                                <input type="password" class="form-control" name="account.password" id="password_strength">
+                                <input type="password" class="form-control" name="account.password" id="password_strength" required>
                             </div>
                         </div>
                     </div>
@@ -57,11 +57,11 @@
                         We use the following tools to collect data about your beta session on this application. None of this data is linked directly to you.
                         <ul>
                             <li>Google Analytics: Measuring Site Visitors</li>
-                            <li>Aure Application Insights: Tracking Server-Side Exceptions w/ trace</li>
+                            <li>Azure Application Insights: Tracking Server-Side Exceptions w/ trace</li>
                             <li>Sentry: Tracking Client-Side Javascript Errors</li>
                             <li>Heap Analytics: Tracking Heatmaps and Popular Actions (Button clicks, etc.)</li>
                         </ul>
-                        By creating and signing in with your testing credentials, you agree to allow us to collect this data, anonymously, for improving the application.<br/>
+                        By creating and signing in with your testing credentials, you agree to allow us to collect this data, anonymously, for improving the application.<br />
                         If you wish to still test the application, but want to disable all tracking software, simply download the <a href="https://tools.google.com/dlpage/gaoptout">Google Opt-Out plugin</a> and your data will be discarded when delivered to the pipline.
                     </p>
                     <div class="form-actions">
@@ -92,6 +92,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
     <script src="~/assets/global/plugins/bootstrap-pwstrength/pwstrength-bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
     <style>
         /*!
         * Start Bootstrap - Busines Frontpage (http://startbootstrap.com/template-overviews/business-frontpage)
@@ -146,6 +148,22 @@
                 initialized = true;
             }
         });
+    </script>
+    <script>
+    $("#form-username").validate({
+        rules: {
+            'account.email': {
+                required: true,
+                myEmail: true
+            }
+        },
+        submitHandler: function (form) {
+            form.submit();
+        }
+        });
+        jQuery.validator.addMethod("myEmail", function(value, element) {
+    return this.optional( element ) || ( /^[a-z0-9]+([-._][a-z0-9]+)*@@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,4}$/.test( value ) && /^(?=.{1,64}@@.{4,64}$)(?=.{6,100}$).*/.test( value ) );
+}, 'Please enter valid email address.');
     </script>
 </body>
 

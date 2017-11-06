@@ -9,6 +9,7 @@ using WebApp.Infrastructure.Inherits;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using Itenso.TimePeriod;
 
 namespace WebApp.Features.Students.Enroll
 {
@@ -78,13 +79,13 @@ namespace WebApp.Features.Students.Enroll
                 .ToList();
 
             //Filter for "show open classes" search option
-            if(filter.ShowOpenClasses)
+            if (filter.ShowOpenClasses)
             {
                 result = result.Where(x => x.enrolled < x.capacity).ToList();
             }
 
             //Filter for course number search options
-            if(filter.CourseNumber == 0) return View("Courses", result);
+            if (filter.CourseNumber == 0) return View("Courses", result);
             switch (filter.CourseNumberFilterOption)
             {
                 case 1:
@@ -121,10 +122,16 @@ namespace WebApp.Features.Students.Enroll
         /// <returns>View("Course", model)</returns>
         [Route("/Student/Enroll/{SemesterID}/Courses/{OfferingID}")]
         public async Task<IActionResult> CourseEnrollInfoAsync(int SemesterID, int OfferingID)
-        {            
+        {
             var sectionId = (await _context.Sections.Where(x => x.offering.Id == OfferingID).FirstAsync()).Id;
             var course = await _context.Offerings.Where(x => x.Id == OfferingID).Include(m => m.course.major).Select(a => a.course).FirstAsync();
-            var recitationOfferings = await _context.Offerings.Where(x => x.type == "recitation").Where(y => y.course.Id == course.Id).ToListAsync();
+            var recitationOfferings = await
+                _context.Sections
+                .Where(x => x.offering.parentcourse == sectionId)
+                .Where(x => x.offering.type == "recitation")
+                .Include(x => x.TimeSlots)
+                .Include(x => x.professor)
+                .Include(x => x.offering.semester).ToListAsync();
 
             var model = new CourseEnrollInfoVM()
             {
@@ -145,7 +152,7 @@ namespace WebApp.Features.Students.Enroll
 
             foreach (var offer in recitationOfferings)
             {
-                model.recitations.Add(_context.Sections.Where(x => x.offering.Id == offer.Id).Where(x => x.offering.type == "recitation").Include(p => p.professor).First());
+                model.recitations.Add(offer);
             }
 
             ViewData["Title"] = model.course.name;
@@ -186,7 +193,7 @@ namespace WebApp.Features.Students.Enroll
         public IActionResult CourseSearch(int SemesterID)
         {
             ViewData["Title"] = "Course Search";
-            return View("CourseSearch", new CourseSearchVM { Majors = _context.Majors.ToList(), SemesterId = SemesterID, semester= _context.Semesters.Find(SemesterID) });
+            return View("CourseSearch", new CourseSearchVM { Majors = _context.Majors.ToList(), SemesterId = SemesterID, semester = _context.Semesters.Find(SemesterID) });
         }
 
         /// <summary>
@@ -220,30 +227,36 @@ namespace WebApp.Features.Students.Enroll
             var courseEnrollment = new Enrollment
             {
                 account = account,
-                section = _context.Sections.Where(x => x.offering.Id == courseId).First(),
+                section = _context.Sections.First(x => x.offering.Id == courseId),
                 status = 2,
                 dateadded = DateTime.Now
             };
 
-            var recitationEnrollment = new Enrollment
+            Enrollment recitationEnrollment = null;
+            if (sectionForRecitationId != 0)
             {
-                account = account,
-                section = _context.Sections.Find(sectionForRecitationId),
-                status = 2,
-                dateadded = DateTime.Now
-            };
-
+                recitationEnrollment = new Enrollment
+                {
+                    account = account,
+                    section = _context.Sections.Find(sectionForRecitationId),
+                    status = 2,
+                    dateadded = DateTime.Now
+                };
+            }
+            
 
             if (CheckCart(SemesterID, account, courseEnrollment.section.Id, sectionForRecitationId))
             {
                 _context.Enrollments.Add(courseEnrollment);
-                _context.Enrollments.Add(recitationEnrollment);
+                if (sectionForRecitationId != 0) _context.Enrollments.Add(recitationEnrollment ?? throw new InvalidOperationException());
                 _context.SaveChanges();
             }
+
             else
             {
                 return new JsonResult(new { status = "false" });
             }
+
             return new JsonResult(new { status = "success" });
 
         }
@@ -256,23 +269,28 @@ namespace WebApp.Features.Students.Enroll
         [Route("/Student/Cart/Remove/{enrollmentID}")]
         public IActionResult RemoveFromCart(int enrollmentID)
         {
-            var course = _context.Enrollments.Where(x => x.Id == enrollmentID).Include(x => x.section).Include(x => x.section.offering.course).First();
-            if (course.section.offering.type == "lecture")
+            var courseEnrollment = _context.Enrollments.Where(x => x.Id == enrollmentID).Include(x => x.section).Include(x => x.section.offering.course).First();
+            if (courseEnrollment.section.offering.type == "lecture")
             {
                 try
                 {
-                    _context.Enrollments.Remove(_context.Enrollments.Where(x => x.section.offering.parentcourse == course.section.offering.course.Id).First());
-                    _context.Enrollments.Remove(course);
+                    _context.Enrollments.Remove(
+                        _context.Enrollments
+                        //.Where(x => x.section.offering.type == "recitation")
+                        .Where(x => x.section.offering.parentcourse == courseEnrollment.section.Id)
+                        .First()
+                        );
+                    _context.Enrollments.Remove(courseEnrollment);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
-                    _context.Enrollments.Remove(course);
+                    _context.Enrollments.Remove(courseEnrollment);
                 }
-                
+
             }
             else
             {
-                _context.Enrollments.Remove(course);
+                _context.Enrollments.Remove(courseEnrollment);
             }
             _context.SaveChanges();
 
@@ -292,7 +310,7 @@ namespace WebApp.Features.Students.Enroll
             {
                 try
                 {
-                    _context.Enrollments.Remove(_context.Enrollments.Where(x => x.section.offering.parentcourse == course.section.offering.course.Id).First());
+                    _context.Enrollments.Remove(_context.Enrollments.Where(x => x.section.offering.parentcourse == course.section.Id).First());
                     _context.Enrollments.Remove(course);
                 }
                 catch (Exception ex)
@@ -323,7 +341,7 @@ namespace WebApp.Features.Students.Enroll
             {
                 try
                 {
-                    _context.Enrollments.Remove(_context.Enrollments.Where(x => x.section.offering.parentcourse == course.section.offering.course.Id).First());
+                    _context.Enrollments.Remove(_context.Enrollments.Where(x => x.section.offering.parentcourse == course.section.Id).First());
                     _context.Enrollments.Remove(course);
                 }
                 catch (Exception ex)
@@ -376,9 +394,23 @@ namespace WebApp.Features.Students.Enroll
             var val = claims.First(x => x.Type == "sub");
             var currentaccount = _context.Accounts.Find(Convert.ToInt32(val.Value));
 
-            foreach (var y in _context.Enrollments.Where(x => x.account.Id == currentaccount.Id).Where(x => x.status == 2))
+            foreach (var y in _context.Enrollments.Where(x => x.account.Id == currentaccount.Id).Where(x => x.status == 2).Include(x => x.section.offering.course).Include(x => x.section.offering).ToList())
             {
                 y.status = 1;
+
+                if (y.section.offering.type == "lecture")
+                {
+                    var notification = new Notification
+                    {
+                        account = currentaccount,
+                        date = DateTime.Now,
+                        content = "You just enrolled in " + y.section.offering.course.name + "! Don't forget to visit the bookstore's website to see what books are needed.",
+                        title = "New Course Added To Your Schedule!",
+                        status = 0
+                    };
+                    _context.Notifications.Add(notification);
+                }
+
                 _context.SaveChanges();
             }
             return Redirect("/Student/Enroll/CheckoutResult");
@@ -399,20 +431,82 @@ namespace WebApp.Features.Students.Enroll
                 .Where(x => x.account.Id == account.Id)
                 .Where(x => x.status < 3)
                 .Include(y => y.section.offering.course)
-                .ToList();           
-            
-            foreach(var i in enrolled)
+                .Include(t => t.section.TimeSlots)
+                .ToList();    
+
+            foreach (var item in enrolled)
+
             {
-                if (i.section.offering.course.Id == course)
+                if (item.section.Id == course) return false;
+
+                if (rec != 0) if (item.section.Id == rec) return false;
+                
+                foreach (var itemSlot in item.section.TimeSlots)
                 {
-                    return (i.section.offering.course.Id == rec);
+                    foreach(var courseSlot in _context.Sections.Where(x => x.Id == course).Include(t => t.TimeSlots).First().TimeSlots)
+                    {
+                        if (itemSlot.dayofweek == courseSlot.dayofweek)
+                        {
+                            var splitItemSlotStart = itemSlot.starttime.Split(':');
+                            var splitItemSlotEnd = itemSlot.endtime.Split(':');
+                            var splitCourseSlotStart = courseSlot.starttime.Split(':');
+                            var splitCourseSlotEnd = courseSlot.endtime.Split(':');
+
+                            var itemSlotDate = new TimeRange(
+                                new DateTime(2017, 1, 1, Convert.ToInt32(splitItemSlotStart[0]), Convert.ToInt32(splitItemSlotStart[1]), 0),
+                                new DateTime(2017,1,1, Convert.ToInt32(splitItemSlotEnd[0]), Convert.ToInt32(splitItemSlotEnd[1]), 0));
+                            var itemCourseDate = new TimeRange(
+                                new DateTime(2017, 1, 1, Convert.ToInt32(splitCourseSlotStart[0]), Convert.ToInt32(splitCourseSlotStart[1]), 0),
+                                new DateTime(2017, 1, 1, Convert.ToInt32(splitCourseSlotEnd[0]), Convert.ToInt32(splitCourseSlotEnd[1]), 0));
+
+                            if (itemSlotDate.IntersectsWith(itemCourseDate))
+                            {
+                                //We have a conflict on both the day and times.
+                                return false;
+                            }
+                        }
+                    }
+
+                    if (rec == 0) continue;
+                    {
+                        foreach (var recitationSlot in _context.Sections.Where(x => x.Id == rec).Include(t => t.TimeSlots).First().TimeSlots)
+                        {
+                            if (itemSlot.dayofweek != recitationSlot.dayofweek) continue;
+                            var splitItemSlotStart = itemSlot.starttime.Split(':');
+                            var splitItemSlotEnd = itemSlot.endtime.Split(':');
+                            var splitCourseSlotStart = recitationSlot.starttime.Split(':');
+                            var splitCourseSlotEnd = recitationSlot.endtime.Split(':');
+
+                            var itemSlotDate = new TimeRange(
+                                new DateTime(2017, 1, 1, Convert.ToInt32(splitItemSlotStart[0]), Convert.ToInt32(splitItemSlotStart[1]), 0),
+                                new DateTime(2017, 1, 1, Convert.ToInt32(splitItemSlotEnd[0]), Convert.ToInt32(splitItemSlotEnd[1]), 0));
+                            var itemCourseDate = new TimeRange(
+                                new DateTime(2017, 1, 1, Convert.ToInt32(splitCourseSlotStart[0]), Convert.ToInt32(splitCourseSlotStart[1]), 0),
+                                new DateTime(2017, 1, 1, Convert.ToInt32(splitCourseSlotEnd[0]), Convert.ToInt32(splitCourseSlotEnd[1]), 0));
+
+                            if (itemSlotDate.IntersectsWith(itemCourseDate))
+                            {
+                                //We have a conflict on both the day and times.
+                                return false;
+                            }
+                        }
+                    }
                 }
-                else if (i.section.offering.course.Id == rec) return false;
+
             }
+
+            //foreach(var i in enrolled)
+            //{
+            //    if (i.section.offering.course.Id == course)
+            //    {
+            //        return (i.section.offering.course.Id == rec);
+            //    }
+            //    else if (i.section.offering.course.Id == rec) return false;
+            //}
 
             return true;
 
         }
-        
+
     }
 }

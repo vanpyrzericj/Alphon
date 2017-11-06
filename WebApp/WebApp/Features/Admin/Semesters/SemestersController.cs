@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
 using WebApp.Infrastructure.Inherits;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApp.Features.Admin.Semesters
 {
@@ -13,41 +14,37 @@ namespace WebApp.Features.Admin.Semesters
     [Authorize("Admin")]
     public class SemestersController : Controller
     {
-        [Route("/Admin/Semesters")]
-        public IActionResult Semesters()
+        public HubContext _context;
+        public SemestersController()
         {
-            //For Prototyping: Just create an arbitrary list of Students (Accounts entity)
-            List<Semester> model = new List<Semester>
-            {
-                new Semester
-                {
-                    season = "Fall",
-                    year = 2017,
-                    Id = 1,
-                }
-            };
-
+            _context = new HubContext();
+        }
+        [Route("/Admin/Semesters")]
+        public async Task<IActionResult> SemestersAsync()
+        {
             ViewData["Title"] = "Semesters";
-            return View("Semesters", model);
+            return View("Semesters", await _context.Semesters.ToListAsync());
         }
 
         [Route("/Admin/Semesters/{id}")]
-        public IActionResult Semester(int id)
+        public async Task<IActionResult> SemesterAsync(int id)
         {
-            //For Prototyping: Just create an arbitrary student entity
-            var model = new Semester
+            var model = new SemesterVM
             {
-                season = "Fall",
-                year = 2017,
-                Id = id,
+                semester = await _context.Semesters.FindAsync(id),
+                sections = await _context.Sections.Where(x => x.offering.semester.Id == id).Include(x => x.offering.course).Include(x => x.professor).ToListAsync()
             };
-
-            ViewData["Title"] = model.season + " " + model.year;
+            ViewData["Title"] = model.semester.season + " " + model.semester.year;
             return View("Semester", model);
         }
 
         [HttpPost]
         [Route("/Admin/Semesters/Create")]
-        public IActionResult Create(Semester semester) => Redirect("/Admin/Semesters");
+        public async Task<IActionResult> CreateAsync(Semester semester)
+        {
+            _context.Semesters.Add(semester);
+            await _context.SaveChangesAsync();
+            return Redirect("/Admin/Semesters/" + semester.Id);
+        }
     }
 }
