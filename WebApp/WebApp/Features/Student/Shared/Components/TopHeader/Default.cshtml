@@ -1,4 +1,4 @@
-﻿@model WebApp.Models.Account
+﻿@model WebApp.Features.Student.Components.TopHeaderVM
 <div class="page-header navbar navbar-fixed-top">
     <div class="page-header-inner ">
         <div class="page-logo">
@@ -14,10 +14,45 @@
         </a>
         <div class="top-menu" data-model="TopBarModel">
             <ul class="nav navbar-nav pull-right">
+                <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
+                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                        <i class="fa fa-shopping-cart"></i>
+						@if(Model.CartItems.Count > 0)
+						{
+							<span class="badge badge-default"> @Model.CartItems.Count </span>
+						}
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="external">
+                            <h3>
+                                <span class="bold"> @Model.CartItems.Count courses</span> in cart
+                            </h3>
+                            <a href="/Student/Cart">view cart</a>
+                        </li>
+                        <li>
+                            <ul class="dropdown-menu-list scroller" style="height: 250px;" data-handle-color="#637283">
+                                <!-- BEGIN LOOP -->
+								@foreach (var course in Model.CartItems)
+								{
+									<li>
+										<a href="javascript:;">
+											<span class="time"> 
+											@course.section.offering.course.major.name 
+											@course.section.offering.course.number 
+											</span>
+											<span class="details"> @course.section.offering.course.name </span>
+										</a>
+									</li>
+								}
+                                <!-- END LOOP -->
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
                 <li class="dropdown dropdown-user">
                     <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                         <img alt="Profile Photo" class="img-circle" src="~/assets/global/img/avatar.png" id="ProfileImage" name="ProfileImage" />
-                        <span class="username username-hide-on-mobile"> @Model.firstname @Model.lastname</span>
+                        <span class="username username-hide-on-mobile"> @Model.Account.firstname @Model.Account.lastname</span>
                         <i class="fa fa-angle-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-default">
@@ -35,13 +70,13 @@
                     </ul>
                 </li>
                 @*<li class="dropdown dropdown-quick-sidebar-toggler">
-                <a href="javascript:;" class="dropdown-toggle">
-                    <i class="icon-logout"></i>
-                </a>
-            </li>*@
+                        <a href="javascript:;" class="dropdown-toggle">
+                            <i class="icon-logout"></i>
+                        </a>
+                    </li>*@
             </ul>
         </div>
     </div>
 </div>
-<input type="hidden" value="@Model.email" id="emailGrav" name="emailGrav" />
-<input type="hidden" value="@Model.firstname" id="currentUserName" name="currentUserName" />
+<input type="hidden" value="@Model.Account.email" id="emailGrav" name="emailGrav" />
+<input type="hidden" value="@Model.Account.firstname" id="currentUserName" name="currentUserName" />
