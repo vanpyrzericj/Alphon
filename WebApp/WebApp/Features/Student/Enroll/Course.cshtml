@@ -96,12 +96,12 @@
                                             <th>@recitation.room</th>
                                             <th>
                                                 @foreach (var time in recitation.TimeSlots)
-                                            {
-                                                @time.dayofweek @: @time.starttime - @time.endtime,
+                                                {
+                                                    @time.dayofweek @: @time.starttime - @time.endtime,
                                             }
-                                        </th>
-                                        <th>@recitation.professor.firstname @recitation.professor.lastname</th>
-                                    </tr>
+                                            </th>
+                                            <th>@recitation.professor.firstname @recitation.professor.lastname</th>
+                                        </tr>
                                     }
                                 </tbody>
                             </table>
@@ -159,17 +159,13 @@
         }
     }
     function AddCourseToCart() {
-        if (selectedRow > 0) {
-            $.post("/Student/Enroll/@Model.semester.Id/AddToCart",
+        $.post("/Student/Enroll/@Model.semester.Id/AddToCart",
                 {
                     courseId: @Model.OfferingId,
                     sectionForRecitationId: selectedRow
                 }, function (response) {
                     window.location = "/Student/Cart?success=" + response.status;
                 });
-        } else {
-            alert("Please select a recitation.");
-        }
     }
     </script>
 }

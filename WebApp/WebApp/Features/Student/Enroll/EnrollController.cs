@@ -227,24 +227,28 @@ namespace WebApp.Features.Students.Enroll
             var courseEnrollment = new Enrollment
             {
                 account = account,
-                section = _context.Sections.Where(x => x.offering.Id == courseId).First(),
+                section = _context.Sections.First(x => x.offering.Id == courseId),
                 status = 2,
                 dateadded = DateTime.Now
             };
 
-            var recitationEnrollment = new Enrollment
+            Enrollment recitationEnrollment = null;
+            if (sectionForRecitationId != 0)
             {
-                account = account,
-                section = _context.Sections.Find(sectionForRecitationId),
-                status = 2,
-                dateadded = DateTime.Now
-            };
-
+                recitationEnrollment = new Enrollment
+                {
+                    account = account,
+                    section = _context.Sections.Find(sectionForRecitationId),
+                    status = 2,
+                    dateadded = DateTime.Now
+                };
+            }
+            
 
             if (CheckCart(SemesterID, account, courseEnrollment.section.Id, sectionForRecitationId))
             {
                 _context.Enrollments.Add(courseEnrollment);
-                _context.Enrollments.Add(recitationEnrollment);
+                if (sectionForRecitationId != 0) _context.Enrollments.Add(recitationEnrollment ?? throw new InvalidOperationException());
                 _context.SaveChanges();
             }
 
@@ -434,9 +438,10 @@ namespace WebApp.Features.Students.Enroll
 
             {
                 if (item.section.Id == course) return false;
-                if (item.section.Id == rec) return false;
 
-                foreach(var itemSlot in item.section.TimeSlots)
+                if (rec != 0) if (item.section.Id == rec) return false;
+                
+                foreach (var itemSlot in item.section.TimeSlots)
                 {
                     foreach(var courseSlot in _context.Sections.Where(x => x.Id == course).Include(t => t.TimeSlots).First().TimeSlots)
                     {
@@ -450,6 +455,31 @@ namespace WebApp.Features.Students.Enroll
                             var itemSlotDate = new TimeRange(
                                 new DateTime(2017, 1, 1, Convert.ToInt32(splitItemSlotStart[0]), Convert.ToInt32(splitItemSlotStart[1]), 0),
                                 new DateTime(2017,1,1, Convert.ToInt32(splitItemSlotEnd[0]), Convert.ToInt32(splitItemSlotEnd[1]), 0));
+                            var itemCourseDate = new TimeRange(
+                                new DateTime(2017, 1, 1, Convert.ToInt32(splitCourseSlotStart[0]), Convert.ToInt32(splitCourseSlotStart[1]), 0),
+                                new DateTime(2017, 1, 1, Convert.ToInt32(splitCourseSlotEnd[0]), Convert.ToInt32(splitCourseSlotEnd[1]), 0));
+
+                            if (itemSlotDate.IntersectsWith(itemCourseDate))
+                            {
+                                //We have a conflict on both the day and times.
+                                return false;
+                            }
+                        }
+                    }
+
+                    if (rec == 0) continue;
+                    {
+                        foreach (var recitationSlot in _context.Sections.Where(x => x.Id == rec).Include(t => t.TimeSlots).First().TimeSlots)
+                        {
+                            if (itemSlot.dayofweek != recitationSlot.dayofweek) continue;
+                            var splitItemSlotStart = itemSlot.starttime.Split(':');
+                            var splitItemSlotEnd = itemSlot.endtime.Split(':');
+                            var splitCourseSlotStart = recitationSlot.starttime.Split(':');
+                            var splitCourseSlotEnd = recitationSlot.endtime.Split(':');
+
+                            var itemSlotDate = new TimeRange(
+                                new DateTime(2017, 1, 1, Convert.ToInt32(splitItemSlotStart[0]), Convert.ToInt32(splitItemSlotStart[1]), 0),
+                                new DateTime(2017, 1, 1, Convert.ToInt32(splitItemSlotEnd[0]), Convert.ToInt32(splitItemSlotEnd[1]), 0));
                             var itemCourseDate = new TimeRange(
                                 new DateTime(2017, 1, 1, Convert.ToInt32(splitCourseSlotStart[0]), Convert.ToInt32(splitCourseSlotStart[1]), 0),
                                 new DateTime(2017, 1, 1, Convert.ToInt32(splitCourseSlotEnd[0]), Convert.ToInt32(splitCourseSlotEnd[1]), 0));
