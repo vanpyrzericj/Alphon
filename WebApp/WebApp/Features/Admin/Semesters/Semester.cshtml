@@ -1,7 +1,7 @@
-@model WebApp.Models.Semester
+@model WebApp.Features.Admin.Semesters.SemesterVM
 <div class="page-content">
     <h1 class="page-title">
-        @Model.season @Model.year
+        @Model.semester.season @Model.semester.year
     </h1>
     <div class="page-bar">
         <ul class="page-breadcrumb">
@@ -15,7 +15,7 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                @Model.season @Model.year (Semester ID# @Model.Id)
+                @Model.semester.season @Model.semester.year (Semester ID# @Model.semester.Id)
             </li>
         </ul>
     </div>
@@ -24,19 +24,64 @@
             <div class="portlet light bordered" id="">
                 <div class="portlet-body">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label col-md-3">Season</label>
                                 <div class="col-md-9">
-                                    <p class="form-control-static">@Model.season</p>
+                                    <p class="form-control-static">@Model.semester.season</p>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-md-3">Year</label>
                                 <div class="col-md-9">
-                                    <p class="form-control-static">@Model.year</p>
+                                    <p class="form-control-static">@Model.semester.year</p>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Enroll Period</label>
+                                <div class="col-md-9">
+                                    <p class="form-control-static">@Model.semester.enrollopen.ToShortDateString() - @Model.semester.enrollclose.ToShortDateString()</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Semester Period</label>
+                                <div class="col-md-9">
+                                    <p class="form-control-static">@Model.semester.startdate.ToShortDateString() - @Model.semester.enddate.ToShortDateString()</p>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Resign Deadline</label>
+                                <div class="col-md-9">
+                                    <p class="form-control-static">@Model.semester.resignclose.ToShortDateString()</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Course Name</th>
+                                        <th>Room</th>
+                                        <th>Professor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var offering in Model.sections)
+                                    {
+                                        <tr>
+                                            <th><a href="/Admin/Courses/@offering.offering.course.Id/Offerings/@offering.Id">@offering.offering.course.name</a></th>
+                                            <th>@offering.room</th>
+                                            <th><a href="/Admin/Professors/@offering.professor.Id">@offering.professor.firstname @offering.professor.lastname</a></th>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

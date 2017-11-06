@@ -1,7 +1,7 @@
-@model WebApp.Models.Course
+@model WebApp.Features.Admin.Courses.CourseVM
 <div class="page-content">
     <h1 class="page-title">
-        @Model.name
+        @Model.course.name
     </h1>
     <div class="page-bar">
         <ul class="page-breadcrumb">
@@ -15,9 +15,16 @@
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                @Model.name @Model.number (Course ID# @Model.Id)
+                @Model.course.name @Model.course.number (Course ID# @Model.course.Id)
             </li>
         </ul>
+        <div class="page-toolbar">
+            <div class="btn-group">
+                <a class="btn btn-fit-height blue" href="#create-offering" data-toggle="modal">
+                    <i class="fa fa-plus"></i> Create Lecture Offering
+                </a>
+            </div>
+        </div>
     </div>
     <div class="row">
         <div class="col-md-12">
@@ -28,13 +35,13 @@
                             <div class="form-group">
                                 <label class="control-label col-md-3">Name </label>
                                 <div class="col-md-9">
-                                    <p class="form-control-static">@Model.name</p>
+                                    <p class="form-control-static">@Model.course.name</p>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-md-3">Number</label>
                                 <div class="col-md-9">
-                                    <p class="form-control-static">@Model.number</p>
+                                    <p class="form-control-static">@Model.course.number</p>
                                 </div>
                             </div>
                         </div>
@@ -42,12 +49,101 @@
                             <div class="form-group">
                                 <label class="control-label col-md-3">Description</label>
                                 <div class="col-md-9">
-                                    <p class="form-control-static">@Model.description</p>
+                                    <p class="form-control-static">@Model.course.description</p>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Offering ID</th>
+                                        <th>Semester</th>
+                                        <th>Professor</th>
+                                        <th>Times</th>
+                                        <th>Room</th>
+                                        <th>Type</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var offering in Model.offerings)
+                                    {
+                                        <tr>
+                                            <th><a href="/Admin/Courses/@Model.course.Id/Offerings/@offering.Id">ID# @offering.Id</a></th>
+                                            <th>@offering.offering.semester.season @offering.offering.semester.year</th>
+                                            <th>@offering.professor.firstname @offering.professor.lastname</th>
+                                            <th>
+                                                @foreach (var time in @offering.TimeSlots)
+                                                {
+                                                    @time.dayofweek @: @time.starttime - @time.endtime,
+                                            }
+                                            </th>
+                                            <th>@offering.room</th>
+                                            <th><strong>@offering.offering.type</strong></th>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal fade" id="create-offering" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Create Offering</h4>
+                </div>
+                <form action="/Admin/Courses/@Model.course.Id/Offerings/Create" method="post" id="CreateOfferingForm">
+                    <div class="modal-body">
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Semester</label>
+                                        <select class="form-control" name="offeringvm.semesterid">
+                                            @foreach (var semester in Model.semesters)
+                                            {
+                                                <option value="@semester.Id">@semester.season @semester.year</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Capacity</label>
+                                        <input class="form-control" type="text" name="offeringvm.capacity" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Room</label>
+                                        <input class="form-control" type="text" name="offeringvm.room" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Professor</label>
+                                        <select class="form-control" name="offeringvm.professorid">
+                                            @foreach (var professor in Model.professors)
+                                            {
+                                                <option value="@professor.Id">@professor.firstname @professor.lastname</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input value="lecture" type="hidden" name="offeringvm.type"/>
+                    <div class="modal-footer">
+                        <button type="button" class="btn dark btn-outline" data-dismiss="modal">Cancel</button>
+                        <input id="CreateOfferingSubmitBtn" type="submit" value="Create" class="btn green-jungle" />
+                    </div>
+                </form>
             </div>
         </div>
     </div>

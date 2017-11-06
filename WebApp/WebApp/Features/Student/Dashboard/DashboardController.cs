@@ -43,13 +43,12 @@ namespace WebApp.Features.Student.Dashboard
             model.AvailableCreditHours = 16 - model.CurrentCreditHours;
             model.ShoppingCartCourses = enrollments.Where(c => c.status == 2).Count();
 
+            model.IsWithinDropPeriod = (semester.enrollopen <= DateTime.Now && DateTime.Now <= semester.resignclose);
+
+            model.Notifications = new List<Notification>();
+
             //User Notifications
             model.Notifications = _context.Notifications.Where(x => x.account.Id == acc.Id).Where(x => x.status != 1).ToList();
-
-            //model.CurrentCourses = 1;
-            //model.CurrentCreditHours = 1;
-            //model.AvailableCreditHours = 1;
-            //model.ShoppingCartCourses = 1;
 
             //Populate with enrollment info based on the current semester and current student
             model.Semester = semester;

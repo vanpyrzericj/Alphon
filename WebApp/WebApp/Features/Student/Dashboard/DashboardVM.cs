@@ -16,5 +16,6 @@ namespace WebApp.Features.Student.Dashboard
         public ICollection<MyCoursesVM> Enrollments { get; set; }
         public ICollection<Notification> Notifications { get; set; }
         public Semester Semester { get; internal set; }
+        public bool IsWithinDropPeriod { get; set; }
     }
 }

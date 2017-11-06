@@ -61,11 +61,14 @@ namespace WebApp.Features.Student.MyCourses
                         })
                         .ToList();
 
+            var semester = _context.Semesters.Find(semesterId);
+
             //Populate new CourseViewerVM with filtered results model
             var masterModel = new CourseViewerVM
             {
                 enrollments = model,
-                semester = _context.Semesters.Find(semesterId)
+                semester = semester,
+                IsWithinDropPeriod = (semester.enrollopen <= DateTime.Now && DateTime.Now <= semester.resignclose)
             };
 
             ViewData["Title"] = "My Courses";
@@ -97,8 +100,9 @@ namespace WebApp.Features.Student.MyCourses
             var acc = _context.Accounts.Find(Convert.ToInt32(val.Value));
 
             //Allow account to only see semesters starting from their first semester at the school
+            var firstSemesterStartDate = _context.Semesters.Find(acc.firstsemester).startdate;
             var model = _context.Semesters
-                .Where(x => x.Id >= acc.firstsemester) 
+                .Where(x => firstSemesterStartDate <= x.startdate) 
                 .OrderBy(x => x.startdate)
                 .Select(x => new
                 {

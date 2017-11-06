@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
-using WebApp.Infrastructure.Inherits;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace WebApp.Features.Admin.Professors
 {
@@ -13,49 +11,37 @@ namespace WebApp.Features.Admin.Professors
     [Authorize("Admin")]
     public class ProfessorsController : Controller
     {
-        [Route("/Admin/Professors")]
-        public IActionResult Professors()
+        public HubContext _context;
+        public ProfessorsController()
         {
-            //For Prototyping: Just create an arbitrary list of Students (Accounts entity)
-            List<Professor> model = new List<Professor>
-            {
-                new Professor
-
-                {
-                    firstname = "Justin",
-                    lastname = "Timberlake",
-                    Id = 1
-                },
-                new Professor
-
-                {
-                    firstname = "Aaron",
-                    lastname = "Carter",
-                    Id = 2
-                },
-            };
-
+            _context = new HubContext();
+        }
+        [Route("/Admin/Professors")]
+        public async Task<IActionResult> ProfessorsAsync()
+        {
             ViewData["Title"] = "Professors";
-            return View("Professors", model);
+            return View("Professors", await _context.Professors.ToListAsync());
         }
 
         [Route("/Admin/Professors/{id}")]
-        public IActionResult Professor(int id)
+        public async Task<IActionResult> ProfessorAsync(int id)
         {
-            //For Prototyping: Just create an arbitrary student entity
-            var model = new Professor
+            var model = new ProfessorVM
             {
-                firstname = "Justin",
-                lastname = "Timberlake",
-                Id = id,
+                professor = await _context.Professors.FindAsync(id),
+                sections = await _context.Sections.Where(x => x.professor.Id == id).Include(x => x.offering.course).Include(x => x.offering.semester).ToListAsync()
             };
-
-            ViewData["Title"] = model.firstname + " " + model.lastname;
+            ViewData["Title"] = model.professor.firstname + " " + model.professor.lastname;
             return View("Professor", model);
         }
 
         [HttpPost]
         [Route("/Admin/Professors/Create")]
-        public IActionResult Create(Professor professor) => Redirect("/Admin/Professors");
+        public async Task<IActionResult> CreateAsync(Professor professor)
+        {
+            _context.Professors.Add(professor);
+            await _context.SaveChangesAsync();
+            return Redirect("/Admin/Professors/" + professor.Id);
+        }
     }
 }
