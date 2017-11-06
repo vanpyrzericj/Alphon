@@ -78,13 +78,13 @@ namespace WebApp.Features.Students.Enroll
                 .ToList();
 
             //Filter for "show open classes" search option
-            if(filter.ShowOpenClasses)
+            if (filter.ShowOpenClasses)
             {
                 result = result.Where(x => x.enrolled < x.capacity).ToList();
             }
 
             //Filter for course number search options
-            if(filter.CourseNumber == 0) return View("Courses", result);
+            if (filter.CourseNumber == 0) return View("Courses", result);
             switch (filter.CourseNumberFilterOption)
             {
                 case 1:
@@ -121,7 +121,7 @@ namespace WebApp.Features.Students.Enroll
         /// <returns>View("Course", model)</returns>
         [Route("/Student/Enroll/{SemesterID}/Courses/{OfferingID}")]
         public async Task<IActionResult> CourseEnrollInfoAsync(int SemesterID, int OfferingID)
-        {            
+        {
             var sectionId = (await _context.Sections.Where(x => x.offering.Id == OfferingID).FirstAsync()).Id;
             var course = await _context.Offerings.Where(x => x.Id == OfferingID).Include(m => m.course.major).Select(a => a.course).FirstAsync();
             var recitationOfferings = await _context.Offerings.Where(x => x.type == "recitation").Where(y => y.course.Id == course.Id).ToListAsync();
@@ -186,7 +186,7 @@ namespace WebApp.Features.Students.Enroll
         public IActionResult CourseSearch(int SemesterID)
         {
             ViewData["Title"] = "Course Search";
-            return View("CourseSearch", new CourseSearchVM { Majors = _context.Majors.ToList(), SemesterId = SemesterID, semester= _context.Semesters.Find(SemesterID) });
+            return View("CourseSearch", new CourseSearchVM { Majors = _context.Majors.ToList(), SemesterId = SemesterID, semester = _context.Semesters.Find(SemesterID) });
         }
 
         /// <summary>
@@ -264,11 +264,11 @@ namespace WebApp.Features.Students.Enroll
                     _context.Enrollments.Remove(_context.Enrollments.Where(x => x.section.offering.parentcourse == course.section.offering.course.Id).First());
                     _context.Enrollments.Remove(course);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     _context.Enrollments.Remove(course);
                 }
-                
+
             }
             else
             {
@@ -376,9 +376,23 @@ namespace WebApp.Features.Students.Enroll
             var val = claims.First(x => x.Type == "sub");
             var currentaccount = _context.Accounts.Find(Convert.ToInt32(val.Value));
 
-            foreach (var y in _context.Enrollments.Where(x => x.account.Id == currentaccount.Id).Where(x => x.status == 2))
+            foreach (var y in _context.Enrollments.Where(x => x.account.Id == currentaccount.Id).Where(x => x.status == 2).Include(x => x.section.offering.course).Include(x => x.section.offering).ToList())
             {
                 y.status = 1;
+
+                if (y.section.offering.type == "lecture")
+                {
+                    var notification = new Notification
+                    {
+                        account = currentaccount,
+                        date = DateTime.Now,
+                        content = "You just enrolled in " + y.section.offering.course.name + "! Don't forget to visit the bookstore's website to see what books are needed.",
+                        title = "New Course Added To Your Schedule!",
+                        status = 0
+                    };
+                    _context.Notifications.Add(notification);
+                }
+
                 _context.SaveChanges();
             }
             return Redirect("/Student/Enroll/CheckoutResult");
@@ -399,9 +413,9 @@ namespace WebApp.Features.Students.Enroll
                 .Where(x => x.account.Id == account.Id)
                 .Where(x => x.status < 3)
                 .Include(y => y.section.offering.course)
-                .ToList();           
-            
-            foreach(var i in enrolled)
+                .ToList();
+
+            foreach (var i in enrolled)
             {
                 if (i.section.offering.course.Id == course)
                 {
@@ -413,6 +427,6 @@ namespace WebApp.Features.Students.Enroll
             return true;
 
         }
-        
+
     }
 }

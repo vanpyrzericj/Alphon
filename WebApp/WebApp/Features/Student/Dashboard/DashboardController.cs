@@ -35,7 +35,7 @@ namespace WebApp.Features.Student.Dashboard
             var semester = _context.Semesters.Where(x => x.startdate <= DateTime.Now).Where(x => x.enddate >= DateTime.Now).First();
             var currentSemesterId = semester.Id;
             var enrollments = _context.Enrollments.Where(x => x.account.Id == acc.Id).Where(x => x.section.offering.semester.Id == currentSemesterId).Include(s => s.section.offering.course).ToList();
-            
+
             //Create new dashboard viewmodel and populate using filtered results
             var model = new DashboardVM();
             model.CurrentCourses = enrollments.Where(c => c.status == 1).Count();
@@ -45,7 +45,7 @@ namespace WebApp.Features.Student.Dashboard
 
             //User Notifications
             model.Notifications = _context.Notifications.Where(x => x.account.Id == acc.Id).Where(x => x.status != 1).ToList();
-            
+
             //model.CurrentCourses = 1;
             //model.CurrentCreditHours = 1;
             //model.AvailableCreditHours = 1;
@@ -83,7 +83,7 @@ namespace WebApp.Features.Student.Dashboard
         {
             return char.ToUpper(original[0]) + original.Substring(1);
         }
-        
+
         //[Route("/Student/AllCourses")]
         //public JsonResult AllCourses()
         //{
@@ -95,5 +95,22 @@ namespace WebApp.Features.Student.Dashboard
         //        .Include(x => x.offering.semester).ToList();
         //    return new JsonResult(model);
         //}
+
+        [HttpPost]
+        [Route("/Student/ClearNotification/{notificationId}")]
+        public IActionResult ClearNotification(int notificationId)
+        {
+            var identity = (ClaimsIdentity)User.Identity;
+            IEnumerable<Claim> claims = identity.Claims;
+            var val = claims.First(x => x.Type == "sub");
+
+            var notification = _context.Notifications.Where(x => x.Id == notificationId).Include(a => a.account).First();
+
+            //Ensure The Authenticated User Is Doing the Clearing
+            if (Convert.ToInt32(val.Value) != notification.account.Id) return Unauthorized();
+            notification.status = 1;
+            _context.SaveChanges();
+            return Ok();
+        }
     }
 }

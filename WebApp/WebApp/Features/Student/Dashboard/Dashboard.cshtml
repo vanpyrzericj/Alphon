@@ -154,14 +154,17 @@
                                         <tr>
                                             <th> Title </th>
                                             <th> Description </th>
+                                            <th> Actions </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach(var notification in Model.Notifications){
-                                        <tr>
-                                            <th> @notification.title </th>
-                                            <th> @notification.content </th>
-                                        </tr>
+                                        @foreach (var notification in Model.Notifications)
+                                        {
+                                            <tr id="notify_@notification.Id">
+                                                <th> @notification.title </th>
+                                                <th> @notification.content </th>
+                                                <th> <a href="#" class="btn red" onclick="ClearNotification('@notification.Id');"><i class="fa fa-close"></i> Clear </a></th>
+                                            </tr>
                                         }
                                         <tr>
                                     </tbody>
@@ -182,6 +185,14 @@
         }
         function DoDrop(id) {
             console.log("Dropped: " + id);
+        }
+        function ClearNotification(id) {
+            $.post("/Student/ClearNotification/" + id,
+                function (data) {
+                    $("#notify_" + id).fadeOut();
+                }).fail(function () {
+                    alert("We couldn't clear this notification for you. Try refreshing the page and then trying again.");
+                });
         }
     </script>
 }
