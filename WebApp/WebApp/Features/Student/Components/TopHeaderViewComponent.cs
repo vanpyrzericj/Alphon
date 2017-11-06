@@ -27,6 +27,7 @@ namespace WebApp.Features.Student.Components
                 CartItems = await _context.Enrollments
                 .Where(x => x.account.Id == Convert.ToInt32(val.Value))
                 .Where(x => x.status != 1)
+                .Where(x => x.section.offering.type == "lecture")
                 .Include(x => x.section)
                 .Include(x => x.section.professor)
                 .Include(x => x.section.offering.course)
