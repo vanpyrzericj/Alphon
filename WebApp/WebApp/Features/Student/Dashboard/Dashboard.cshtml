@@ -104,7 +104,12 @@
                                                     }
                                                 </th>
                                                 <th> @enrolledCourse.room </th>
-                                                <th> @enrolledCourse.credithours </th>
+                                                <th>
+                                                    @if (enrolledCourse.type == "Lecture")
+                                                    {
+                                                        @enrolledCourse.credithours
+                                                    }
+                                                </th>
                                                 <th> @enrolledCourse.professor.lastname, @enrolledCourse.professor.firstname </th>
                                                 <th>
                                                     @if (enrolledCourse.type == "Lecture")
