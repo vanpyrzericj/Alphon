@@ -52,10 +52,10 @@
                             @foreach(var semester in Model.AllSemesters)
                             {
                                 <h4>@semester.season  @semester.year</h4>
-                                <strong>Enrollment Opens: </strong> @semester.enrollopen.ToLongDateString()
-                                <strong>Enrollment Closes: </strong> @semester.enrollclose.ToLongDateString()
-                                <strong>Semester Begins: </strong> @semester.startdate.ToLongDateString()
-                                <strong>Semester Ends: </strong> @semester.enddate.ToLongDateString()
+                                <strong>Enrollment Opens: </strong> @semester.enrollopen.ToLongDateString()<br />
+                                <strong>Enrollment Closes: </strong> @semester.enrollclose.ToLongDateString()<br />
+                                <strong>Semester Begins: </strong> @semester.startdate.ToLongDateString()<br />
+                                <strong>Semester Ends: </strong> @semester.enddate.ToLongDateString()<br />
                             }
                         </div>
                     </div>
